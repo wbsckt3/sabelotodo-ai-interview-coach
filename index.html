@@ -2,30 +2,40 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Sabelotodo AI · Interview Coach</title>
 <style>
 :root{font-family:system-ui,Segoe UI,sans-serif;color:#172033;background:#f4f6fa}
 *{box-sizing:border-box}
-body{margin:0;padding:24px}
-main{max-width:950px;margin:auto;display:grid;gap:16px}
-header,section{background:#fff;border:1px solid #e1e6ef;border-radius:16px;padding:20px}
-h1{margin:0 0 8px;font-size:1.5rem}
+html,body{height:100%;overflow:hidden}
+html{touch-action:manipulation;-webkit-text-size-adjust:100%}
+body{margin:0;padding:8px}
+main{height:100%;max-width:950px;margin:auto;display:flex;flex-direction:column;gap:8px;min-height:0}
+header,section{background:#fff;border:1px solid #e1e6ef;border-radius:14px;padding:10px 12px}
+header{flex:0 0 auto}
+.stage{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.title-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+h1{margin:0;font-size:1.05rem;line-height:1.2}
+.subtitle{margin:2px 0 0;font-size:.82rem;font-weight:650;color:#233e73}
+.session{margin:0;padding:4px 8px;border-radius:999px;background:#e9eefb;color:#233e73;font-size:.78rem;font-weight:750;font-variant-numeric:tabular-nums;white-space:nowrap}
 h2{font-size:1.15rem}
-.muted{color:#647084;font-size:.92rem}
-label{display:block;font-weight:650;margin:12px 0 6px}
-input,select,textarea{width:100%;border:1px solid #cbd3e1;border-radius:9px;padding:11px;font:inherit;background:#fff}
-textarea{min-height:110px}
-.field-hint{margin:0 0 6px;color:#5c6b82;font-size:.84rem}
-.actor{min-height:120px;line-height:1.45}
+.muted{color:#647084;font-size:.78rem}
+label{font-weight:650;font-size:.82rem}
+input,select,textarea{width:100%;border:1px solid #cbd3e1;border-radius:8px;padding:8px;font:inherit;font-size:16px;background:#fff}
+.field{min-height:0;display:flex;flex-direction:column}
+.field.grow{flex:1}
+.label-row{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:4px 0}
+.label-row label{margin:0}
+.q{width:22px;height:22px;padding:0;border-radius:50%;background:#e9eefb;color:#233e73;border:1px solid #c5d0e6;font-size:.85rem;line-height:1;flex:0 0 auto}
+.actor{flex:1;min-height:0;height:auto;resize:none;line-height:1.35}
 .actor-interviewer{background:#e3f6e9;border-color:#7ec9a2}
 .actor-student{background:#fff4cc;border-color:#e3c86a}
 .actor-feedback{background:#f3f6fb;border-color:#c5d2e6;min-height:220px}
 .actor-feedback:disabled{opacity:1;color:#172033;-webkit-text-fill-color:#172033;cursor:default;background:#f3f6fb}
 .actor-interviewer:focus,.actor-student:focus{outline:2px solid #233e73;outline-offset:1px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .row-3{grid-template-columns:1fr 1fr 1fr}
-button{border:0;border-radius:10px;padding:12px 16px;font-weight:700;cursor:pointer;background:#233e73;color:white}
+button{border:0;border-radius:10px;padding:8px 10px;font-weight:700;cursor:pointer;background:#233e73;color:white}
 button:disabled{opacity:.55}
 .pill{display:inline-block;border-radius:999px;background:#e9eefb;padding:4px 9px;font-size:.8rem}
 #modal-profesor .modal-card{background:#fff8e8}
@@ -36,8 +46,13 @@ button:disabled{opacity:.55}
 .theory-actions button{background:#fff;color:#233e73;border:1px solid #233e73;padding:10px 12px;font-size:.9rem}
 .theory-actions button:hover{background:#e9eefb}
 .theory-actions .btn-note{color:#b7bec8;font-weight:550;font-size:.78rem}
-.reply-btn{margin-top:8px}
-.jc-ai-usage{margin:0 0 14px;padding:8px 10px;border:1px solid #bbf7d0;border-radius:10px;background:#dcfce7}
+.actions{display:flex;gap:6px;align-items:center;margin-top:6px}
+.actions .reply-btn{flex:0 0 auto}
+.actions .learn-btn{flex:1;background:#fff;color:#233e73;border:1px solid #233e73;font-size:.78rem}
+.actions .ghost{background:#eef2f8;color:#172033}
+#status{margin:4px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.feedback-view{width:100%;min-height:180px;resize:vertical;line-height:1.4;background:#f3f6fb}
+.jc-ai-usage{margin:0 0 6px;padding:6px 8px;border:1px solid #bbf7d0;border-radius:10px;background:#dcfce7;flex:0 0 auto}
 .jc-ai-usage--open{box-shadow:0 2px 8px rgba(15,23,42,.06)}
 .jc-ai-usage__toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;padding:2px 0;border:0;background:none;color:#14532d;cursor:pointer;font:inherit;text-align:left}
 .jc-ai-usage__toggle-label{font-size:.82rem;font-weight:700}
@@ -71,17 +86,21 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 .modal-card th,.modal-card td{text-align:left;padding:8px 8px;border-bottom:1px solid #e1e6ef;vertical-align:top}
 .modal-card th{font-size:.8rem;color:#3d4b63}
 .note{font-size:.88rem;color:#3d4b63}
-@media(max-width:650px){body{padding:12px}.row{grid-template-columns:1fr}.theory-actions{display:grid}}
+@media(max-width:650px){body{padding:6px}h1{font-size:.95rem}.subtitle{font-size:.75rem}.actions .learn-btn{font-size:.7rem}.theory-actions{display:grid}}
 </style>
 </head>
 <body>
 <main>
 <header>
-<span class="pill">Prototipo · texto</span>
+<div class="title-row">
+<div>
 <h1>Sabelotodo AI — Interview Coach</h1>
-<p class="muted">La entrevista arranca sola en el idioma que quieres aprender. Tú respondes en ese idioma y el profesor explica en el idioma de explicación. Cada turno reemplaza esos textos.</p>
+<p class="subtitle">Motor de inferencia gramatical</p>
+</div>
+<p class="session" id="sessionClock" aria-live="polite">Sesión 00:00</p>
+</div>
 </header>
-<section>
+<section class="stage">
 <div class="jc-ai-usage" id="aiUsage" aria-label="Consumo de IA del día">
 <button type="button" class="jc-ai-usage__toggle" id="aiUsageToggle" aria-expanded="false">
 <span class="jc-ai-usage__toggle-label">Consumo de IA</span>
@@ -97,12 +116,13 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <p class="jc-ai-usage__last" id="aiUsageLast"></p>
 </div>
 </div>
-<label for="interviewType">Tipo de entrevista</label>
+<div class="field">
+<div class="label-row"><label for="interviewType">Tipo de entrevista</label><button type="button" class="q" id="hintType" aria-label="Ayuda: tipo de entrevista">?</button></div>
 <select id="interviewType"></select>
-<p class="field-hint" id="interviewTypeHint">Define el puesto, el tono y los temas de la entrevista. Cambiarlo abre otra conversación.</p>
+</div>
 <div class="row row-3">
 <div>
-<label for="targetLanguage">Idioma a aprender</label>
+<div class="label-row"><label for="targetLanguage">Idioma a aprender</label><button type="button" class="q" id="hintTarget" aria-label="Ayuda: idioma a aprender">?</button></div>
 <select id="targetLanguage">
 <option value="es">Español</option>
 <option value="en" selected>Inglés</option>
@@ -110,7 +130,7 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 </select>
 </div>
 <div>
-<label for="level">Nivel aproximado</label>
+<div class="label-row"><label for="level">Nivel aproximado</label><button type="button" class="q" id="hintLevel" aria-label="Ayuda: nivel aproximado">?</button></div>
 <select id="level">
 <option value="beginner">Beginner</option>
 <option value="intermediate" selected>Intermediate</option>
@@ -118,7 +138,7 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 </select>
 </div>
 <div>
-<label for="explanationLanguage">Idioma de explicación</label>
+<div class="label-row"><label for="explanationLanguage">Idioma de explicación</label><button type="button" class="q" id="hintExplain" aria-label="Ayuda: idioma de explicación">?</button></div>
 <select id="explanationLanguage">
 <option value="es" selected>Español</option>
 <option value="en">English</option>
@@ -126,21 +146,50 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 </select>
 </div>
 </div>
-<p class="field-hint" id="languageHint">El idioma a aprender es el del entrevistador y el de tu respuesta. El idioma de explicación es el tuyo y el del profesor: ahí va el feedback. Cada turno de la conversación envía esos dos idiomas.</p>
-<label for="interviewer">Entrevistador</label>
-<p class="field-hint" id="interviewerHint">La primera pregunta llega sola al abrir la entrevista. Cada respuesta tuya la reemplaza por otra distinta, en el idioma a aprender.</p>
+<div class="field grow">
+<div class="label-row"><label for="interviewer">Entrevistador</label><button type="button" class="q" id="hintInterviewer" aria-label="Ayuda: entrevistador">?</button></div>
 <textarea id="interviewer" class="actor actor-interviewer" readonly placeholder="El entrevistador está preparando la primera pregunta…"></textarea>
-<label for="studentText">Tu respuesta</label>
-<p class="field-hint" id="studentHint">Escríbela en el idioma a aprender y pulsa Responder.</p>
+</div>
+<div class="field grow">
+<div class="label-row"><label for="studentText">Tu respuesta</label><button type="button" class="q" id="hintStudent" aria-label="Ayuda: tu respuesta">?</button></div>
 <textarea id="studentText" class="actor actor-student" placeholder="Tu respuesta"></textarea>
+</div>
+<div class="actions">
 <button id="replyBtn" class="reply-btn" type="button">Responder</button>
-<label for="feedback">Feedback</label>
-<p class="field-hint" id="feedbackHint">Lo escribe la misma IA después de tu respuesta. Este campo está deshabilitado.</p>
-<textarea id="feedback" class="actor actor-feedback" disabled placeholder="Corrección de la respuesta&#10;&#10;Expectativa de la siguiente respuesta"></textarea>
+<button id="feedbackBtn" class="ghost" type="button" disabled>Feedback</button>
+<button id="learnBtn" class="learn-btn" type="button" data-open-modal="modal-aprende" aria-haspopup="dialog">Aprende más de este motor LLM</button>
+</div>
 <p id="status" class="muted" role="status">Abriendo la entrevista…</p>
-<div class="theory-bar">
-<p class="theory-kicker">Base del motor</p>
-<p class="theory-lead">Antes de escribir: así decide este entrenador. Las notas sirven al profesor que va a enriquecer las reglas y al estudiante que quiere ver la fórmula con la que se lee su frase.</p>
+</section>
+</main>
+
+<dialog class="theory-modal hint-modal" id="modal-hint" aria-labelledby="hintTitle">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="hintTitle">Ayuda</h2>
+<button type="button" class="close-btn" data-close-modal>Cerrar</button>
+</div>
+<p id="hintBody"></p>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-feedback" aria-labelledby="titulo-feedback">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-feedback">Feedback</h2>
+<button type="button" class="close-btn" data-close-modal>Cerrar</button>
+</div>
+<textarea id="feedback" class="feedback-view" readonly placeholder="Corrección de la respuesta&#10;&#10;Expectativa de la siguiente respuesta"></textarea>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-aprende" aria-labelledby="titulo-aprende">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-aprende">Aprende más de este motor LLM</h2>
+<button type="button" class="close-btn" data-close-modal>Cerrar</button>
+</div>
+<p class="theory-lead">Así decide este entrenador. Las notas sirven al profesor que va a enriquecer las reglas y al estudiante que quiere ver la fórmula con la que se lee su frase.</p>
 <div class="theory-actions">
 <button type="button" data-open-modal="modal-guia" aria-haspopup="dialog">Guía de uso</button>
 <button type="button" data-open-modal="modal-profesor" aria-haspopup="dialog">Para el profesor: 6 dimensiones</button>
@@ -149,8 +198,7 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <button type="button" data-open-modal="modal-wittgenstein" aria-haspopup="dialog">Wittgenstein y el uso <span class="btn-note">(Para los filósofos)</span></button>
 </div>
 </div>
-</section>
-</main>
+</dialog>
 
 <dialog class="theory-modal" id="modal-guia" aria-labelledby="titulo-guia">
 <div class="modal-card">
@@ -160,7 +208,7 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 </div>
 <p>Hay cuatro controles arriba de la entrevista: tipo de entrevista, idioma a aprender (español, inglés o francés), nivel e idioma de explicación (español, inglés o francés).</p>
 <p>El tipo de entrevista fija el puesto (ingeniería de software, call center, mesero de restaurante, retail, recepción de hotel, enfermería, asistente administrativo, reparto, docencia o ventas), el tono y los temas de las preguntas. Cambiarlo abre otra conversación con una pregunta nueva de ese puesto. Las reglas gramaticales no cambian: el tiempo verbal lo sigue pidiendo cada pregunta.</p>
-<p>En el sitio publicado, la página no llama a Groq desde tu computador. Cada pregunta sale hacia el servidor Node que enciende el workflow de GitHub, y ese servidor es quien consulta a Groq.</p>
+<p>En el sitio publicado, la página no llama a Groq desde tu computador. Cada pregunta sale hacia el servidor Node que enciende el workflow de GitHub, y ese servidor es quien consulta a Groq. El contador Sesión es el tiempo que queda de ese workflow. En 00:00 la sesión de esa conversación termina.</p>
 <p>El idioma a aprender es el del entrevistador y el de tu respuesta. El de explicación es el tuyo y el del profesor: el feedback sale ahí, y la sugerencia queda en el idioma que estás aprendiendo. Cada turno le manda esos dos idiomas a la IA.</p>
 <p>Cambiar el idioma a aprender abre otra conversación y pide una pregunta nueva. Cambiar solo el idioma de explicación deja la pregunta actual y aplica el idioma nuevo en el siguiente feedback.</p>
 <p>La misma IA lleva el hilo: hace la pregunta, lee tu respuesta y escribe el feedback y la pregunta siguiente. El feedback queda deshabilitado y trae dos partes: corrección de la respuesta y expectativa de la siguiente respuesta. El motor gramatical es solo referencia para el skill del idioma en curso. Hay un apoyo de contexto en inglés, otro en español y otro en francés; entra el del idioma a aprender.</p>
@@ -328,11 +376,15 @@ import {buildPedagogicalContext,INTERVIEW_TYPES,DEFAULT_INTERVIEW_TYPE,interview
 const $=id=>document.getElementById(id);
 for(const [id,type] of Object.entries(INTERVIEW_TYPES)){const option=document.createElement('option');option.value=id;option.textContent=type.label;if(id===DEFAULT_INTERVIEW_TYPE)option.selected=true;$('interviewType').append(option);}
 function currentType(){return interviewTypeOf($('interviewType').value);}
-let apiBase='';
-const OFFLINE_MSG='El servidor de Groq está apagado. En el repositorio de GitHub, ejecuta el workflow «Servidor del coach (Groq)» y recarga esta página cuando publique la dirección.';
-const SERVER_SOURCES=['https://raw.githubusercontent.com/wbsckt3/sabelotodo-ai-interview-coach/main/server.json',new URL('server.json',document.baseURI).href];
-async function readApi(source){const response=await fetch(`${source}${source.includes('?')?'&':'?'}t=${Date.now()}`,{cache:'no-store'});if(!response.ok)return '';const data=await response.json();return data&&typeof data.api==='string'&&/^https:\/\//.test(data.api.trim())?data.api.trim().replace(/\/$/,''):'';}
-async function loadServer(){for(const source of SERVER_SOURCES){try{const api=await readApi(source);if(api){apiBase=api;return;}}catch{/* prueba la siguiente fuente */}}}
+let apiBase='', sessionUntil=0, sessionLive=false;
+const NO_SESSION='Sin sesión activa.';
+const SERVER_SOURCES=['https://api.github.com/repos/wbsckt3/sabelotodo-ai-interview-coach/contents/server.json?ref=main','https://raw.githubusercontent.com/wbsckt3/sabelotodo-ai-interview-coach/main/server.json',new URL('server.json',document.baseURI).href];
+function pad(n){return String(n).padStart(2,'0');}
+function formatRemain(ms){const total=Math.max(0,Math.ceil(ms/1000));const h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;return h?`${h}:${pad(m)}:${pad(s)}`:`${pad(m)}:${pad(s)}`;}
+function renderSession(){const el=$('sessionClock');if(!el)return;if(sessionLive&&sessionUntil&&sessionUntil<=Date.now()){sessionLive=false;apiBase='';}if(sessionLive&&sessionUntil>Date.now()){el.textContent=`Sesión ${formatRemain(sessionUntil-Date.now())}`;return;}if(sessionLive){el.textContent='Sesión activa';return;}el.textContent=location.hostname.endsWith('github.io')?'Sesión 00:00':'Sesión local';}
+async function readServer(source){const response=await fetch(`${source}${source.includes('?')?'&':'?'}t=${Date.now()}`,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});if(!response.ok)return null;const data=await response.json();if(data&&typeof data.content==='string'){try{return JSON.parse(atob(data.content.replace(/\s/g,'')));}catch{return null;}}return data&&typeof data==='object'?data:null;}
+function applyServer(data){const api=data&&typeof data.api==='string'&&/^https:\/\//.test(data.api.trim())?data.api.trim().replace(/\/$/,''):'';const until=Date.parse(data&&data.until||'');const open=Boolean(api)&&( !Number.isFinite(until)||until>Date.now());if(!open)return false;apiBase=api;sessionLive=true;sessionUntil=Number.isFinite(until)?until:0;renderSession();return true;}
+async function loadServer(){for(const source of SERVER_SOURCES){try{const data=await readServer(source);if(data&&applyServer(data))return;}catch{/* prueba la siguiente fuente */}}if(!sessionLive)renderSession();}
 function remoteMissing(){return location.hostname.endsWith('github.io')&&!apiBase;}
 function apiUrl(path){return `${apiBase}${path}`;}
 const INPUT_USD=0.05, OUTPUT_USD=0.08;
@@ -350,26 +402,46 @@ function appendTurn(entry){if(!sessionId)beginConversation();const list=readConv
 const NAMES={es:'español',en:'inglés',fr:'francés'};
 function targetName(){return NAMES[$('targetLanguage').value]||'inglés';}
 function explanationName(){return NAMES[$('explanationLanguage').value]||'español';}
-function updateLanguageHints(){const learn=targetName(), explain=explanationName();$('languageHint').textContent=`Idioma a aprender: ${learn}. Ese es el idioma del entrevistador y de tu respuesta. Idioma de explicación: ${explain}. Ese es tu idioma y el del profesor en el feedback. Cada turno envía los dos.`;$('interviewerHint').textContent=`Pregunta en ${learn}. Llega sola al abrir la entrevista y se reemplaza en cada respuesta. Cambiar el idioma a aprender abre otra conversación.`;$('studentHint').textContent=`Escribe en ${learn} y pulsa Responder.`;$('studentText').placeholder=`Tu respuesta en ${learn}`;$('feedbackHint').textContent=`La misma IA escribe aquí en ${explain}, después de tu respuesta: corrección de la respuesta y expectativa de la siguiente. La sugerencia queda en ${learn}. Este campo está deshabilitado.`;}
+function setHint(id,text){const el=$(id);if(el)el.dataset.hint=text;}
+function showFeedback(text,open){const value=text||'';$('feedback').value=value;$('feedbackBtn').disabled=!value;const dialog=$('modal-feedback');if(!value&&dialog.open)dialog.close();else if(open&&value&&!dialog.open)dialog.showModal();}
+function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintType','Define el puesto, el tono y los temas de la entrevista. Cambiarlo abre otra conversación.');setHint('hintTarget',`Idioma a aprender: ${learn}. Es el idioma del entrevistador y de tu respuesta.`);setHint('hintLevel','Nivel aproximado de tus respuestas.');setHint('hintExplain',`Idioma de explicación: ${explain}. Es tu idioma y el del profesor en el feedback.`);setHint('hintInterviewer',`Pregunta en ${learn}. Llega sola al abrir la entrevista y se reemplaza en cada respuesta. Cambiar el idioma a aprender abre otra conversación.`);setHint('hintStudent',`Escribe en ${learn} y pulsa Responder.`);$('studentText').placeholder=`Tu respuesta en ${learn}`;}
 function learner(){return {level:$('level').value,explanationLanguage:$('explanationLanguage').value,targetLanguage:$('targetLanguage').value};}
 function skillFor(userText,question,nextAction,scenario,cue){const target=$('targetLanguage').value;const type=currentType();const grammarAnalysis=analyzeGrammar(userText,{question,language:target,domainTerms:type.terms[target]||type.terms.en,domainLabel:type.label});const skillInput=buildPedagogicalContext({userText,learner:learner(),lesson:{goal:type.id,scenario:scenario||type.id,expectedGrammar:grammarAnalysis.questionExpectation||['context_appropriate_tense']},grammarAnalysis,conversation:{lastQuestion:question,nextAction}});skillInput.variationCue=cue||'';return skillInput;}
-async function postCoach(body){if(remoteMissing())throw new Error(OFFLINE_MSG);const response=await fetch(apiUrl('/api/coach'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);if(result.aiUsage)renderUsage(result.aiUsage);else refreshUsage();return result;}
-async function startInterview(){const gen=++generation;busy=true;replyBtn.disabled=true;if(remoteMissing()){$('status').textContent=OFFLINE_MSG;busy=false;replyBtn.disabled=false;return;}$('status').textContent=`El entrevistador está preparando una pregunta en ${targetName()}…`;const type=currentType();const cue=type.openings[Math.floor(Math.random()*type.openings.length)];try{const result=await postCoach({action:'start',skillInput:skillFor('','','open_interview',type.id,`${cue} Phrase a new question.`)});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');if(!turn.interviewer)throw new Error('El entrevistador no envió una pregunta.');beginConversation();appendTurn({role:'interviewer',text:turn.interviewer});$('interviewer').value=turn.interviewer;$('feedback').value='';$('studentText').value='';$('status').textContent=`Pregunta lista. Responde en ${targetName()}.`;$('studentText').focus();}catch(e){if(gen===generation)$('status').textContent=`No se pudo abrir la entrevista: ${e.message}`;}finally{if(gen===generation){busy=false;replyBtn.disabled=false;}}}
-replyBtn.addEventListener('click',async()=>{const gen=generation;const userText=$('studentText').value.trim();const question=$('interviewer').value.trim();if(!question){$('status').textContent='Todavía no hay pregunta del entrevistador.';return;}if(!userText){$('status').textContent=`Escribe tu respuesta en ${targetName()}.`;return;}if(busy)return;busy=true;replyBtn.disabled=true;$('status').textContent='El entrevistador y el profesor están respondiendo…';try{const result=await postCoach({action:'reply',skillInput:skillFor(userText,question,'correct_and_continue',currentType().id,`Ask a different follow-up question in ${targetName()}. Do not repeat the previous interviewer question.`)});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');appendTurn({role:'student',text:userText,answeredQuestion:question});appendTurn({role:'professor',feedback:formatFeedback(turn),correction:turn.correction,expectation:turn.expectation,suggestion:turn.suggestion});if(turn.interviewer)appendTurn({role:'interviewer',text:turn.interviewer});$('feedback').value=formatFeedback(turn);if(turn.interviewer)$('interviewer').value=turn.interviewer;$('studentText').value='';$('studentText').focus();$('status').textContent=turn.interviewer?'Nueva pregunta del entrevistador.':'Llegó el feedback. El entrevistador no cambió la pregunta.';}catch(e){if(gen===generation)$('status').textContent=`Error: ${e.message}`;}finally{if(gen===generation){busy=false;replyBtn.disabled=false;}}});
+async function postCoach(body){if(remoteMissing())throw new Error(NO_SESSION);const response=await fetch(apiUrl('/api/coach'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);if(result.aiUsage)renderUsage(result.aiUsage);else refreshUsage();return result;}
+async function startInterview(){const gen=++generation;busy=true;replyBtn.disabled=true;if(remoteMissing()){$('status').textContent=NO_SESSION;busy=false;replyBtn.disabled=false;return;}$('status').textContent=`El entrevistador está preparando una pregunta en ${targetName()}…`;const type=currentType();const cue=type.openings[Math.floor(Math.random()*type.openings.length)];try{const result=await postCoach({action:'start',skillInput:skillFor('','','open_interview',type.id,`${cue} Phrase a new question.`)});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');if(!turn.interviewer)throw new Error('El entrevistador no envió una pregunta.');beginConversation();appendTurn({role:'interviewer',text:turn.interviewer});showFeedback('',false);$('studentText').value='';$('status').textContent=`Pregunta lista. Responde en ${targetName()}.`;$('studentText').focus();}catch(e){if(gen===generation)$('status').textContent=`No se pudo abrir la entrevista: ${e.message}`;}finally{if(gen===generation){busy=false;replyBtn.disabled=false;}}}
+replyBtn.addEventListener('click',async()=>{const gen=generation;const userText=$('studentText').value.trim();const question=$('interviewer').value.trim();if(!question){$('status').textContent='Todavía no hay pregunta del entrevistador.';return;}if(!userText){$('status').textContent=`Escribe tu respuesta en ${targetName()}.`;return;}if(busy)return;busy=true;replyBtn.disabled=true;$('status').textContent='El entrevistador y el profesor están respondiendo…';try{const result=await postCoach({action:'reply',skillInput:skillFor(userText,question,'correct_and_continue',currentType().id,`Ask a different follow-up question in ${targetName()}. Do not repeat the previous interviewer question.`)});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');appendTurn({role:'student',text:userText,answeredQuestion:question});appendTurn({role:'professor',feedback:formatFeedback(turn),correction:turn.correction,expectation:turn.expectation,suggestion:turn.suggestion});if(turn.interviewer)appendTurn({role:'interviewer',text:turn.interviewer});showFeedback(formatFeedback(turn),true);if(turn.interviewer)$('interviewer').value=turn.interviewer;$('studentText').value='';$('studentText').focus();$('status').textContent=turn.interviewer?'Nueva pregunta del entrevistador.':'Llegó el feedback. El entrevistador no cambió la pregunta.';}catch(e){if(gen===generation)$('status').textContent=`Error: ${e.message}`;}finally{if(gen===generation){busy=false;replyBtn.disabled=false;}}});
 function money(n){const v=Math.max(0,Number(n)||0);if(v===0)return '$0.00';if(v>=0.01)return `$${v.toFixed(2)}`;return `$${v.toFixed(8)}`;}
 function tokens(n){return Math.max(0,Number(n)||0).toLocaleString('es-CO');}
 function costOf(prompt,completion){const input=(Math.max(0,Number(prompt)||0)*INPUT_USD)/1e6;const output=(Math.max(0,Number(completion)||0)*OUTPUT_USD)/1e6;return {input,output,total:input+output};}
 function renderUsage(usage){if(!usage)return;const pct=Math.max(0,Math.min(100,Number(usage.percentUsed)||0));const level=pct>=95||usage.quotaExhausted?'is-danger':pct>=75?'is-warn':'';const day=costOf(usage.promptTokens,usage.completionTokens);$('aiUsageCount').textContent=`${usage.requests||0} / ${usage.limit||0}`;$('aiUsageSummary').className=`jc-ai-usage__summary ${level}`.trim();$('aiUsageSummary').textContent='';const warn=usage.quotaExhausted?' <span class="jc-ai-usage__warn">— agotado</span>':'';$('aiUsageSummary').insertAdjacentHTML('beforeend',`${usage.requests||0} / ${usage.limit||0} llamadas <span class="jc-ai-usage__sep">|</span> ${pct}% del cupo diario <span class="jc-ai-usage__sep">|</span> <span class="jc-ai-usage__cost">Costo ${money(day.total)}</span>${warn}`);$('aiUsageBar').setAttribute('aria-valuenow',String(pct));$('aiUsageFill').style.width=`${pct}%`;$('aiUsageFill').className=`jc-ai-usage__fill ${level}`.trim();$('aiUsageIn').textContent=`${tokens(usage.promptTokens)} tok`;$('aiUsageOut').textContent=`${tokens(usage.completionTokens)} tok`;$('aiUsageInCost').textContent=money(day.input);$('aiUsageOutCost').textContent=money(day.output);const last=usage.lastCall;if(!last){$('aiUsageLast').textContent='Todavía no hay llamadas hoy.';return;}const lastCost=costOf(last.promptTokens,last.completionTokens);$('aiUsageLast').textContent=`Última llamada: ${tokens(last.promptTokens)} input · ${tokens(last.completionTokens)} output · Costo ${money(lastCost.total)}${last.estimated?' · estimado':''}`;}
 async function refreshUsage(){try{if(remoteMissing())return;const response=await fetch(apiUrl('/api/ai-usage'));if(!response.ok)return;renderUsage(await response.json());}catch{/* la barra se queda en el último valor conocido */}}
 $('aiUsageToggle').addEventListener('click',()=>{const body=$('aiUsageBody');const open=body.hidden;body.hidden=!open;$('aiUsageToggle').setAttribute('aria-expanded',String(open));$('aiUsage').classList.toggle('jc-ai-usage--open',open);$('aiUsageCaret').textContent=open?'▴':'▾';});
-function restartInterview(){updateLanguageHints();$('interviewer').value='';$('feedback').value='';$('studentText').value='';startInterview();}
+function restartInterview(){updateLanguageHints();$('interviewer').value='';showFeedback('',false);$('studentText').value='';startInterview();}
 $('targetLanguage').addEventListener('change',restartInterview);
 $('interviewType').addEventListener('change',restartInterview);
 $('explanationLanguage').addEventListener('change',updateLanguageHints);
 updateLanguageHints();
+renderSession();
+setInterval(renderSession,1000);
+setInterval(loadServer,30000);
 loadServer().finally(()=>refreshUsage().finally(()=>startInterview()));
 </script>
 <script>
+document.querySelectorAll('.q').forEach((btn)=>{
+  btn.addEventListener('click',()=>{
+    const title=document.getElementById('hintTitle');
+    const body=document.getElementById('hintBody');
+    const dialog=document.getElementById('modal-hint');
+    if(!title||!body||!dialog)return;
+    title.textContent=(btn.getAttribute('aria-label')||'Ayuda').replace(/^Ayuda:\s*/,'');
+    body.textContent=btn.dataset.hint||'';
+    if(typeof dialog.showModal==='function') dialog.showModal();
+  });
+});
+document.getElementById('feedbackBtn').addEventListener('click',()=>{
+  const dialog=document.getElementById('modal-feedback');
+  if(dialog&&typeof dialog.showModal==='function'&&!dialog.open) dialog.showModal();
+});
 document.querySelectorAll('[data-open-modal]').forEach((opener)=>{
   opener.addEventListener('click',()=>{
     const dialog=document.getElementById(opener.getAttribute('data-open-modal'));

@@ -74,14 +74,16 @@ jobs:
           echo "SERVIDOR_LISTO ${URL}"
           echo "::notice title=Servidor del coach::${URL}"
           echo "Servidor listo: ${URL}" >>"$GITHUB_STEP_SUMMARY"
-          printf '%s\n' "{\"api\":\"${URL}\"}" >server.json
+          UNTIL=$(date -u -d "+${MINUTES} minutes" +%Y-%m-%dT%H:%M:%SZ)
+          echo "SESION_HASTA ${UNTIL}"
+          printf '%s\n' "{\"api\":\"${URL}\",\"until\":\"${UNTIL}\"}" >server.json
           git add server.json
           git -c user.email="wbsckt3@gmail.com" -c user.name="wbsckt3" commit -m "Publica la dirección temporal del servidor del coach"
           git push origin HEAD:main
 
           cleanup() {
             if [ -f server.json ] && grep -q "$URL" server.json; then
-              printf '%s\n' '{"api":""}' >server.json
+              printf '%s\n' '{"api":"","until":""}' >server.json
               git add server.json
               git -c user.email="wbsckt3@gmail.com" -c user.name="wbsckt3" commit -m "Apaga la dirección temporal del servidor del coach" || true
               git push origin HEAD:main || true
