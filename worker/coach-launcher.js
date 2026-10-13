@@ -97,13 +97,13 @@ async function createSession(request, env) {
   const id = crypto.randomUUID();
   const session = { status: 'starting', minutes, lang, type, createdAt: new Date().toISOString(), api: '', until: '' };
   await writeSession(env, id, session);
-  await env.SESSIONS.put(hourKey, String(used + 1), { expirationTtl: 3700 });
   try {
     await dispatchWorkflow(env, id, minutes);
   } catch (error) {
     await writeSession(env, id, { ...session, status: 'failed', error: error.message });
     return json(request, env, 502, { error: 'No se pudo encender el servidor del coach.', detail: error.message });
   }
+  await env.SESSIONS.put(hourKey, String(used + 1), { expirationTtl: 3700 });
   return json(request, env, 201, { id, status: 'starting', minutes });
 }
 
