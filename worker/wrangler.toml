@@ -1,0 +1,19 @@
+name = "sabelotodo-coach-launcher"
+main = "coach-launcher.js"
+compatibility_date = "2026-10-01"
+
+# Sin id: Cloudflare crea el KV en el primer despliegue y lo reutiliza en los siguientes.
+[[kv_namespaces]]
+binding = "SESSIONS"
+
+[vars]
+ALLOWED_ORIGINS = "https://wbsckt3.github.io,http://127.0.0.1:8787,http://localhost:8787"
+GITHUB_REPO = "wbsckt3/sabelotodo-ai-interview-coach"
+WORKFLOW_FILE = "coach-server.yml"
+GITHUB_REF = "main"
+MAX_ACTIVE = "3"
+MAX_PER_IP_HOUR = "3"
+
+# Secretos (no van en este archivo; se crean en Settings → Variables and Secrets del Worker):
+#   GITHUB_TOKEN     -> token fine-grained, solo este repo, permiso Actions: Read and write
+#   CALLBACK_SECRET  -> la misma cadena que el secreto COACH_CALLBACK_SECRET del repo

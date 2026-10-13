@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Sabelotodo AI · Interview Coach</title>
+<meta name="coach-launcher" content="">
 <style>
 :root{font-family:system-ui,Segoe UI,sans-serif;color:#172033;background:#f4f6fa}
 *{box-sizing:border-box}
@@ -90,6 +91,28 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 .modal-card th,.modal-card td{text-align:left;padding:8px 8px;border-bottom:1px solid #e1e6ef;vertical-align:top}
 .modal-card th{font-size:.8rem;color:#3d4b63}
 .note{font-size:.88rem;color:#3d4b63}
+.start-grid{display:grid;gap:10px;margin:10px 0 14px}
+.start-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.start-actions .ghost{background:#eef2f8;color:#172033}
+.launch-status{min-height:1.4em;margin:10px 0 0}
+.launch-status.is-error{color:#b91c1c}
+#sessionClock.is-clickable{cursor:pointer;text-decoration:underline dotted}
+.start-grid--2{grid-template-columns:1fr 1fr}
+.start-grid--2 .start-wide{grid-column:1/-1}
+.start-grid .label-row{margin:0 0 4px}
+.native-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid #c5d0e6;border-radius:10px;background:#f4f7fd}
+.native-row .muted{margin:2px 0 0}
+.native-label{font-weight:650;font-size:.82rem}
+.native-row .qa-lang-switch__btn{min-width:2.4rem;padding:6px 9px;font-size:.8rem}
+body.class-started .title-tools{display:none}
+.class-card{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #c5d0e6;border-radius:12px;background:#f4f7fd;margin-bottom:4px}
+.class-card__data{flex:1;min-width:0;margin:0;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:4px 10px}
+.class-card__data div{min-width:0}
+.class-card__data dt{font-size:.68rem;font-weight:650;color:#647084;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.class-card__data dd{margin:0;font-size:.84rem;font-weight:700;color:#172033;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.class-card__side{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.class-card__side .ghost{background:#fff;color:#233e73;border:1px solid #c5d0e6;padding:4px 10px;font-size:.75rem}
+@media(max-width:650px){.class-card__data{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){body{padding:6px}h1{font-size:.95rem}.subtitle{font-size:.75rem}.actions .learn-btn{font-size:.7rem}.theory-actions{display:grid}}
 </style>
 </head>
@@ -107,7 +130,6 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <button type="button" class="qa-lang-switch__btn" data-set-locale="en" aria-pressed="false">EN</button>
 <button type="button" class="qa-lang-switch__btn" data-set-locale="fr" aria-pressed="false">FR</button>
 </div>
-<p class="session" id="sessionClock" aria-live="polite">Sesión 00:00</p>
 </div>
 </div>
 </header>
@@ -127,34 +149,16 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <p class="jc-ai-usage__last" id="aiUsageLast"></p>
 </div>
 </div>
-<div class="field">
-<div class="label-row"><label for="interviewType" data-i18n="ui.type">Tipo de entrevista</label><button type="button" class="q" id="hintType" data-i18n-aria="hints.typeTitle" aria-label="Tipo de entrevista">?</button></div>
-<select id="interviewType"></select>
-</div>
-<div class="row row-3">
-<div>
-<div class="label-row"><label for="targetLanguage" data-i18n="ui.target">Idioma a aprender</label><button type="button" class="q" id="hintTarget" data-i18n-aria="hints.targetTitle" aria-label="Idioma a aprender">?</button></div>
-<select id="targetLanguage">
-<option value="es" data-i18n="langOptions.es">Español</option>
-<option value="en" data-i18n="langOptions.en" selected>Inglés</option>
-<option value="fr" data-i18n="langOptions.fr">Francés</option>
-</select>
-</div>
-<div>
-<div class="label-row"><label for="level" data-i18n="ui.level">Nivel aproximado</label><button type="button" class="q" id="hintLevel" data-i18n-aria="hints.levelTitle" aria-label="Nivel aproximado">?</button></div>
-<select id="level">
-<option value="beginner" data-i18n="levels.beginner">Principiante</option>
-<option value="intermediate" data-i18n="levels.intermediate" selected>Intermedio</option>
-<option value="advanced" data-i18n="levels.advanced">Avanzado</option>
-</select>
-</div>
-<div>
-<div class="label-row"><label for="explanationLanguage" data-i18n="ui.explain">Idioma de explicación</label><button type="button" class="q" id="hintExplain" data-i18n-aria="hints.explainTitle" aria-label="Idioma de explicación">?</button></div>
-<select id="explanationLanguage">
-<option value="es" selected>Español</option>
-<option value="en">English</option>
-<option value="fr">Français</option>
-</select>
+<div class="class-card" id="classCard">
+<dl class="class-card__data">
+<div><dt data-i18n="ui.type">Tipo de entrevista</dt><dd id="cardType"></dd></div>
+<div><dt data-i18n="ui.target">Idioma a aprender</dt><dd id="cardTarget"></dd></div>
+<div><dt data-i18n="ui.level">Nivel aproximado</dt><dd id="cardLevel"></dd></div>
+<div><dt data-i18n="ui.explain">Idioma de explicación</dt><dd id="cardExplain"></dd></div>
+</dl>
+<div class="class-card__side">
+<p class="session" id="sessionClock" aria-live="polite">Sesión 00:00</p>
+<button type="button" class="ghost" id="changeClass" data-i18n="ui.change">Cambiar</button>
 </div>
 </div>
 <div class="field grow">
@@ -191,6 +195,80 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
 <textarea id="feedback" class="feedback-view" readonly placeholder="Corrección de la respuesta&#10;&#10;Expectativa de la siguiente respuesta"></textarea>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-start" aria-labelledby="titulo-start">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-start" data-i18n="start.title">Prepara tu clase</h2>
+</div>
+<p class="note" data-i18n="start.lead">Selecciona el tipo de entrevista, el lenguaje que quieres practicar, tu nivel y el idioma de las explicaciones.</p>
+<div class="start-grid start-grid--2">
+<div class="start-wide native-row">
+<div>
+<span class="native-label" id="nativeLabel" data-i18n="start.native">Idioma nativo</span>
+<p class="muted" data-i18n="start.nativeHint">Toda la página y las explicaciones se muestran en tu idioma.</p>
+</div>
+<div class="qa-lang-switch" role="group" aria-labelledby="nativeLabel">
+<button type="button" class="qa-lang-switch__btn qa-lang-switch__btn--active" data-set-locale="es" aria-pressed="true">ES</button>
+<button type="button" class="qa-lang-switch__btn" data-set-locale="en" aria-pressed="false">EN</button>
+<button type="button" class="qa-lang-switch__btn" data-set-locale="fr" aria-pressed="false">FR</button>
+</div>
+</div>
+<div class="start-wide">
+<div class="label-row"><label for="interviewType" data-i18n="ui.type">Tipo de entrevista</label><button type="button" class="q" id="hintType" data-i18n-aria="hints.typeTitle" aria-label="Tipo de entrevista">?</button></div>
+<select id="interviewType"></select>
+</div>
+<div>
+<div class="label-row"><label for="targetLanguage" data-i18n="ui.target">Idioma a aprender</label><button type="button" class="q" id="hintTarget" data-i18n-aria="hints.targetTitle" aria-label="Idioma a aprender">?</button></div>
+<select id="targetLanguage">
+<option value="es" data-i18n="langOptions.es">Español</option>
+<option value="en" data-i18n="langOptions.en" selected>Inglés</option>
+<option value="fr" data-i18n="langOptions.fr">Francés</option>
+</select>
+</div>
+<div>
+<div class="label-row"><label for="level" data-i18n="ui.level">Nivel aproximado</label><button type="button" class="q" id="hintLevel" data-i18n-aria="hints.levelTitle" aria-label="Nivel aproximado">?</button></div>
+<select id="level">
+<option value="beginner" data-i18n="levels.beginner">Principiante</option>
+<option value="intermediate" data-i18n="levels.intermediate" selected>Intermedio</option>
+<option value="advanced" data-i18n="levels.advanced">Avanzado</option>
+</select>
+</div>
+<div class="start-wide">
+<div class="label-row"><label for="explanationLanguage" data-i18n="ui.explain">Idioma de explicación</label><button type="button" class="q" id="hintExplain" data-i18n-aria="hints.explainTitle" aria-label="Idioma de explicación">?</button></div>
+<select id="explanationLanguage">
+<option value="es" selected>Español</option>
+<option value="en">English</option>
+<option value="fr">Français</option>
+</select>
+</div>
+</div>
+<div class="start-actions">
+<button type="button" id="startBegin" data-i18n="start.begin">Comenzar entrevista</button>
+</div>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-launch" aria-labelledby="titulo-launch">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-launch" data-i18n="start.launchTitle">Iniciar la clase</h2>
+</div>
+<p class="note" id="launchSummary"></p>
+<div class="start-grid">
+<div>
+<label for="startMinutes" data-i18n="start.minutes">Duración de la clase (minutos)</label>
+<input id="startMinutes" type="number" min="5" max="180" step="5" value="60" inputmode="numeric">
+<p class="muted" data-i18n="start.minutesHint">Entre 5 y 180 minutos. El servidor se apaga solo al terminar.</p>
+</div>
+</div>
+<div class="start-actions">
+<button type="button" class="ghost" id="launchBack" data-i18n="start.back">Volver</button>
+<button type="button" id="launchBtn" data-i18n="start.launch">Iniciar la clase</button>
+</div>
+<p class="muted launch-status" id="launchStatus" role="status"></p>
 </div>
 </dialog>
 
@@ -235,7 +313,7 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
 <div data-i18n-html="html.profesor">
-<p>Esto es un entrenador de inglés para un ámbito concreto: la entrevista técnica de software. Simula la conversación con un profesor. Corrige, explica una regla y sigue la entrevista. El alumno practica el inglés de esa situación, no una lista suelta de ejercicios.</p>
+<p>Esto es un entrenador de lenguaje para un ámbito concreto: la entrevista técnica de software. Simula la conversación con un profesor. Corrige, explica una regla y sigue la entrevista. El alumno practica el lenguaje de esa situación, no una lista suelta de ejercicios.</p>
 <p>La misma IA responde como entrevistador y como profesor. El hilo —la pregunta, lo que esa pregunta espera y el turno siguiente— se arma en esa IA a partir de la respuesta del estudiante. Hay tres piezas, y cada una se enriquece en su archivo:</p>
 <ul>
 <li><strong>Motorg</strong> (<code>motorg.js</code>, <code>motorg-es.js</code>, <code>motorg-fr.js</code>). Referencia para el skill del idioma en curso. Cada idioma tiene un apoyo de contexto. Devuelve un hallazgo y un grado de pertenencia. No escribe el feedback.</li>
@@ -300,7 +378,7 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <p>fix → fixed, deploy → deployed, implement → implemented, debug → debugged, test → tested, create → created, build → built, write → wrote, find → found, make → made, do → did, go → went, have → had, see → saw.</p>
 <p>Los irregulares importan porque el pasado no es siempre «añadir -ed». built, wrote, went y found pertenecen al pasado por el uso del verbo, no por un sufijo común.</p>
 <h3>Un límite que el profesor debe respetar</h3>
-<p><em>Yesterday, I did fix the bug</em> es enfático y gramatical: did ya marca el pasado y fix permanece en forma base. Motorg comprueba si hay un auxiliar (did, was, had, will, would) antes de proponer el pasado. Las reglas actuales son heurísticas: no analizan todas las subordinadas ni todos los verbos del inglés. Una frase que ninguna regla reconoce permanece como frase no clasificada. No pasa a ser un error por silencio del motor.</p>
+<p><em>Yesterday, I did fix the bug</em> es enfático y gramatical: did ya marca el pasado y fix permanece en forma base. Motorg comprueba si hay un auxiliar (did, was, had, will, would) antes de proponer el pasado. Las reglas actuales son heurísticas: no analizan todas las subordinadas ni todos los verbos del lenguaje. Una frase que ninguna regla reconoce permanece como frase no clasificada. No pasa a ser un error por silencio del motor.</p>
 <p class="note">Cuando se amplíe el ámbito (otra profesión, otro curso), se amplía el léxico y el mapa pregunta → tiempo. La pieza central sigue siendo el verbo dentro de la situación, no una lista memorizada fuera de la entrevista.</p>
 </div>
 </div>
@@ -365,7 +443,7 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
 <div data-i18n-html="html.wittgenstein">
-<p>La teoría está en las <em>Investigaciones filosóficas</em>. La frase que orienta el motor es la del parágrafo 43: el significado de una palabra es su uso en el lenguaje. Aplicada a una clase de inglés, dice algo concreto: una forma verbal no tiene un veredicto eterno. Tiene un valor dentro de la actividad en la que aparece.</p>
+<p>La teoría está en las <em>Investigaciones filosóficas</em>. La frase que orienta el motor es la del parágrafo 43: el significado de una palabra es su uso en el lenguaje. Aplicada a una clase de lenguaje, dice algo concreto: una forma verbal no tiene un veredicto eterno. Tiene un valor dentro de la actividad en la que aparece.</p>
 <h3>En otras palabras</h3>
 <p>La entrevista técnica es un juego de lenguaje, con jugadas y con reglas que los participantes reconocen. «Correcto» quiere decir: esta jugada cumple la regla que la pregunta acaba de poner en la mesa. El motor no busca un sentido escondido detrás de la frase del alumno. Mira si la frase, dicha aquí, hace el trabajo que la pregunta pidió.</p>
 <p>Por eso la misma cadena cambia de papel:</p>
@@ -375,7 +453,7 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 </ul>
 <p>Corregir sin mirar la pregunta sería tratar la gramática como un objeto fuera del uso. El motor recibe siempre la pregunta junto con la respuesta para no hacer eso.</p>
 <h3>Parecidos de familia</h3>
-<p>Wittgenstein llamó parecido de familia al hecho de que los miembros de un grupo se reconocen por rasgos compartidos de a pocos, no por una sola marca que todos tengan. El pasado inglés funciona así. fixed y deployed llevan -ed. built, wrote, went y found no. Igual pertenecen al uso «acción terminada en el pasado». El léxico del motor guarda esas formas una a una, y la lógica difusa les pone un grado, porque la frontera entre «esta forma cumple el juego» y «esta forma se sale» no es siempre un borde nítido.</p>
+<p>Wittgenstein llamó parecido de familia al hecho de que los miembros de un grupo se reconocen por rasgos compartidos de a pocos, no por una sola marca que todos tengan. El pasado del lenguaje funciona así. fixed y deployed llevan -ed. built, wrote, went y found no. Igual pertenecen al uso «acción terminada en el pasado». El léxico del motor guarda esas formas una a una, y la lógica difusa les pone un grado, porque la frontera entre «esta forma cumple el juego» y «esta forma se sale» no es siempre un borde nítido.</p>
 <h3>Seguir una regla, sin leer la mente</h3>
 <p>Seguir la regla del pasado se muestra en público: ante yesterday, el alumno produce la forma que esa entrevista reconoce. El motor observa esa jugada. No tiene acceso a una intención privada, y la teoría dice que ese acceso no hace falta para enseñar. Lo que se puede practicar es el uso compartido.</p>
 <p>De ahí sale la abstención. Si las dimensiones no separan dos lecturas, declarar un error sería inventar una intención que la frase no muestra. El resultado honesto es evidencia insuficiente y una pregunta. El skill ya pide eso: si la confianza es baja o la frase puede ser válida, se dice con cuidado y se pide una aclaración.</p>
@@ -411,11 +489,36 @@ function paintStatus(){const vars={...(statusState.extra||{})};if(statusState.ke
 const SERVER_SOURCES=['https://api.github.com/repos/wbsckt3/sabelotodo-ai-interview-coach/contents/server.json?ref=main','https://raw.githubusercontent.com/wbsckt3/sabelotodo-ai-interview-coach/main/server.json',new URL('server.json',document.baseURI).href];
 function pad(n){return String(n).padStart(2,'0');}
 function formatRemain(ms){const total=Math.max(0,Math.ceil(ms/1000));const h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;return h?`${h}:${pad(m)}:${pad(s)}`:`${pad(m)}:${pad(s)}`;}
-function renderSession(){const el=$('sessionClock');if(!el)return;if(sessionLive&&sessionUntil&&sessionUntil<=Date.now()){sessionLive=false;apiBase='';}if(sessionLive&&sessionUntil>Date.now()){el.textContent=tr('ui.session','Sesión {{time}}',{time:formatRemain(sessionUntil-Date.now())});return;}if(sessionLive){el.textContent=tr('ui.sessionActive','Sesión activa');return;}el.textContent=location.hostname.endsWith('github.io')?tr('ui.sessionZero','Sesión 00:00'):tr('ui.sessionLocal','Sesión local');}
+function renderSession(){const el=$('sessionClock');if(!el)return;el.classList.toggle('is-clickable',useLauncher&&!sessionLive);if(sessionLive&&sessionUntil&&sessionUntil<=Date.now()){sessionLive=false;apiBase='';el.classList.toggle('is-clickable',useLauncher);if(useLauncher)sessionEnded();}if(sessionLive&&sessionUntil>Date.now()){el.textContent=tr('ui.session','Sesión {{time}}',{time:formatRemain(sessionUntil-Date.now())});return;}if(sessionLive){el.textContent=tr('ui.sessionActive','Sesión activa');return;}el.textContent=location.hostname.endsWith('github.io')?tr('ui.sessionZero','Sesión 00:00'):tr('ui.sessionLocal','Sesión local');}
 async function readServer(source){const response=await fetch(`${source}${source.includes('?')?'&':'?'}t=${Date.now()}`,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});if(!response.ok)return null;const data=await response.json();if(data&&typeof data.content==='string'){try{return JSON.parse(atob(data.content.replace(/\s/g,'')));}catch{return null;}}return data&&typeof data==='object'?data:null;}
 function applyServer(data){const api=data&&typeof data.api==='string'&&/^https:\/\//.test(data.api.trim())?data.api.trim().replace(/\/$/,''):'';const until=Date.parse(data&&data.until||'');const open=Boolean(api)&&( !Number.isFinite(until)||until>Date.now());if(!open)return false;apiBase=api;sessionLive=true;sessionUntil=Number.isFinite(until)?until:0;renderSession();return true;}
 async function loadServer(){for(const source of SERVER_SOURCES){try{const data=await readServer(source);if(data&&applyServer(data))return;}catch{/* prueba la siguiente fuente */}}if(!sessionLive)renderSession();}
 function remoteMissing(){return location.hostname.endsWith('github.io')&&!apiBase;}
+const LAUNCHER=((document.querySelector('meta[name="coach-launcher"]')||{}).content||'').trim().replace(/\/$/,'');
+const useLauncher=Boolean(LAUNCHER)&&location.hostname.endsWith('github.io');
+const LAUNCH_KEY='coach-launcher-session';
+let launchTimer=null, launchStartedAt=0, launchPollId=0;
+function launchStatus(text,isError){const el=$('launchStatus');el.textContent=text||'';el.classList.toggle('is-error',Boolean(isError));}
+const CHOICE_IDS=['interviewType','targetLanguage','level','explanationLanguage'];
+let choiceSnapshot=null, choiceConfirmed=false;
+function readChoice(){return Object.fromEntries(CHOICE_IDS.map(id=>[id,$(id).value]));}
+function selectedText(id){const option=$(id).selectedOptions[0];return option?option.textContent:'';}
+function renderCard(){$('cardType').textContent=selectedText('interviewType');$('cardTarget').textContent=selectedText('targetLanguage');$('cardLevel').textContent=selectedText('level');$('cardExplain').textContent=selectedText('explanationLanguage');}
+function launchSummary(){$('launchSummary').textContent=tr('start.summary','Entrevista: {{type}} · Idioma: {{lang}}',{type:selectedText('interviewType'),lang:targetName()});}
+function openStartModal(){const pending=useLauncher&&!sessionLive&&sessionStorage.getItem(LAUNCH_KEY);if(pending){launchSummary();if(!$('modal-launch').open)$('modal-launch').showModal();return;}choiceSnapshot=readChoice();choiceConfirmed=false;if(!$('modal-start').open)$('modal-start').showModal();}
+function stopLaunchTimer(){if(launchTimer){clearInterval(launchTimer);launchTimer=null;}}
+function paintLaunching(){launchStatus(tr('start.starting','Encendiendo el servidor del coach… {{time}}. Suele tardar 1 o 2 minutos.',{time:formatRemain(Date.now()-launchStartedAt)}));}
+function launchFailed(message){stopLaunchTimer();launchPollId++;sessionStorage.removeItem(LAUNCH_KEY);$('launchBtn').disabled=false;$('launchBack').disabled=false;launchStatus(tr('start.failed','No se pudo iniciar la clase: {{message}}',{message}),true);if(!$('modal-launch').open)$('modal-launch').showModal();}
+async function pollLaunch(id){const poll=++launchPollId;$('launchBtn').disabled=true;$('launchBack').disabled=true;stopLaunchTimer();paintLaunching();launchTimer=setInterval(paintLaunching,1000);while(poll===launchPollId){let data=null;try{const response=await fetch(`${LAUNCHER}/sessions/${encodeURIComponent(id)}`,{cache:'no-store'});if(response.status===404){launchFailed(tr('start.expired','la sesión ya no existe.'));return;}data=await response.json();}catch{/* reintenta en el siguiente ciclo */}if(poll!==launchPollId)return;if(data&&data.status==='ready'&&applyServer(data)){stopLaunchTimer();$('launchBtn').disabled=false;$('launchBack').disabled=false;launchStatus('');if($('modal-launch').open)$('modal-launch').close();restartInterview();refreshUsage();return;}if(data&&(data.status==='failed'||data.status==='ended')){launchFailed(tr('start.serverDown','el servidor no arrancó.'));return;}await new Promise(resolve=>setTimeout(resolve,5000));}}
+async function launchClass(){const minutes=Math.min(180,Math.max(5,Number.parseInt($('startMinutes').value,10)||60));$('startMinutes').value=String(minutes);$('launchBtn').disabled=true;$('launchBack').disabled=true;launchStatus(tr('start.requesting','Pidiendo un servidor para tu clase…'));try{const response=await fetch(`${LAUNCHER}/sessions`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({minutes,type:$('interviewType').value,lang:$('targetLanguage').value})});const data=await response.json().catch(()=>({}));if(!response.ok){const known={429:'start.tooMany',503:'start.full'}[response.status];launchFailed(known?tr(known,data.error||''):(data.error||`HTTP ${response.status}`));return;}sessionStorage.setItem(LAUNCH_KEY,data.id);launchStartedAt=Date.now();pollLaunch(data.id);}catch(e){launchFailed(e.message);}}
+function sessionEnded(){sessionStorage.removeItem(LAUNCH_KEY);setStatus('start.ended','La clase terminó. Inicia otra cuando quieras.');openStartModal();}
+$('modal-start').addEventListener('close',()=>{if(choiceConfirmed||!choiceSnapshot)return;for(const [id,value] of Object.entries(choiceSnapshot))$(id).value=value;updateLanguageHints();});
+$('startBegin').addEventListener('click',()=>{const before=choiceSnapshot||{};const restart=['interviewType','targetLanguage'].some(id=>before[id]!==$(id).value)||!$('interviewer').value.trim();choiceConfirmed=true;document.body.classList.add('class-started');$('modal-start').close();updateLanguageHints();renderCard();if(useLauncher&&!sessionLive){launchStatus('');launchSummary();$('modal-launch').showModal();return;}if(restart)restartInterview();});
+$('launchBack').addEventListener('click',()=>{$('modal-launch').close();openStartModal();});
+$('launchBtn').addEventListener('click',launchClass);
+$('changeClass').addEventListener('click',openStartModal);
+document.querySelectorAll('#modal-start [data-set-locale]').forEach(btn=>btn.addEventListener('click',()=>{$('explanationLanguage').value=btn.dataset.setLocale;updateLanguageHints();}));
+$('sessionClock').addEventListener('click',()=>{if(useLauncher&&!sessionLive)openStartModal();});
 function apiUrl(path){return `${apiBase}${path}`;}
 const INPUT_USD=0.05, OUTPUT_USD=0.08;
 const replyBtn=$('replyBtn');
@@ -446,19 +549,20 @@ function renderUsage(usage){if(!usage)return;lastUsage=usage;const pct=Math.max(
 async function refreshUsage(){try{if(remoteMissing())return;const response=await fetch(apiUrl('/api/ai-usage'));if(!response.ok)return;renderUsage(await response.json());}catch{/* la barra se queda en el último valor conocido */}}
 $('aiUsageToggle').addEventListener('click',()=>{const body=$('aiUsageBody');const open=body.hidden;body.hidden=!open;$('aiUsageToggle').setAttribute('aria-expanded',String(open));$('aiUsage').classList.toggle('jc-ai-usage--open',open);$('aiUsageCaret').textContent=open?'▴':'▾';});
 function restartInterview(){updateLanguageHints();$('interviewer').value='';showFeedback('',false);$('studentText').value='';startInterview();}
-$('targetLanguage').addEventListener('change',restartInterview);
-$('interviewType').addEventListener('change',restartInterview);
-$('explanationLanguage').addEventListener('change',updateLanguageHints);
+for(const id of CHOICE_IDS)$(id).addEventListener('change',updateLanguageHints);
 updateLanguageHints();
+renderCard();
 renderSession();
 setInterval(renderSession,1000);
-setInterval(loadServer,30000);
-loadServer().finally(()=>refreshUsage().finally(()=>startInterview()));
+setStatus('start.pick','Elige el tipo de entrevista y el idioma para iniciar la clase.');
+if(useLauncher){const pending=sessionStorage.getItem(LAUNCH_KEY);if(pending){launchStartedAt=Date.now();launchSummary();$('modal-launch').showModal();pollLaunch(pending);}else openStartModal();}
+else{setInterval(loadServer,30000);loadServer().finally(()=>refreshUsage());openStartModal();}
 function refreshOpenHint(){const dialog=$('modal-hint');const btn=window.__coachOpenHint&&$(window.__coachOpenHint);if(!dialog||!dialog.open||!btn)return;$('hintTitle').textContent=btn.dataset.hintTitle||btn.getAttribute('aria-label')||'';$('hintBody').textContent=btn.dataset.hint||'';}
-function refreshChrome(){updateLanguageHints();renderSession();paintStatus();refreshOpenHint();if(lastUsage)renderUsage(lastUsage);}
+function refreshChrome(){updateLanguageHints();renderSession();paintStatus();refreshOpenHint();if(lastUsage)renderUsage(lastUsage);renderCard();if(useLauncher){launchSummary();if(launchTimer)paintLaunching();}}
 window.onCoachLocaleChange=refreshChrome;
-window.onCoachI18nReady=refreshChrome;
-if(window.coachI18n&&window.coachI18n.ready)refreshChrome();
+function syncNativeLanguage(){const locale=window.coachI18n&&window.coachI18n.getLocale&&window.coachI18n.getLocale();if(locale&&!document.body.classList.contains('class-started'))$('explanationLanguage').value=locale;refreshChrome();}
+window.onCoachI18nReady=syncNativeLanguage;
+if(window.coachI18n&&window.coachI18n.ready)syncNativeLanguage();
 </script>
 <script>
 document.querySelectorAll('.q').forEach((btn)=>{

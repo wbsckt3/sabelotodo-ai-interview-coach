@@ -24,7 +24,30 @@ window.COACH_I18N_RESOURCES = {
       interviewerPh: 'El entrevistador está preparando la primera pregunta…',
       feedbackPh: 'Corrección de la respuesta\n\nExpectativa de la siguiente respuesta',
       help: 'Ayuda',
+      change: 'Cambiar',
       language: 'Idioma de la interfaz'
+    },
+    start: {
+      title: 'Prepara tu clase',
+      lead: 'Selecciona el tipo de entrevista, el lenguaje que quieres practicar, tu nivel y el idioma de las explicaciones.',
+      begin: 'Comenzar entrevista',
+      native: 'Idioma nativo',
+      nativeHint: 'Toda la página y las explicaciones se muestran en tu idioma.',
+      launchTitle: 'Iniciar la clase',
+      summary: 'Entrevista: {{type}} · Idioma: {{lang}}',
+      minutes: 'Duración de la clase (minutos)',
+      minutesHint: 'Entre 5 y 180 minutos. El servidor se apaga solo al terminar.',
+      back: 'Volver',
+      launch: 'Iniciar la clase',
+      requesting: 'Pidiendo un servidor para tu clase…',
+      starting: 'Encendiendo el servidor del coach… {{time}}. Suele tardar 1 o 2 minutos.',
+      failed: 'No se pudo iniciar la clase: {{message}}',
+      expired: 'la sesión ya no existe.',
+      serverDown: 'el servidor no arrancó.',
+      tooMany: 'ya iniciaste varias clases en la última hora. Intenta más tarde.',
+      full: 'todas las aulas están ocupadas. Intenta en unos minutos.',
+      pick: 'Elige el tipo de entrevista y el idioma para iniciar la clase.',
+      ended: 'La clase terminó. Inicia otra cuando quieras.'
     },
     hints: {
       type: 'Define el puesto, el tono y los temas de la entrevista. Cambiarlo abre otra conversación.',
@@ -127,7 +150,30 @@ window.COACH_I18N_RESOURCES = {
       interviewerPh: 'The interviewer is preparing the first question…',
       feedbackPh: 'Correction of the answer\n\nExpectation of the next answer',
       help: 'Help',
+      change: 'Change',
       language: 'Interface language'
+    },
+    start: {
+      title: 'Set up your class',
+      lead: 'Choose the interview type, the language you want to practice, your level and the language of the explanations.',
+      begin: 'Start interview',
+      native: 'Native language',
+      nativeHint: 'The whole page and the explanations are shown in your language.',
+      launchTitle: 'Start the class',
+      summary: 'Interview: {{type}} · Language: {{lang}}',
+      minutes: 'Class length (minutes)',
+      minutesHint: 'Between 5 and 180 minutes. The server shuts down by itself when it ends.',
+      back: 'Back',
+      launch: 'Start the class',
+      requesting: 'Requesting a server for your class…',
+      starting: 'Starting the coach server… {{time}}. It usually takes 1 or 2 minutes.',
+      failed: 'The class could not start: {{message}}',
+      expired: 'the session no longer exists.',
+      serverDown: 'the server did not start.',
+      tooMany: 'you already started several classes in the last hour. Try again later.',
+      full: 'all classrooms are busy. Try again in a few minutes.',
+      pick: 'Choose the interview type and the language to start the class.',
+      ended: 'The class is over. Start another one whenever you like.'
     },
     hints: {
       type: 'Sets the role, the tone, and the topics of the interview. Changing it starts another conversation.',
@@ -211,7 +257,7 @@ window.COACH_I18N_RESOURCES = {
 <p>The language to learn is the interviewer's language and the language of your answer. The explanation language is yours and the teacher's: feedback comes out there, and the suggestion stays in the language you are learning. Each turn sends both languages to the AI.</p>
 <p>Changing the language to learn opens another conversation and asks for a new question. Changing only the explanation language keeps the current question and applies the new language on the next feedback.</p>
 <p>The same AI carries the thread: it asks the question, reads your answer, and writes the feedback and the next question. Feedback is disabled and has two parts: a correction of the answer and an expectation for the next answer. The grammar engine is only a reference for the skill of the language in progress. There is a context support in English, another in Spanish, and another in French; the one for the language to learn is the one that enters.</p>`,
-      profesor: `<p>This is an English trainer for a concrete setting: the technical software interview. It simulates the conversation with a teacher. It corrects, explains one rule, and continues the interview. The student practices the English of that situation, not a loose list of exercises.</p>
+      profesor: `<p>This is a language trainer for a concrete setting: the technical software interview. It simulates the conversation with a teacher. It corrects, explains one rule, and continues the interview. The student practices the language of that situation, not a loose list of exercises.</p>
 <p>The same AI answers as interviewer and as teacher. The thread — the question, what that question expects, and the next turn — is built in that AI from the student's answer. There are three pieces, and each one is enriched in its own file:</p>
 <ul>
 <li><strong>Motorg</strong> (<code>motorg.js</code>, <code>motorg-es.js</code>, <code>motorg-fr.js</code>). A reference for the skill of the language in progress. Each language has a context support. It returns a finding and a degree of membership. It does not write the feedback.</li>
@@ -265,7 +311,7 @@ window.COACH_I18N_RESOURCES = {
 <p>fix → fixed, deploy → deployed, implement → implemented, debug → debugged, test → tested, create → created, build → built, write → wrote, find → found, make → made, do → did, go → went, have → had, see → saw.</p>
 <p>Irregulars matter because the past is not always «add -ed». built, wrote, went, and found belong to the past by the use of the verb, not by a shared suffix.</p>
 <h3>A limit the teacher must respect</h3>
-<p><em>Yesterday, I did fix the bug</em> is emphatic and grammatical: did already marks the past and fix stays in base form. Motorg checks whether there is an auxiliary (did, was, had, will, would) before proposing the past. The current rules are heuristics: they do not analyze every subordinate clause or every English verb. A sentence that no rule recognizes remains an unclassified sentence. It does not become an error because the engine is silent.</p>
+<p><em>Yesterday, I did fix the bug</em> is emphatic and grammatical: did already marks the past and fix stays in base form. Motorg checks whether there is an auxiliary (did, was, had, will, would) before proposing the past. The current rules are heuristics: they do not analyze every subordinate clause or every verb of the language. A sentence that no rule recognizes remains an unclassified sentence. It does not become an error because the engine is silent.</p>
 <p class="note">When the setting is widened (another profession, another course), the lexicon and the question → tense map are widened. The central piece remains the verb inside the situation, not a list memorized outside the interview.</p>`,
       difusa: `<p>An interview sentence is almost never entirely correct or entirely incorrect. It can tell the right incident and miss the tense. It can be grammatical and not answer the question. Fuzzy logic, from Zadeh's sets (1965), assigns each reading a degree of membership μ between 0 and 1, instead of a yes or a no.</p>
 <p>Motorg already publishes that degree on each finding. The past rule uses 0.86 and the conditional rule uses 0.78: the sentence belongs to that degree to the set «possible mismatch of that rule». It is evidence, not a sentence.</p>
@@ -308,7 +354,7 @@ window.COACH_I18N_RESOURCES = {
 <p class="note">S does not measure what the student «meant inside». It measures how much public evidence there is for a pedagogical decision. The numbers in the example are illustrative; the shape of the formula and the degree μ of each rule are the stable criterion.</p>
 <h3>The rules inside: regular expressions</h3>
 <p>The three engines (English, Spanish, and French) recognize markers, tenses, and structures with JavaScript regular expressions. Each match is the literal evidence that then receives a degree μ. To read them or write new rules: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions" target="_blank" rel="noopener noreferrer">JavaScript regular expressions guide (MDN)</a>.</p>`,
-      wittgenstein: `<p>The theory is in the <em>Philosophical Investigations</em>. The sentence that orients the engine is the one in paragraph 43: the meaning of a word is its use in the language. Applied to an English class, it says something concrete: a verb form does not have an eternal verdict. It has a value inside the activity in which it appears.</p>
+      wittgenstein: `<p>The theory is in the <em>Philosophical Investigations</em>. The sentence that orients the engine is the one in paragraph 43: the meaning of a word is its use in the language. Applied to a language class, it says something concrete: a verb form does not have an eternal verdict. It has a value inside the activity in which it appears.</p>
 <h3>In other words</h3>
 <p>The technical interview is a language game, with moves and with rules the participants recognize. «Correct» means: this move fulfills the rule the question has just put on the table. The engine does not look for a hidden sense behind the student's sentence. It looks at whether the sentence, said here, does the work the question asked for.</p>
 <p>That is why the same string changes role:</p>
@@ -318,7 +364,7 @@ window.COACH_I18N_RESOURCES = {
 </ul>
 <p>Correcting without looking at the question would treat grammar as an object outside use. The engine always receives the question together with the answer so it does not do that.</p>
 <h3>Family resemblances</h3>
-<p>Wittgenstein called family resemblance the fact that the members of a group are recognized by shared traits a few at a time, not by a single mark that all of them have. The English past works like that. fixed and deployed take -ed. built, wrote, went, and found do not. They still belong to the use «finished action in the past». The engine's lexicon stores those forms one by one, and fuzzy logic gives them a degree, because the border between «this form fulfills the game» and «this form steps outside» is not always a sharp edge.</p>
+<p>Wittgenstein called family resemblance the fact that the members of a group are recognized by shared traits a few at a time, not by a single mark that all of them have. The past of the language works like that. fixed and deployed take -ed. built, wrote, went, and found do not. They still belong to the use «finished action in the past». The engine's lexicon stores those forms one by one, and fuzzy logic gives them a degree, because the border between «this form fulfills the game» and «this form steps outside» is not always a sharp edge.</p>
 <h3>Following a rule, without reading the mind</h3>
 <p>Following the past rule is shown in public: faced with yesterday, the student produces the form that interview recognizes. The engine observes that move. It has no access to a private intention, and the theory says that access is not needed in order to teach. What can be practiced is shared use.</p>
 <p>Abstention comes from there. If the dimensions do not separate two readings, declaring an error would invent an intention the sentence does not show. The honest result is insufficient evidence and a question. The skill already asks for that: if confidence is low or the sentence may be valid, it is said carefully and a clarification is requested.</p>
@@ -357,7 +403,30 @@ window.COACH_I18N_RESOURCES = {
       interviewerPh: 'L\'intervieweur prépare la première question…',
       feedbackPh: 'Correction de la réponse\n\nAttente de la réponse suivante',
       help: 'Aide',
+      change: 'Modifier',
       language: 'Langue de l\'interface'
+    },
+    start: {
+      title: 'Préparez votre cours',
+      lead: 'Choisissez le type d\'entretien, la langue que vous voulez pratiquer, votre niveau et la langue des explications.',
+      begin: 'Commencer l\'entretien',
+      native: 'Langue maternelle',
+      nativeHint: 'Toute la page et les explications s\'affichent dans votre langue.',
+      launchTitle: 'Commencer le cours',
+      summary: 'Entretien : {{type}} · Langue : {{lang}}',
+      minutes: 'Durée du cours (minutes)',
+      minutesHint: 'Entre 5 et 180 minutes. Le serveur s\'arrête tout seul à la fin.',
+      back: 'Retour',
+      launch: 'Commencer le cours',
+      requesting: 'Demande d\'un serveur pour votre cours…',
+      starting: 'Démarrage du serveur du coach… {{time}}. Cela prend en général 1 ou 2 minutes.',
+      failed: 'Le cours n\'a pas pu commencer : {{message}}',
+      expired: 'la session n\'existe plus.',
+      serverDown: 'le serveur n\'a pas démarré.',
+      tooMany: 'vous avez déjà lancé plusieurs cours dans la dernière heure. Réessayez plus tard.',
+      full: 'toutes les salles sont occupées. Réessayez dans quelques minutes.',
+      pick: 'Choisissez le type d\'entretien et la langue pour commencer le cours.',
+      ended: 'Le cours est terminé. Lancez-en un autre quand vous voulez.'
     },
     hints: {
       type: 'Définit le poste, le ton et les thèmes de l\'entretien. Le changer ouvre une autre conversation.',
@@ -441,7 +510,7 @@ window.COACH_I18N_RESOURCES = {
 <p>La langue à apprendre est celle de l'intervieweur et de votre réponse. La langue d'explication est la vôtre et celle du professeur : le feedback en sort, et la suggestion reste dans la langue que vous apprenez. Chaque tour envoie ces deux langues à l'IA.</p>
 <p>Changer la langue à apprendre ouvre une autre conversation et demande une nouvelle question. Changer seulement la langue d'explication laisse la question actuelle et applique la nouvelle langue au feedback suivant.</p>
 <p>La même IA porte le fil : elle pose la question, lit votre réponse et écrit le feedback et la question suivante. Le feedback est désactivé et comporte deux parties : correction de la réponse et attente de la réponse suivante. Le moteur grammatical n'est qu'une référence pour le skill de la langue en cours. Il y a un appui de contexte en anglais, un autre en espagnol et un autre en français ; celui de la langue à apprendre est celui qui entre.</p>`,
-      profesor: `<p>C'est un formateur d'anglais pour un cadre concret : l'entretien technique de logiciel. Il simule la conversation avec un professeur. Il corrige, explique une règle et poursuit l'entretien. L'élève pratique l'anglais de cette situation, pas une liste d'exercices détachée.</p>
+      profesor: `<p>C'est un formateur de langage pour un cadre concret : l'entretien technique de logiciel. Il simule la conversation avec un professeur. Il corrige, explique une règle et poursuit l'entretien. L'élève pratique le langage de cette situation, pas une liste d'exercices détachée.</p>
 <p>La même IA répond comme intervieweur et comme professeur. Le fil — la question, ce que cette question attend et le tour suivant — se construit dans cette IA à partir de la réponse de l'étudiant. Il y a trois pièces, et chacune s'enrichit dans son fichier :</p>
 <ul>
 <li><strong>Motorg</strong> (<code>motorg.js</code>, <code>motorg-es.js</code>, <code>motorg-fr.js</code>). Référence pour le skill de la langue en cours. Chaque langue a un appui de contexte. Il renvoie une constatation et un degré d'appartenance. Il n'écrit pas le feedback.</li>
@@ -455,23 +524,23 @@ window.COACH_I18N_RESOURCES = {
 <table>
 <thead><tr><th>Dimension</th><th>Ce qui s'observe</th><th>Exemple dans l'entretien</th></tr></thead>
 <tbody>
-<tr><td>1. Temporelle</td><td>Quand elle situe l'action : marqueurs comme yesterday, right now, last week, in 2024.</td><td>« Yesterday » situe l'incident dans un passé clos.</td></tr>
-<tr><td>2. Aspectuelle</td><td>Si l'action est terminée, encore en cours ou une habitude.</td><td>fixed (close), am fixing (en cours), I fix bugs every sprint (habitude).</td></tr>
-<tr><td>3. Modale</td><td>Si elle énonce un fait, une hypothèse ou une obligation.</td><td>If the deployment fails, I will roll back. La condition est hypothétique ; le plan va avec will.</td></tr>
-<tr><td>4. Illocutoire</td><td>Quel acte la phrase accomplit : raconter, expliquer une cause, proposer une étape, demander une précision.</td><td>« I restarted the service » raconte ce qui a été fait. « I will restart it » propose ce qui serait fait.</td></tr>
-<tr><td>5. Pragmatique</td><td>Si cet acte répond à la question en cours et conserve le thème technique.</td><td>Devant « what did you do to fix the bug? », parler de l'incident répond. Passer à un loisir ne répond pas.</td></tr>
-<tr><td>6. Structurelle</td><td>Si la forme du verbe est celle que cette intention exige dans ce jeu.</td><td>Passé simple, présent continu, present perfect ou conditionnel réel (présent dans if, will dans la principale).</td></tr>
+<tr><td>1. Temporelle</td><td>Quand elle situe l'action : marqueurs comme hier, en ce moment, la semaine dernière, en 2024.</td><td>« Hier » situe l'incident dans un passé clos.</td></tr>
+<tr><td>2. Aspectuelle</td><td>Si l'action est terminée, encore en cours ou une habitude.</td><td>j'ai corrigé (terminée), je suis en train de corriger (en cours), je corrige des bogues à chaque sprint (habitude).</td></tr>
+<tr><td>3. Modale</td><td>Si elle énonce un fait, une hypothèse ou une obligation.</td><td>Si le déploiement échoue, j'annulerai la mise en production. La condition est hypothétique ; le plan va au futur.</td></tr>
+<tr><td>4. Illocutoire</td><td>Quel acte la phrase accomplit : raconter, expliquer une cause, proposer une étape, demander une précision.</td><td>« J'ai redémarré le service » raconte ce qui a été fait. « Je vais le redémarrer » propose ce qui serait fait.</td></tr>
+<tr><td>5. Pragmatique</td><td>Si cet acte répond à la question en cours et conserve le thème technique.</td><td>Devant « qu'avez-vous fait pour corriger le bogue ? », parler de l'incident répond. Passer à un loisir ne répond pas.</td></tr>
+<tr><td>6. Structurelle</td><td>Si la forme du verbe est celle que cette intention exige dans ce jeu.</td><td>Passé composé, présent continu, passé composé d'expérience ou conditionnel réel (présent dans si, futur dans la principale).</td></tr>
 </tbody>
 </table>
 <h3>Lecture d'une phrase</h3>
-<p>« Yesterday I fix a bug in production », avec la question « Tell me about a challenging bug you fixed » :</p>
+<p>« Hier je corrige un bogue en production », avec la question « Parlez-moi d'un bogue difficile que vous avez corrigé » :</p>
 <ul>
-<li>Appartenance temporelle haute vers le passé, à cause de yesterday et de previous project dans la question.</li>
+<li>Appartenance temporelle haute vers le passé, à cause de hier et de projet précédent dans la question.</li>
 <li>Aspectuelle : la question demande une action terminée.</li>
 <li>Modale : c'est un fait, pas une hypothèse.</li>
 <li>Illocutoire : l'élève raconte un incident. L'acte est le bon.</li>
 <li>Appartenance pragmatique haute : il parle du bug, pas d'un autre sujet.</li>
-<li>Appartenance structurelle basse : fix est à la forme de base. La structure qui convient est le passé simple, fixed.</li>
+<li>Appartenance structurelle basse : corrige est au présent. La structure qui convient est le passé composé, ai corrigé.</li>
 </ul>
 <p>Le contenu de l'entretien tient. Une dimension échoue. Le professeur corrige cette forme et demande l'étape suivante de l'incident. Si les six signaux ne suffisent pas pour décider, le résultat valable est une preuve insuffisante : on pose une question, et on ne déclare pas la phrase incorrecte.</p>
 <p class="note">En enrichissant le moteur, chaque règle nouvelle doit dire quelle dimension elle observe, quelle forme elle suggère et avec quel degré d'appartenance. Le skill décide comment le dire. Le modèle conversationnel n'ajoute pas de règles de lui-même.</p>`,
@@ -480,22 +549,22 @@ window.COACH_I18N_RESOURCES = {
 <table>
 <thead><tr><th>Question d'entretien</th><th>Temps demandé</th><th>Réponse qui convient</th></tr></thead>
 <tbody>
-<tr><td>What do you do in your current role?</td><td>Présent simple. Habitude ou responsabilité actuelle.</td><td>I design APIs and review pull requests.</td></tr>
-<tr><td>What did you do to fix the bug?</td><td>Passé simple. Action terminée.</td><td>I traced the logs and deployed a patch.</td></tr>
-<tr><td>What are you working on right now?</td><td>Présent continu. Action en cours.</td><td>I am migrating the auth service.</td></tr>
-<tr><td>What will you do if the deployment fails?</td><td>Conditionnel réel : présent simple dans if, will dans la principale.</td><td>If it fails, I will roll back the release.</td></tr>
-<tr><td>What have you learned from that experience?</td><td>Present perfect. L'expérience reste actuelle dans le présent professionnel.</td><td>I have learned to ship a canary release first.</td></tr>
+<tr><td>Que faites-vous dans votre poste actuel ?</td><td>Présent. Habitude ou responsabilité actuelle.</td><td>Je conçois des API et je relis les demandes de fusion.</td></tr>
+<tr><td>Qu'avez-vous fait pour corriger le bogue ?</td><td>Passé composé. Action terminée.</td><td>J'ai examiné les journaux et j'ai déployé un correctif.</td></tr>
+<tr><td>Sur quoi travaillez-vous en ce moment ?</td><td>Présent continu. Action en cours.</td><td>Je suis en train de migrer le service d'authentification.</td></tr>
+<tr><td>Que ferez-vous si le déploiement échoue ?</td><td>Conditionnel réel : présent dans si, futur dans la principale.</td><td>S'il échoue, j'annulerai la mise en production.</td></tr>
+<tr><td>Qu'avez-vous appris de cette expérience ?</td><td>Passé composé. L'expérience reste actuelle dans le présent professionnel.</td><td>J'ai appris à publier d'abord une version canari.</td></tr>
 </tbody>
 </table>
 <h3>Le cas que le prototype reconnaît déjà</h3>
-<p>Entrée de l'élève : <em>Yesterday I fix a bug in production.</em></p>
-<p>Sortie que le professeur doit pouvoir expliquer : <em>Yesterday I fixed a bug in production.</em> Le marqueur yesterday situe l'action dans le passé et fix est à la forme de base. La forme passée de ce verbe est fixed. L'explication tient en une ligne : avec yesterday on emploie le passé simple, fix → fixed. La question suivante reste dans l'incident : ce que vous avez fait pour le résoudre.</p>
-<p>Un autre cas déjà couvert par la règle du conditionnel : <em>If the deployment will fail, I will restart the service.</em> Dans une condition réelle de futur, will ne va pas dans la proposition avec if. La forme de cette proposition est le présent : <em>If the deployment fails, I will restart the service.</em></p>
+<p>Entrée de l'élève : <em>Hier je corrige un bogue en production.</em></p>
+<p>Sortie que le professeur doit pouvoir expliquer : <em>Hier, j'ai corrigé un bogue en production.</em> Le marqueur hier situe l'action dans le passé et corrige est au présent. La forme de passé composé de ce verbe est ai corrigé. L'explication tient en une ligne : avec hier on emploie le passé composé, corrige → ai corrigé. La question suivante reste dans l'incident : ce que vous avez fait pour le résoudre.</p>
+<p>Un autre cas déjà couvert par la règle du conditionnel : <em>Si le déploiement échouera, je redémarrerai le service.</em> Dans une condition réelle de futur, le futur ne va pas dans la proposition avec si. La forme de cette proposition est le présent : <em>Si le déploiement échoue, je redémarrerai le service.</em></p>
 <h3>Verbes que le lexique initial conjugue déjà au passé</h3>
-<p>fix → fixed, deploy → deployed, implement → implemented, debug → debugged, test → tested, create → created, build → built, write → wrote, find → found, make → made, do → did, go → went, have → had, see → saw.</p>
-<p>Les irréguliers comptent parce que le passé n'est pas toujours « ajouter -ed ». built, wrote, went et found appartiennent au passé par l'usage du verbe, pas par un suffixe commun.</p>
+<p>corriger → ai corrigé, déployer → ai déployé, mettre en œuvre → ai mis en œuvre, déboguer → ai débogué, tester → ai testé, créer → ai créé, construire → ai construit, écrire → ai écrit, trouver → ai trouvé, faire → ai fait, aller → suis allé, avoir → ai eu, voir → ai vu.</p>
+<p>Les irréguliers comptent parce que le passé n'est pas toujours une marque régulière. suis allé, ai fait, ai vu et ai écrit appartiennent au passé par l'usage du verbe, pas par une terminaison commune.</p>
 <h3>Une limite que le professeur doit respecter</h3>
-<p><em>Yesterday, I did fix the bug</em> est emphatique et grammatical : did marque déjà le passé et fix reste à la forme de base. Motorg vérifie s'il y a un auxiliaire (did, was, had, will, would) avant de proposer le passé. Les règles actuelles sont des heuristiques : elles n'analysent pas toutes les subordonnées ni tous les verbes de l'anglais. Une phrase qu'aucune règle ne reconnaît reste une phrase non classée. Elle ne devient pas une erreur par le silence du moteur.</p>
+<p><em>Hier, j'ai bien corrigé le bogue</em> est emphatique et grammatical : ai marque déjà le passé et corrigé reste au participe. Motorg vérifie s'il y a un auxiliaire (ai, suis, avais, vais) avant de proposer le passé. Les règles actuelles sont des heuristiques : elles n'analysent pas toutes les subordonnées ni tous les verbes du langage. Une phrase qu'aucune règle ne reconnaît reste une phrase non classée. Elle ne devient pas une erreur par le silence du moteur.</p>
 <p class="note">Quand on élargit le cadre (un autre métier, un autre cours), on élargit le lexique et la carte question → temps. La pièce centrale reste le verbe dans la situation, pas une liste mémorisée hors de l'entretien.</p>`,
       difusa: `<p>Une phrase d'entretien n'est presque jamais tout à fait correcte ou tout à fait incorrecte. Elle peut raconter le bon incident et rater le temps. Elle peut être grammaticale et ne pas répondre à la question. La logique floue, à partir des ensembles de Zadeh (1965), attribue à chaque lecture un degré d'appartenance μ entre 0 et 1, au lieu d'un oui ou d'un non.</p>
 <p>Motorg publie déjà ce degré dans chaque constatation. La règle du passé utilise 0,86 et celle du conditionnel 0,78 : la phrase appartient à ce degré à l'ensemble « possible décalage de cette règle ». C'est une preuve, pas une sentence.</p>
@@ -511,20 +580,20 @@ window.COACH_I18N_RESOURCES = {
 <div class="formula">S = 0.35 G + 0.25 C + 0.25 V + 0.15 P</div>
 <p>Le poids le plus fort est sur G parce que ce formateur existe pour rendre visible la règle grammaticale. C et V pèsent autant : la phrase doit répondre à la question et avec le temps que cette question exige. P pèse moins pour ne pas récompenser un thème pertinent écrit au mauvais temps, ni punir toute la réponse quand une seule forme échoue. Les poids sont initiaux. Ils se calibrent avec de vrais entretiens.</p>
 <h3>Exemple avec la formule appliquée</h3>
-<p>Question : <em>What will you do if the deployment fails?</em><br>Réponse : <em>If the deployment will fail, I will restart the service.</em></p>
+<p>Question : <em>Que ferez-vous si le déploiement échoue ?</em><br>Réponse : <em>Si le déploiement échouera, je redémarrerai le service.</em></p>
 <table>
 <thead><tr><th>Symbole</th><th>Lecture illustrative</th><th>Valeur</th><th>Poids</th><th>Apport</th></tr></thead>
 <tbody>
-<tr><td>G</td><td>La proposition avec if porte will. La structure du conditionnel réel n'est pas respectée.</td><td>0.25</td><td>0.35</td><td>0.0875</td></tr>
+<tr><td>G</td><td>La proposition avec si porte le futur. La structure du conditionnel réel n'est pas respectée.</td><td>0.25</td><td>0.35</td><td>0.0875</td></tr>
 <tr><td>C</td><td>Elle répond bien à ce qu'on ferait si le déploiement échoue.</td><td>0.90</td><td>0.25</td><td>0.2250</td></tr>
 <tr><td>V</td><td>Le temps de la condition n'est pas le présent.</td><td>0.30</td><td>0.25</td><td>0.0750</td></tr>
 <tr><td>P</td><td>Redémarrer le service est un plan pertinent.</td><td>0.85</td><td>0.15</td><td>0.1275</td></tr>
 <tr><td>S</td><td>0.0875 + 0.2250 + 0.0750 + 0.1275</td><td></td><td></td><td>0.5150</td></tr>
 </tbody>
 </table>
-<p>S = 0,515 dit que la réponse est à moitié adéquate : le plan sert, la forme de la condition non. Motorg apporte en plus μ = 0,78 pour cette règle. Avec une constatation ainsi, on corrige seulement la proposition if et on conserve « I will restart the service ». L'entretien continue.</p>
+<p>S = 0,515 dit que la réponse est à moitié adéquate : le plan sert, la forme de la condition non. Motorg apporte en plus μ = 0,78 pour cette règle. Avec une constatation ainsi, on corrige seulement la proposition si et on conserve « je redémarrerai le service ». L'entretien continue.</p>
 <h3>Quand il y a deux interprétations</h3>
-<p>Parfois deux lectures se font concurrence. Par exemple, « I have fixed the bug yesterday » peut se lire comme un present perfect d'expérience ou comme un passé simple que le marqueur yesterday demande. Pour chaque lecture i on calcule son appartenance μ(I<sub>i</sub>). La lecture choisie est celle du plus haut degré :</p>
+<p>Parfois deux lectures se font concurrence. Par exemple, « Hier je corrige le bogue » peut se lire comme un présent d'habitude ou comme un passé composé que le marqueur hier demande. Pour chaque lecture i on calcule son appartenance μ(I<sub>i</sub>). La lecture choisie est celle du plus haut degré :</p>
 <div class="formula">I* = argmax<sub>i</sub> μ(I<sub>i</sub>)</div>
 <p>Si la meilleure et la seconde sont trop proches, il n'y a pas de gagnante claire. Le seuil illustratif, encore à calibrer, est :</p>
 <div class="formula">si μ(I*) − μ(I<sub>2</sub>) &lt; 0.15, le résultat est une preuve insuffisante</div>
@@ -538,19 +607,19 @@ window.COACH_I18N_RESOURCES = {
 <p class="note">S ne mesure pas ce que l'élève « a voulu dire à l'intérieur ». Il mesure combien de preuve publique il y a pour une décision pédagogique. Les nombres de l'exemple sont illustratifs ; la forme de la formule et le degré μ de chaque règle sont le critère stable.</p>
 <h3>Les règles à l'intérieur : expressions régulières</h3>
 <p>Les trois moteurs (anglais, espagnol et français) reconnaissent marqueurs, temps et structures avec des expressions régulières JavaScript. Chaque correspondance est la preuve littérale qui reçoit ensuite un degré μ. Pour les lire ou écrire de nouvelles règles : <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Guide/Regular_expressions" target="_blank" rel="noopener noreferrer">Guide des expressions régulières en JavaScript (MDN)</a>.</p>`,
-      wittgenstein: `<p>La théorie est dans les <em>Investigations philosophiques</em>. La phrase qui oriente le moteur est celle du paragraphe 43 : la signification d'un mot est son usage dans la langue. Appliquée à un cours d'anglais, elle dit quelque chose de concret : une forme verbale n'a pas un verdict éternel. Elle a une valeur à l'intérieur de l'activité où elle apparaît.</p>
+      wittgenstein: `<p>La théorie est dans les <em>Investigations philosophiques</em>. La phrase qui oriente le moteur est celle du paragraphe 43 : la signification d'un mot est son usage dans la langue. Appliquée à un cours de langage, elle dit quelque chose de concret : une forme verbale n'a pas un verdict éternel. Elle a une valeur à l'intérieur de l'activité où elle apparaît.</p>
 <h3>Autrement dit</h3>
 <p>L'entretien technique est un jeu de langage, avec des coups et des règles que les participants reconnaissent. « Correct » veut dire : ce coup respecte la règle que la question vient de poser sur la table. Le moteur ne cherche pas un sens caché derrière la phrase de l'élève. Il regarde si la phrase, dite ici, fait le travail que la question a demandé.</p>
 <p>C'est pourquoi la même chaîne change de rôle :</p>
 <ul>
-<li>Dans le jeu de « What do you do in your current role? », <em>I fix bugs</em> est un coup valide. Présent simple, habitude du poste.</li>
-<li>Dans le jeu de « What did you do yesterday? », <em>I fix bugs</em> ne respecte plus la règle. Ce jeu demande le passé simple : <em>I fixed a bug</em>.</li>
+<li>Dans le jeu de « Que faites-vous dans votre poste actuel ? », <em>Je corrige des bogues</em> est un coup valide. Présent, habitude du poste.</li>
+<li>Dans le jeu de « Qu'avez-vous fait hier ? », <em>Je corrige des bogues</em> ne respecte plus la règle. Ce jeu demande le passé composé : <em>J'ai corrigé un bogue</em>.</li>
 </ul>
 <p>Corriger sans regarder la question serait traiter la grammaire comme un objet hors de l'usage. Le moteur reçoit toujours la question avec la réponse pour ne pas faire cela.</p>
 <h3>Airs de famille</h3>
-<p>Wittgenstein a appelé air de famille le fait que les membres d'un groupe se reconnaissent par des traits partagés quelques-uns à la fois, pas par une seule marque que tous auraient. Le passé anglais fonctionne ainsi. fixed et deployed portent -ed. built, wrote, went et found non. Ils appartiennent quand même à l'usage « action terminée dans le passé ». Le lexique du moteur garde ces formes une à une, et la logique floue leur donne un degré, parce que la frontière entre « cette forme respecte le jeu » et « cette forme en sort » n'est pas toujours un bord net.</p>
+<p>Wittgenstein a appelé air de famille le fait que les membres d'un groupe se reconnaissent par des traits partagés quelques-uns à la fois, pas par une seule marque que tous auraient. Le passé du langage fonctionne ainsi. Certains verbes prennent une marque régulière. suis allé, ai fait, ai vu et ai écrit non. Ils appartiennent quand même à l'usage « action terminée dans le passé ». Le lexique du moteur garde ces formes une à une, et la logique floue leur donne un degré, parce que la frontière entre « cette forme respecte le jeu » et « cette forme en sort » n'est pas toujours un bord net.</p>
 <h3>Suivre une règle, sans lire l'esprit</h3>
-<p>Suivre la règle du passé se montre en public : devant yesterday, l'élève produit la forme que cet entretien reconnaît. Le moteur observe ce coup. Il n'a pas accès à une intention privée, et la théorie dit que cet accès n'est pas nécessaire pour enseigner. Ce qui peut se pratiquer, c'est l'usage partagé.</p>
+<p>Suivre la règle du passé se montre en public : devant hier, l'élève produit la forme que cet entretien reconnaît. Le moteur observe ce coup. Il n'a pas accès à une intention privée, et la théorie dit que cet accès n'est pas nécessaire pour enseigner. Ce qui peut se pratiquer, c'est l'usage partagé.</p>
 <p>L'abstention vient de là. Si les dimensions ne séparent pas deux lectures, déclarer une erreur inventerait une intention que la phrase ne montre pas. Le résultat honnête est une preuve insuffisante et une question. Le skill le demande déjà : si la confiance est basse ou si la phrase peut être valide, on le dit avec prudence et on demande une précision.</p>
 <h3>Comment cela s'assemble avec le reste</h3>
 <ul>

@@ -1,5 +1,7 @@
 state/
 node_modules/
+.wrangler/
+.dev.vars
 .env
 .env.*
 *.pem

@@ -1,4 +1,5 @@
 name: Servidor del coach (Groq)
+run-name: ${{ inputs.session && format('Clase {0}', inputs.session) || 'Servidor compartido del coach' }}
 
 on:
   workflow_dispatch:
@@ -7,12 +8,16 @@ on:
         description: Minutos que el servidor permanece activo (entre 5 y 180)
         default: "60"
         required: false
+      session:
+        description: Sesión de navegador creada por el lanzador (vacío = servidor compartido en server.json)
+        default: ""
+        required: false
 
 permissions:
   contents: write
 
 concurrency:
-  group: coach-server
+  group: coach-server-${{ inputs.session || 'shared' }}
   cancel-in-progress: false
 
 jobs:
@@ -30,6 +35,9 @@ jobs:
           COACH_CORS_ORIGIN: https://wbsckt3.github.io
           PORT: "8787"
           MINUTES: ${{ inputs.minutes }}
+          SESSION: ${{ inputs.session }}
+          LAUNCHER_URL: ${{ vars.COACH_LAUNCHER_URL }}
+          CALLBACK_SECRET: ${{ secrets.COACH_CALLBACK_SECRET }}
         run: |
           set -euo pipefail
           if [ -z "${GROQ_API_KEY}" ]; then
@@ -41,7 +49,40 @@ jobs:
           esac
           if [ "${MINUTES}" -gt 180 ]; then MINUTES=180; fi
           if [ "${MINUTES}" -lt 5 ]; then MINUTES=5; fi
+
+          if [ -n "${SESSION}" ]; then
+            if ! printf '%s' "${SESSION}" | grep -Eq '^[a-z0-9-]{8,40}$'; then
+              echo "Identificador de sesión inválido."
+              exit 1
+            fi
+            if [ -z "${LAUNCHER_URL}" ] || [ -z "${CALLBACK_SECRET}" ]; then
+              echo "Faltan la variable COACH_LAUNCHER_URL o el secreto COACH_CALLBACK_SECRET."
+              exit 1
+            fi
+            LAUNCHER_URL="${LAUNCHER_URL%/}"
+          fi
           echo "El servidor quedará activo ${MINUTES} minutos."
+
+          notify() {
+            curl -fsS -X POST "${LAUNCHER_URL}/sessions/${SESSION}/$1" \
+              -H "Authorization: Bearer ${CALLBACK_SECRET}" \
+              -H "Content-Type: application/json" \
+              --data "$2" >/dev/null
+          }
+
+          URL=""
+          cleanup() {
+            status=$?
+            if [ -n "${SESSION}" ]; then
+              if [ "$status" -eq 0 ]; then notify end '{}' || true; else notify end '{"failed":true}' || true; fi
+            elif [ -n "$URL" ] && [ -f server.json ] && grep -q "$URL" server.json; then
+              printf '%s\n' '{"api":"","until":""}' >server.json
+              git add server.json
+              git -c user.email="wbsckt3@gmail.com" -c user.name="wbsckt3" commit -m "Apaga la dirección temporal del servidor del coach" || true
+              git push origin HEAD:main || true
+            fi
+          }
+          trap cleanup EXIT
 
           node modc.js >node.log 2>&1 &
           echo $! >node.pid
@@ -60,7 +101,6 @@ jobs:
           chmod +x cloudflared
           ./cloudflared tunnel --url http://127.0.0.1:8787 --no-autoupdate >tunnel.log 2>&1 &
           echo $! >tunnel.pid
-          URL=""
           for _ in $(seq 1 40); do
             URL=$(grep -oE 'https://[-a-z0-9]+\.trycloudflare\.com' tunnel.log | head -1 || true)
             if [ -n "$URL" ]; then break; fi
@@ -71,25 +111,24 @@ jobs:
             cat tunnel.log
             exit 1
           fi
+          for _ in $(seq 1 30); do
+            if curl -sf "${URL}/health" >/dev/null; then break; fi
+            sleep 2
+          done
           echo "SERVIDOR_LISTO ${URL}"
           echo "::notice title=Servidor del coach::${URL}"
           echo "Servidor listo: ${URL}" >>"$GITHUB_STEP_SUMMARY"
           UNTIL=$(date -u -d "+${MINUTES} minutes" +%Y-%m-%dT%H:%M:%SZ)
           echo "SESION_HASTA ${UNTIL}"
-          printf '%s\n' "{\"api\":\"${URL}\",\"until\":\"${UNTIL}\"}" >server.json
-          git add server.json
-          git -c user.email="wbsckt3@gmail.com" -c user.name="wbsckt3" commit -m "Publica la dirección temporal del servidor del coach"
-          git push origin HEAD:main
 
-          cleanup() {
-            if [ -f server.json ] && grep -q "$URL" server.json; then
-              printf '%s\n' '{"api":"","until":""}' >server.json
-              git add server.json
-              git -c user.email="wbsckt3@gmail.com" -c user.name="wbsckt3" commit -m "Apaga la dirección temporal del servidor del coach" || true
-              git push origin HEAD:main || true
-            fi
-          }
-          trap cleanup EXIT
+          if [ -n "${SESSION}" ]; then
+            notify ready "{\"api\":\"${URL}\",\"until\":\"${UNTIL}\"}"
+          else
+            printf '%s\n' "{\"api\":\"${URL}\",\"until\":\"${UNTIL}\"}" >server.json
+            git add server.json
+            git -c user.email="wbsckt3@gmail.com" -c user.name="wbsckt3" commit -m "Publica la dirección temporal del servidor del coach"
+            git push origin HEAD:main
+          fi
 
           end=$((SECONDS + MINUTES * 60))
           while [ "$SECONDS" -lt "$end" ]; do
