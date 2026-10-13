@@ -14,10 +14,14 @@ main{height:100%;max-width:950px;margin:auto;display:flex;flex-direction:column;
 header,section{background:#fff;border:1px solid #e1e6ef;border-radius:14px;padding:10px 12px}
 header{flex:0 0 auto}
 .stage{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-.title-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.title-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.title-tools{display:flex;align-items:center;gap:6px;margin-left:auto;flex:0 0 auto}
 h1{margin:0;font-size:1.05rem;line-height:1.2}
 .subtitle{margin:2px 0 0;font-size:.82rem;font-weight:650;color:#233e73}
 .session{margin:0;padding:4px 8px;border-radius:999px;background:#e9eefb;color:#233e73;font-size:.78rem;font-weight:750;font-variant-numeric:tabular-nums;white-space:nowrap}
+.qa-lang-switch{display:inline-flex;border:1px solid #c5d0e6;border-radius:999px;overflow:hidden;background:#eef2f8}
+.qa-lang-switch__btn{min-width:2rem;padding:4px 7px;border:0;border-radius:0;background:transparent;color:#233e73;font-size:.72rem;font-weight:750}
+.qa-lang-switch__btn--active{background:#233e73;color:#fff}
 h2{font-size:1.15rem}
 .muted{color:#647084;font-size:.78rem}
 label{font-weight:650;font-size:.82rem}
@@ -94,16 +98,23 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <header>
 <div class="title-row">
 <div>
-<h1>Sabelotodo AI — Interview Coach</h1>
-<p class="subtitle">Motor de inferencia gramatical</p>
+<h1 data-i18n="ui.title">Sabelotodo AI — Coach de entrevista</h1>
+<p class="subtitle" data-i18n="ui.subtitle">Motor de inferencia gramatical</p>
+</div>
+<div class="title-tools">
+<div class="qa-lang-switch" role="group" data-i18n-aria="ui.language" aria-label="Idioma de la interfaz">
+<button type="button" class="qa-lang-switch__btn qa-lang-switch__btn--active" data-set-locale="es" aria-pressed="true">ES</button>
+<button type="button" class="qa-lang-switch__btn" data-set-locale="en" aria-pressed="false">EN</button>
+<button type="button" class="qa-lang-switch__btn" data-set-locale="fr" aria-pressed="false">FR</button>
 </div>
 <p class="session" id="sessionClock" aria-live="polite">Sesión 00:00</p>
 </div>
+</div>
 </header>
 <section class="stage">
-<div class="jc-ai-usage" id="aiUsage" aria-label="Consumo de IA del día">
+<div class="jc-ai-usage" id="aiUsage" data-i18n-aria="ui.usageAria" aria-label="Consumo de IA del día">
 <button type="button" class="jc-ai-usage__toggle" id="aiUsageToggle" aria-expanded="false">
-<span class="jc-ai-usage__toggle-label">Consumo de IA</span>
+<span class="jc-ai-usage__toggle-label" data-i18n="ui.usage">Consumo de IA</span>
 <span class="jc-ai-usage__toggle-meta"><span id="aiUsageCount">0 / 0</span> <span id="aiUsageCaret" aria-hidden="true">▾</span></span>
 </button>
 <div class="jc-ai-usage__body" id="aiUsageBody" hidden>
@@ -117,28 +128,28 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 </div>
 </div>
 <div class="field">
-<div class="label-row"><label for="interviewType">Tipo de entrevista</label><button type="button" class="q" id="hintType" aria-label="Ayuda: tipo de entrevista">?</button></div>
+<div class="label-row"><label for="interviewType" data-i18n="ui.type">Tipo de entrevista</label><button type="button" class="q" id="hintType" data-i18n-aria="hints.typeTitle" aria-label="Tipo de entrevista">?</button></div>
 <select id="interviewType"></select>
 </div>
 <div class="row row-3">
 <div>
-<div class="label-row"><label for="targetLanguage">Idioma a aprender</label><button type="button" class="q" id="hintTarget" aria-label="Ayuda: idioma a aprender">?</button></div>
+<div class="label-row"><label for="targetLanguage" data-i18n="ui.target">Idioma a aprender</label><button type="button" class="q" id="hintTarget" data-i18n-aria="hints.targetTitle" aria-label="Idioma a aprender">?</button></div>
 <select id="targetLanguage">
-<option value="es">Español</option>
-<option value="en" selected>Inglés</option>
-<option value="fr">Francés</option>
+<option value="es" data-i18n="langOptions.es">Español</option>
+<option value="en" data-i18n="langOptions.en" selected>Inglés</option>
+<option value="fr" data-i18n="langOptions.fr">Francés</option>
 </select>
 </div>
 <div>
-<div class="label-row"><label for="level">Nivel aproximado</label><button type="button" class="q" id="hintLevel" aria-label="Ayuda: nivel aproximado">?</button></div>
+<div class="label-row"><label for="level" data-i18n="ui.level">Nivel aproximado</label><button type="button" class="q" id="hintLevel" data-i18n-aria="hints.levelTitle" aria-label="Nivel aproximado">?</button></div>
 <select id="level">
-<option value="beginner">Beginner</option>
-<option value="intermediate" selected>Intermediate</option>
-<option value="advanced">Advanced</option>
+<option value="beginner" data-i18n="levels.beginner">Principiante</option>
+<option value="intermediate" data-i18n="levels.intermediate" selected>Intermedio</option>
+<option value="advanced" data-i18n="levels.advanced">Avanzado</option>
 </select>
 </div>
 <div>
-<div class="label-row"><label for="explanationLanguage">Idioma de explicación</label><button type="button" class="q" id="hintExplain" aria-label="Ayuda: idioma de explicación">?</button></div>
+<div class="label-row"><label for="explanationLanguage" data-i18n="ui.explain">Idioma de explicación</label><button type="button" class="q" id="hintExplain" data-i18n-aria="hints.explainTitle" aria-label="Idioma de explicación">?</button></div>
 <select id="explanationLanguage">
 <option value="es" selected>Español</option>
 <option value="en">English</option>
@@ -147,27 +158,27 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 </div>
 </div>
 <div class="field grow">
-<div class="label-row"><label for="interviewer">Entrevistador</label><button type="button" class="q" id="hintInterviewer" aria-label="Ayuda: entrevistador">?</button></div>
+<div class="label-row"><label for="interviewer" data-i18n="ui.interviewer">Entrevistador</label><button type="button" class="q" id="hintInterviewer" data-i18n-aria="hints.interviewerTitle" aria-label="Entrevistador">?</button></div>
 <textarea id="interviewer" class="actor actor-interviewer" readonly placeholder="El entrevistador está preparando la primera pregunta…"></textarea>
 </div>
 <div class="field grow">
-<div class="label-row"><label for="studentText">Tu respuesta</label><button type="button" class="q" id="hintStudent" aria-label="Ayuda: tu respuesta">?</button></div>
+<div class="label-row"><label for="studentText" data-i18n="ui.student">Tu respuesta</label><button type="button" class="q" id="hintStudent" data-i18n-aria="hints.studentTitle" aria-label="Tu respuesta">?</button></div>
 <textarea id="studentText" class="actor actor-student" placeholder="Tu respuesta"></textarea>
 </div>
 <div class="actions">
-<button id="replyBtn" class="reply-btn" type="button">Responder</button>
-<button id="feedbackBtn" class="ghost" type="button" disabled>Feedback</button>
-<button id="learnBtn" class="learn-btn" type="button" data-open-modal="modal-aprende" aria-haspopup="dialog">Aprende más de este motor LLM</button>
+<button id="replyBtn" class="reply-btn" type="button" data-i18n="ui.reply">Responder</button>
+<button id="feedbackBtn" class="ghost" type="button" disabled data-i18n="ui.feedback">Feedback</button>
+<button id="learnBtn" class="learn-btn" type="button" data-open-modal="modal-aprende" aria-haspopup="dialog" data-i18n="ui.learn">Aprende más de este motor LLM</button>
 </div>
-<p id="status" class="muted" role="status">Abriendo la entrevista…</p>
+<p id="status" class="muted" role="status" data-i18n="status.opening">Abriendo la entrevista…</p>
 </section>
 </main>
 
 <dialog class="theory-modal hint-modal" id="modal-hint" aria-labelledby="hintTitle">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="hintTitle">Ayuda</h2>
-<button type="button" class="close-btn" data-close-modal>Cerrar</button>
+<h2 id="hintTitle" data-i18n="modals.help">Ayuda</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
 <p id="hintBody"></p>
 </div>
@@ -176,8 +187,8 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <dialog class="theory-modal" id="modal-feedback" aria-labelledby="titulo-feedback">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="titulo-feedback">Feedback</h2>
-<button type="button" class="close-btn" data-close-modal>Cerrar</button>
+<h2 id="titulo-feedback" data-i18n="modals.feedback">Feedback</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
 <textarea id="feedback" class="feedback-view" readonly placeholder="Corrección de la respuesta&#10;&#10;Expectativa de la siguiente respuesta"></textarea>
 </div>
@@ -186,16 +197,16 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <dialog class="theory-modal" id="modal-aprende" aria-labelledby="titulo-aprende">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="titulo-aprende">Aprende más de este motor LLM</h2>
-<button type="button" class="close-btn" data-close-modal>Cerrar</button>
+<h2 id="titulo-aprende" data-i18n="modals.learn">Aprende más de este motor LLM</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
-<p class="theory-lead">Así decide este entrenador. Las notas sirven al profesor que va a enriquecer las reglas y al estudiante que quiere ver la fórmula con la que se lee su frase.</p>
+<p class="theory-lead" data-i18n="learn.lead">Así decide este entrenador. Las notas sirven al profesor que va a enriquecer las reglas y al estudiante que quiere ver la fórmula con la que se lee su frase.</p>
 <div class="theory-actions">
-<button type="button" data-open-modal="modal-guia" aria-haspopup="dialog">Guía de uso <span class="btn-note">(Para el profesor)</span></button>
-<button type="button" data-open-modal="modal-profesor" aria-haspopup="dialog">6 dimensiones <span class="btn-note">(Para el profesor q quiere profundizar)</span></button>
-<button type="button" data-open-modal="modal-verbos" aria-haspopup="dialog">Verbos y tiempos <span class="btn-note">(Para los puristas)</span></button>
-<button type="button" data-open-modal="modal-difusa" aria-haspopup="dialog">Lógica difusa <span class="btn-note">(Para los matemáticos)</span></button>
-<button type="button" data-open-modal="modal-wittgenstein" aria-haspopup="dialog">Wittgenstein y el uso <span class="btn-note">(Para los filósofos)</span></button>
+<button type="button" data-open-modal="modal-guia" aria-haspopup="dialog"><span data-i18n="learn.guide">Guía de uso</span> <span class="btn-note" data-i18n="learn.guideNote">(Para el profesor)</span></button>
+<button type="button" data-open-modal="modal-profesor" aria-haspopup="dialog"><span data-i18n="learn.dims">6 dimensiones</span> <span class="btn-note" data-i18n="learn.dimsNote">(Para el profesor que quiere profundizar en metodologías con IA)</span></button>
+<button type="button" data-open-modal="modal-verbos" aria-haspopup="dialog"><span data-i18n="learn.verbs">Verbos y tiempos</span> <span class="btn-note" data-i18n="learn.verbsNote">(Para los puristas)</span></button>
+<button type="button" data-open-modal="modal-difusa" aria-haspopup="dialog"><span data-i18n="learn.fuzzy">Lógica difusa</span> <span class="btn-note" data-i18n="learn.fuzzyNote">(Para los matemáticos)</span></button>
+<button type="button" data-open-modal="modal-wittgenstein" aria-haspopup="dialog"><span data-i18n="learn.witt">Wittgenstein y el uso</span> <span class="btn-note" data-i18n="learn.wittNote">(Para los filósofos)</span></button>
 </div>
 </div>
 </dialog>
@@ -203,9 +214,10 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <dialog class="theory-modal" id="modal-guia" aria-labelledby="titulo-guia">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="titulo-guia">Guía de uso</h2>
-<button type="button" class="close-btn" data-close-modal>Cerrar</button>
+<h2 id="titulo-guia" data-i18n="modals.guide">Guía de uso</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
+<div data-i18n-html="html.guia">
 <p>Hay cuatro controles arriba de la entrevista: tipo de entrevista, idioma a aprender (español, inglés o francés), nivel e idioma de explicación (español, inglés o francés).</p>
 <p>El tipo de entrevista fija el puesto (ingeniería de software, call center, mesero de restaurante, retail, recepción de hotel, enfermería, asistente administrativo, reparto, docencia o ventas), el tono y los temas de las preguntas. Cambiarlo abre otra conversación con una pregunta nueva de ese puesto. Las reglas gramaticales no cambian: el tiempo verbal lo sigue pidiendo cada pregunta.</p>
 <p>En el sitio publicado, la página no llama a Groq desde tu computador. Cada pregunta sale hacia el servidor Node que enciende el workflow de GitHub, y ese servidor es quien consulta a Groq. El contador Sesión es el tiempo que queda de ese workflow. En 00:00 la sesión de esa conversación termina.</p>
@@ -213,14 +225,16 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <p>Cambiar el idioma a aprender abre otra conversación y pide una pregunta nueva. Cambiar solo el idioma de explicación deja la pregunta actual y aplica el idioma nuevo en el siguiente feedback.</p>
 <p>La misma IA lleva el hilo: hace la pregunta, lee tu respuesta y escribe el feedback y la pregunta siguiente. El feedback queda deshabilitado y trae dos partes: corrección de la respuesta y expectativa de la siguiente respuesta. El motor gramatical es solo referencia para el skill del idioma en curso. Hay un apoyo de contexto en inglés, otro en español y otro en francés; entra el del idioma a aprender.</p>
 </div>
+</div>
 </dialog>
 
 <dialog class="theory-modal" id="modal-profesor" aria-labelledby="titulo-profesor">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="titulo-profesor">Para el profesor: el motor y las 6 dimensiones de la intención</h2>
-<button type="button" class="close-btn" data-close-modal>Cerrar</button>
+<h2 id="titulo-profesor" data-i18n="modals.profesor">Para el profesor: el motor y las 6 dimensiones de la intención</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
+<div data-i18n-html="html.profesor">
 <p>Esto es un entrenador de inglés para un ámbito concreto: la entrevista técnica de software. Simula la conversación con un profesor. Corrige, explica una regla y sigue la entrevista. El alumno practica el inglés de esa situación, no una lista suelta de ejercicios.</p>
 <p>La misma IA responde como entrevistador y como profesor. El hilo —la pregunta, lo que esa pregunta espera y el turno siguiente— se arma en esa IA a partir de la respuesta del estudiante. Hay tres piezas, y cada una se enriquece en su archivo:</p>
 <ul>
@@ -256,14 +270,16 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <p>El contenido de la entrevista se sostiene. Falla una dimensión. El profesor corrige esa forma y pregunta el siguiente paso del incidente. Si las seis señales no alcanzan para decidir, el resultado válido es evidencia insuficiente: se pregunta, y no se declara la frase incorrecta.</p>
 <p class="note">Al enriquecer el motor, cada regla nueva debe decir qué dimensión observa, qué forma sugiere y con qué grado de pertenencia. El skill decide cómo decirlo. El modelo conversacional no añade reglas por su cuenta.</p>
 </div>
+</div>
 </dialog>
 
 <dialog class="theory-modal" id="modal-verbos" aria-labelledby="titulo-verbos">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="titulo-verbos">Verbos y tiempos: la pieza central</h2>
-<button type="button" class="close-btn" data-close-modal>Cerrar</button>
+<h2 id="titulo-verbos" data-i18n="modals.verbs">Verbos y tiempos: la pieza central</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
+<div data-i18n-html="html.verbos">
 <p>En esta entrevista el verbo carga el sentido profesional. El candidato puede usar el vocabulario técnico correcto y aun así fallar la jugada si el tiempo no es el que la pregunta acaba de pedir. El motor empieza por ahí: marcador de tiempo, forma del verbo y estructura esperada.</p>
 <h3>La pregunta elige el tiempo</h3>
 <table>
@@ -287,14 +303,16 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <p><em>Yesterday, I did fix the bug</em> es enfático y gramatical: did ya marca el pasado y fix permanece en forma base. Motorg comprueba si hay un auxiliar (did, was, had, will, would) antes de proponer el pasado. Las reglas actuales son heurísticas: no analizan todas las subordinadas ni todos los verbos del inglés. Una frase que ninguna regla reconoce permanece como frase no clasificada. No pasa a ser un error por silencio del motor.</p>
 <p class="note">Cuando se amplíe el ámbito (otra profesión, otro curso), se amplía el léxico y el mapa pregunta → tiempo. La pieza central sigue siendo el verbo dentro de la situación, no una lista memorizada fuera de la entrevista.</p>
 </div>
+</div>
 </dialog>
 
 <dialog class="theory-modal" id="modal-difusa" aria-labelledby="titulo-difusa">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="titulo-difusa">Lógica difusa: cómo se resuelve una interpretación</h2>
-<button type="button" class="close-btn" data-close-modal>Cerrar</button>
+<h2 id="titulo-difusa" data-i18n="modals.fuzzy">Lógica difusa: cómo se resuelve una interpretación</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
+<div data-i18n-html="html.difusa">
 <p>Una frase de entrevista casi nunca es del todo correcta o del todo incorrecta. Puede contar el incidente justo y fallar el tiempo. Puede ser gramatical y no contestar la pregunta. La lógica difusa, a partir de los conjuntos de Zadeh (1965), asigna a cada lectura un grado de pertenencia μ entre 0 y 1, en lugar de un sí o un no.</p>
 <p>Motorg ya publica ese grado en cada hallazgo. La regla de pasado usa 0.86 y la del condicional usa 0.78: la frase pertenece en ese grado al conjunto «posible desajuste de esa regla». Es evidencia, no una sentencia.</p>
 <h3>De seis dimensiones a cuatro puntajes</h3>
@@ -337,14 +355,16 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 <h3>Las reglas por dentro: expresiones regulares</h3>
 <p>Los tres motores (inglés, español y francés) reconocen marcadores, tiempos y estructuras con expresiones regulares de JavaScript. Cada coincidencia es la evidencia literal que luego recibe un grado μ. Para leerlas o escribir reglas nuevas: <a href="https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Regular_expressions" target="_blank" rel="noopener noreferrer">Guía de expresiones regulares en JavaScript (MDN)</a>.</p>
 </div>
+</div>
 </dialog>
 
 <dialog class="theory-modal" id="modal-wittgenstein" aria-labelledby="titulo-wittgenstein">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="titulo-wittgenstein">Qué aporta Wittgenstein a este motor</h2>
-<button type="button" class="close-btn" data-close-modal>Cerrar</button>
+<h2 id="titulo-wittgenstein" data-i18n="modals.witt">Qué aporta Wittgenstein a este motor</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
+<div data-i18n-html="html.wittgenstein">
 <p>La teoría está en las <em>Investigaciones filosóficas</em>. La frase que orienta el motor es la del parágrafo 43: el significado de una palabra es su uso en el lenguaje. Aplicada a una clase de inglés, dice algo concreto: una forma verbal no tiene un veredicto eterno. Tiene un valor dentro de la actividad en la que aparece.</p>
 <h3>En otras palabras</h3>
 <p>La entrevista técnica es un juego de lenguaje, con jugadas y con reglas que los participantes reconocen. «Correcto» quiere decir: esta jugada cumple la regla que la pregunta acaba de poner en la mesa. El motor no busca un sentido escondido detrás de la frase del alumno. Mira si la frase, dicha aquí, hace el trabajo que la pregunta pidió.</p>
@@ -368,20 +388,30 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 </ul>
 <p class="note">Quien enriquezca el motor puede añadir ámbitos —otras profesiones, otras preguntas— como nuevos juegos de lenguaje. Cada juego trae sus tiempos esperados. La teoría no cambia: el sentido de la forma es el uso dentro del juego que está en curso.</p>
 </div>
+</div>
 </dialog>
 
+<script src="https://unpkg.com/i18next@23.4.6/i18next.min.js"></script>
+<script src="scripts/locales-embed.js"></script>
+<script src="scripts/i18n.js"></script>
 <script type="module">
 import {analyzeGrammar} from './motorg.js';
 import {buildPedagogicalContext,INTERVIEW_TYPES,DEFAULT_INTERVIEW_TYPE,interviewTypeOf} from './skill.js';
 const $=id=>document.getElementById(id);
 for(const [id,type] of Object.entries(INTERVIEW_TYPES)){const option=document.createElement('option');option.value=id;option.textContent=type.label;if(id===DEFAULT_INTERVIEW_TYPE)option.selected=true;$('interviewType').append(option);}
 function currentType(){return interviewTypeOf($('interviewType').value);}
+function tr(key, fallback, vars){const api=window.coachI18n;if(api&&api.ready){const value=api.t(key, vars);if(typeof value==='string'&&value&&value!==key)return value;}let text=fallback==null?key:String(fallback);if(vars)text=text.replace(/\{\{(\w+)\}\}/g,(_,name)=>vars[name]==null?'':String(vars[name]));return text;}
+function uiLangName(code){return tr('langs.'+code,{es:'español',en:'inglés',fr:'francés'}[code]||code);}
+function refreshTypeLabels(){for(const option of $('interviewType').options){const type=INTERVIEW_TYPES[option.value];if(type)option.textContent=tr('types.'+option.value, type.label);}}
 let apiBase='', sessionUntil=0, sessionLive=false;
-const NO_SESSION='Sin sesión activa.';
+let statusState={key:'status.opening', fallback:'Abriendo la entrevista…', extra:null};
+let lastUsage=null;
+function setStatus(key, fallback, extra){statusState={key, fallback, extra:extra||null};paintStatus();}
+function paintStatus(){const vars={...(statusState.extra||{})};if(statusState.key==='status.preparing'||statusState.key==='status.ready'||statusState.key==='status.write')vars.lang=targetName();$('status').textContent=tr(statusState.key, statusState.fallback, vars);}
 const SERVER_SOURCES=['https://api.github.com/repos/wbsckt3/sabelotodo-ai-interview-coach/contents/server.json?ref=main','https://raw.githubusercontent.com/wbsckt3/sabelotodo-ai-interview-coach/main/server.json',new URL('server.json',document.baseURI).href];
 function pad(n){return String(n).padStart(2,'0');}
 function formatRemain(ms){const total=Math.max(0,Math.ceil(ms/1000));const h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;return h?`${h}:${pad(m)}:${pad(s)}`:`${pad(m)}:${pad(s)}`;}
-function renderSession(){const el=$('sessionClock');if(!el)return;if(sessionLive&&sessionUntil&&sessionUntil<=Date.now()){sessionLive=false;apiBase='';}if(sessionLive&&sessionUntil>Date.now()){el.textContent=`Sesión ${formatRemain(sessionUntil-Date.now())}`;return;}if(sessionLive){el.textContent='Sesión activa';return;}el.textContent=location.hostname.endsWith('github.io')?'Sesión 00:00':'Sesión local';}
+function renderSession(){const el=$('sessionClock');if(!el)return;if(sessionLive&&sessionUntil&&sessionUntil<=Date.now()){sessionLive=false;apiBase='';}if(sessionLive&&sessionUntil>Date.now()){el.textContent=tr('ui.session','Sesión {{time}}',{time:formatRemain(sessionUntil-Date.now())});return;}if(sessionLive){el.textContent=tr('ui.sessionActive','Sesión activa');return;}el.textContent=location.hostname.endsWith('github.io')?tr('ui.sessionZero','Sesión 00:00'):tr('ui.sessionLocal','Sesión local');}
 async function readServer(source){const response=await fetch(`${source}${source.includes('?')?'&':'?'}t=${Date.now()}`,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});if(!response.ok)return null;const data=await response.json();if(data&&typeof data.content==='string'){try{return JSON.parse(atob(data.content.replace(/\s/g,'')));}catch{return null;}}return data&&typeof data==='object'?data:null;}
 function applyServer(data){const api=data&&typeof data.api==='string'&&/^https:\/\//.test(data.api.trim())?data.api.trim().replace(/\/$/,''):'';const until=Date.parse(data&&data.until||'');const open=Boolean(api)&&( !Number.isFinite(until)||until>Date.now());if(!open)return false;apiBase=api;sessionLive=true;sessionUntil=Number.isFinite(until)?until:0;renderSession();return true;}
 async function loadServer(){for(const source of SERVER_SOURCES){try{const data=await readServer(source);if(data&&applyServer(data))return;}catch{/* prueba la siguiente fuente */}}if(!sessionLive)renderSession();}
@@ -399,21 +429,20 @@ function readConversations(){try{const raw=JSON.parse(localStorage.getItem(STORE
 function writeConversations(list){try{localStorage.setItem(STORE_KEY,JSON.stringify(list.slice(-40)));}catch{/* el navegador puede rechazar el guardado */}}
 function beginConversation(){sessionId=(crypto.randomUUID&&crypto.randomUUID())||String(Date.now());const list=readConversations();list.push({id:sessionId,startedAt:new Date().toISOString(),interviewType:$('interviewType').value,targetLanguage:$('targetLanguage').value,explanationLanguage:$('explanationLanguage').value,level:$('level').value,turns:[]});writeConversations(list);return sessionId;}
 function appendTurn(entry){if(!sessionId)beginConversation();const list=readConversations();const session=list.find(item=>item.id===sessionId);if(!session)return;session.turns.push({at:new Date().toISOString(),...entry});writeConversations(list);}
-const NAMES={es:'español',en:'inglés',fr:'francés'};
-function targetName(){return NAMES[$('targetLanguage').value]||'inglés';}
-function explanationName(){return NAMES[$('explanationLanguage').value]||'español';}
+function targetName(){return uiLangName($('targetLanguage').value||'en');}
+function explanationName(){return uiLangName($('explanationLanguage').value||'es');}
 function setHint(id,text){const el=$(id);if(el)el.dataset.hint=text;}
 function showFeedback(text,open){const value=text||'';$('feedback').value=value;$('feedbackBtn').disabled=!value;const dialog=$('modal-feedback');if(!value&&dialog.open)dialog.close();else if(open&&value&&!dialog.open)dialog.showModal();}
-function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintType','Define el puesto, el tono y los temas de la entrevista. Cambiarlo abre otra conversación.');setHint('hintTarget',`Idioma a aprender: ${learn}. Es el idioma del entrevistador y de tu respuesta.`);setHint('hintLevel','Nivel aproximado de tus respuestas.');setHint('hintExplain',`Idioma de explicación: ${explain}. Es tu idioma y el del profesor en el feedback.`);setHint('hintInterviewer',`Pregunta en ${learn}. Llega sola al abrir la entrevista y se reemplaza en cada respuesta. Cambiar el idioma a aprender abre otra conversación.`);setHint('hintStudent',`Escribe en ${learn} y pulsa Responder.`);$('studentText').placeholder=`Tu respuesta en ${learn}`;}
+function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintType',tr('hints.type','Define el puesto, el tono y los temas de la entrevista. Cambiarlo abre otra conversación.'));setHint('hintTarget',tr('hints.target','Idioma a aprender: {{lang}}. Es el idioma del entrevistador y de tu respuesta.',{lang:learn}));setHint('hintLevel',tr('hints.level','Nivel aproximado de tus respuestas.'));setHint('hintExplain',tr('hints.explain','Idioma de explicación: {{lang}}. Es tu idioma y el del profesor en el feedback.',{lang:explain}));setHint('hintInterviewer',tr('hints.interviewer','Pregunta en {{lang}}. Llega sola al abrir la entrevista y se reemplaza en cada respuesta. Cambiar el idioma a aprender abre otra conversación.',{lang:learn}));setHint('hintStudent',tr('hints.student','Escribe en {{lang}} y pulsa Responder.',{lang:learn}));$('studentText').placeholder=tr('hints.studentPh','Tu respuesta en {{lang}}',{lang:learn});$('interviewer').placeholder=tr('ui.interviewerPh','El entrevistador está preparando la primera pregunta…');$('feedback').placeholder=tr('ui.feedbackPh','Corrección de la respuesta\n\nExpectativa de la siguiente respuesta');document.title=tr('ui.docTitle','Sabelotodo AI · Coach de entrevista');refreshTypeLabels();const titles={hintType:'hints.typeTitle',hintTarget:'hints.targetTitle',hintLevel:'hints.levelTitle',hintExplain:'hints.explainTitle',hintInterviewer:'hints.interviewerTitle',hintStudent:'hints.studentTitle'};for(const [id,key] of Object.entries(titles)){const el=$(id);if(el)el.dataset.hintTitle=tr(key, el.getAttribute('aria-label')||'');}}
 function learner(){return {level:$('level').value,explanationLanguage:$('explanationLanguage').value,targetLanguage:$('targetLanguage').value};}
 function skillFor(userText,question,nextAction,scenario,cue){const target=$('targetLanguage').value;const type=currentType();const grammarAnalysis=analyzeGrammar(userText,{question,language:target,domainTerms:type.terms[target]||type.terms.en,domainLabel:type.label});const skillInput=buildPedagogicalContext({userText,learner:learner(),lesson:{goal:type.id,scenario:scenario||type.id,expectedGrammar:grammarAnalysis.questionExpectation||['context_appropriate_tense']},grammarAnalysis,conversation:{lastQuestion:question,nextAction}});skillInput.variationCue=cue||'';return skillInput;}
-async function postCoach(body){if(remoteMissing())throw new Error(NO_SESSION);const response=await fetch(apiUrl('/api/coach'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);if(result.aiUsage)renderUsage(result.aiUsage);else refreshUsage();return result;}
-async function startInterview(){const gen=++generation;busy=true;replyBtn.disabled=true;if(remoteMissing()){$('status').textContent=NO_SESSION;busy=false;replyBtn.disabled=false;return;}$('status').textContent=`El entrevistador está preparando una pregunta en ${targetName()}…`;const type=currentType();const cue=type.openings[Math.floor(Math.random()*type.openings.length)];try{const result=await postCoach({action:'start',skillInput:skillFor('','','open_interview',type.id,`${cue} Phrase a new question.`)});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');if(!turn.interviewer)throw new Error('El entrevistador no envió una pregunta.');beginConversation();appendTurn({role:'interviewer',text:turn.interviewer});showFeedback('',false);$('studentText').value='';$('status').textContent=`Pregunta lista. Responde en ${targetName()}.`;$('studentText').focus();}catch(e){if(gen===generation)$('status').textContent=`No se pudo abrir la entrevista: ${e.message}`;}finally{if(gen===generation){busy=false;replyBtn.disabled=false;}}}
-replyBtn.addEventListener('click',async()=>{const gen=generation;const userText=$('studentText').value.trim();const question=$('interviewer').value.trim();if(!question){$('status').textContent='Todavía no hay pregunta del entrevistador.';return;}if(!userText){$('status').textContent=`Escribe tu respuesta en ${targetName()}.`;return;}if(busy)return;busy=true;replyBtn.disabled=true;$('status').textContent='El entrevistador y el profesor están respondiendo…';try{const result=await postCoach({action:'reply',skillInput:skillFor(userText,question,'correct_and_continue',currentType().id,`Ask a different follow-up question in ${targetName()}. Do not repeat the previous interviewer question.`)});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');appendTurn({role:'student',text:userText,answeredQuestion:question});appendTurn({role:'professor',feedback:formatFeedback(turn),correction:turn.correction,expectation:turn.expectation,suggestion:turn.suggestion});if(turn.interviewer)appendTurn({role:'interviewer',text:turn.interviewer});showFeedback(formatFeedback(turn),true);if(turn.interviewer)$('interviewer').value=turn.interviewer;$('studentText').value='';$('studentText').focus();$('status').textContent=turn.interviewer?'Nueva pregunta del entrevistador.':'Llegó el feedback. El entrevistador no cambió la pregunta.';}catch(e){if(gen===generation)$('status').textContent=`Error: ${e.message}`;}finally{if(gen===generation){busy=false;replyBtn.disabled=false;}}});
+async function postCoach(body){if(remoteMissing())throw new Error(tr('ui.noSession','Sin sesión activa.'));const response=await fetch(apiUrl('/api/coach'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);if(result.aiUsage)renderUsage(result.aiUsage);else refreshUsage();return result;}
+async function startInterview(){const gen=++generation;busy=true;replyBtn.disabled=true;if(remoteMissing()){setStatus('ui.noSession','Sin sesión activa.');busy=false;replyBtn.disabled=false;return;}setStatus('status.preparing','El entrevistador está preparando una pregunta en {{lang}}…');const type=currentType();const cue=type.openings[Math.floor(Math.random()*type.openings.length)];try{const result=await postCoach({action:'start',skillInput:skillFor('','','open_interview',type.id,`${cue} Phrase a new question.`)});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');if(!turn.interviewer)throw new Error(tr('status.noQuestionFromAi','El entrevistador no envió una pregunta.'));beginConversation();appendTurn({role:'interviewer',text:turn.interviewer});showFeedback('',false);$('studentText').value='';setStatus('status.ready','Pregunta lista. Responde en {{lang}}.');$('studentText').focus();}catch(e){if(gen===generation)setStatus('status.openError','No se pudo abrir la entrevista: {{message}}',{message:e.message});}finally{if(gen===generation){busy=false;replyBtn.disabled=false;}}}
+replyBtn.addEventListener('click',async()=>{const gen=generation;const userText=$('studentText').value.trim();const question=$('interviewer').value.trim();if(!question){setStatus('status.noQuestion','Todavía no hay pregunta del entrevistador.');return;}if(!userText){setStatus('status.write','Escribe tu respuesta en {{lang}}.');return;}if(busy)return;busy=true;replyBtn.disabled=true;setStatus('status.thinking','El entrevistador y el profesor están respondiendo…');try{const result=await postCoach({action:'reply',skillInput:skillFor(userText,question,'correct_and_continue',currentType().id,`Ask a different follow-up question in ${targetName()}. Do not repeat the previous interviewer question.`)});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');appendTurn({role:'student',text:userText,answeredQuestion:question});appendTurn({role:'professor',feedback:formatFeedback(turn),correction:turn.correction,expectation:turn.expectation,suggestion:turn.suggestion});if(turn.interviewer)appendTurn({role:'interviewer',text:turn.interviewer});showFeedback(formatFeedback(turn),true);if(turn.interviewer)$('interviewer').value=turn.interviewer;$('studentText').value='';$('studentText').focus();setStatus(turn.interviewer?'status.newQuestion':'status.sameQuestion',turn.interviewer?'Nueva pregunta del entrevistador.':'Llegó el feedback. El entrevistador no cambió la pregunta.');}catch(e){if(gen===generation)setStatus('status.error','Error: {{message}}',{message:e.message});}finally{if(gen===generation){busy=false;replyBtn.disabled=false;}}});
 function money(n){const v=Math.max(0,Number(n)||0);if(v===0)return '$0.00';if(v>=0.01)return `$${v.toFixed(2)}`;return `$${v.toFixed(8)}`;}
-function tokens(n){return Math.max(0,Number(n)||0).toLocaleString('es-CO');}
+function tokens(n){const loc={es:'es-CO',en:'en-US',fr:'fr-FR'}[(window.coachI18n&&window.coachI18n.getLocale&&window.coachI18n.getLocale())||'es']||'es-CO';return Math.max(0,Number(n)||0).toLocaleString(loc);}
 function costOf(prompt,completion){const input=(Math.max(0,Number(prompt)||0)*INPUT_USD)/1e6;const output=(Math.max(0,Number(completion)||0)*OUTPUT_USD)/1e6;return {input,output,total:input+output};}
-function renderUsage(usage){if(!usage)return;const pct=Math.max(0,Math.min(100,Number(usage.percentUsed)||0));const level=pct>=95||usage.quotaExhausted?'is-danger':pct>=75?'is-warn':'';const day=costOf(usage.promptTokens,usage.completionTokens);$('aiUsageCount').textContent=`${usage.requests||0} / ${usage.limit||0}`;$('aiUsageSummary').className=`jc-ai-usage__summary ${level}`.trim();$('aiUsageSummary').textContent='';const warn=usage.quotaExhausted?' <span class="jc-ai-usage__warn">— agotado</span>':'';$('aiUsageSummary').insertAdjacentHTML('beforeend',`${usage.requests||0} / ${usage.limit||0} llamadas <span class="jc-ai-usage__sep">|</span> ${pct}% del cupo diario <span class="jc-ai-usage__sep">|</span> <span class="jc-ai-usage__cost">Costo ${money(day.total)}</span>${warn}`);$('aiUsageBar').setAttribute('aria-valuenow',String(pct));$('aiUsageFill').style.width=`${pct}%`;$('aiUsageFill').className=`jc-ai-usage__fill ${level}`.trim();$('aiUsageIn').textContent=`${tokens(usage.promptTokens)} tok`;$('aiUsageOut').textContent=`${tokens(usage.completionTokens)} tok`;$('aiUsageInCost').textContent=money(day.input);$('aiUsageOutCost').textContent=money(day.output);const last=usage.lastCall;if(!last){$('aiUsageLast').textContent='Todavía no hay llamadas hoy.';return;}const lastCost=costOf(last.promptTokens,last.completionTokens);$('aiUsageLast').textContent=`Última llamada: ${tokens(last.promptTokens)} input · ${tokens(last.completionTokens)} output · Costo ${money(lastCost.total)}${last.estimated?' · estimado':''}`;}
+function renderUsage(usage){if(!usage)return;lastUsage=usage;const pct=Math.max(0,Math.min(100,Number(usage.percentUsed)||0));const level=pct>=95||usage.quotaExhausted?'is-danger':pct>=75?'is-warn':'';const day=costOf(usage.promptTokens,usage.completionTokens);$('aiUsageCount').textContent=`${usage.requests||0} / ${usage.limit||0}`;$('aiUsageSummary').className=`jc-ai-usage__summary ${level}`.trim();$('aiUsageSummary').textContent='';const warn=usage.quotaExhausted?` <span class="jc-ai-usage__warn">— ${tr('usage.exhausted','agotado')}</span>`:'';$('aiUsageSummary').insertAdjacentHTML('beforeend',`${usage.requests||0} / ${usage.limit||0} ${tr('usage.calls','llamadas')} <span class="jc-ai-usage__sep">|</span> ${pct}% ${tr('usage.quota','del cupo diario')} <span class="jc-ai-usage__sep">|</span> <span class="jc-ai-usage__cost">${tr('usage.cost','Costo')} ${money(day.total)}</span>${warn}`);$('aiUsageBar').setAttribute('aria-valuenow',String(pct));$('aiUsageFill').style.width=`${pct}%`;$('aiUsageFill').className=`jc-ai-usage__fill ${level}`.trim();$('aiUsageIn').textContent=`${tokens(usage.promptTokens)} tok`;$('aiUsageOut').textContent=`${tokens(usage.completionTokens)} tok`;$('aiUsageInCost').textContent=money(day.input);$('aiUsageOutCost').textContent=money(day.output);const last=usage.lastCall;if(!last){$('aiUsageLast').textContent=tr('usage.none','Todavía no hay llamadas hoy.');return;}const lastCost=costOf(last.promptTokens,last.completionTokens);$('aiUsageLast').textContent=tr('usage.last','Última llamada: {{input}} input · {{output}} output · Costo {{cost}}{{estimated}}',{input:tokens(last.promptTokens),output:tokens(last.completionTokens),cost:money(lastCost.total),estimated:last.estimated?tr('usage.estimated',' · estimado'):''});}
 async function refreshUsage(){try{if(remoteMissing())return;const response=await fetch(apiUrl('/api/ai-usage'));if(!response.ok)return;renderUsage(await response.json());}catch{/* la barra se queda en el último valor conocido */}}
 $('aiUsageToggle').addEventListener('click',()=>{const body=$('aiUsageBody');const open=body.hidden;body.hidden=!open;$('aiUsageToggle').setAttribute('aria-expanded',String(open));$('aiUsage').classList.toggle('jc-ai-usage--open',open);$('aiUsageCaret').textContent=open?'▴':'▾';});
 function restartInterview(){updateLanguageHints();$('interviewer').value='';showFeedback('',false);$('studentText').value='';startInterview();}
@@ -425,6 +454,11 @@ renderSession();
 setInterval(renderSession,1000);
 setInterval(loadServer,30000);
 loadServer().finally(()=>refreshUsage().finally(()=>startInterview()));
+function refreshOpenHint(){const dialog=$('modal-hint');const btn=window.__coachOpenHint&&$(window.__coachOpenHint);if(!dialog||!dialog.open||!btn)return;$('hintTitle').textContent=btn.dataset.hintTitle||btn.getAttribute('aria-label')||'';$('hintBody').textContent=btn.dataset.hint||'';}
+function refreshChrome(){updateLanguageHints();renderSession();paintStatus();refreshOpenHint();if(lastUsage)renderUsage(lastUsage);}
+window.onCoachLocaleChange=refreshChrome;
+window.onCoachI18nReady=refreshChrome;
+if(window.coachI18n&&window.coachI18n.ready)refreshChrome();
 </script>
 <script>
 document.querySelectorAll('.q').forEach((btn)=>{
@@ -433,7 +467,8 @@ document.querySelectorAll('.q').forEach((btn)=>{
     const body=document.getElementById('hintBody');
     const dialog=document.getElementById('modal-hint');
     if(!title||!body||!dialog)return;
-    title.textContent=(btn.getAttribute('aria-label')||'Ayuda').replace(/^Ayuda:\s*/,'');
+    window.__coachOpenHint=btn.id;
+    title.textContent=btn.dataset.hintTitle||btn.getAttribute('aria-label')||'Ayuda';
     body.textContent=btn.dataset.hint||'';
     if(typeof dialog.showModal==='function') dialog.showModal();
   });
