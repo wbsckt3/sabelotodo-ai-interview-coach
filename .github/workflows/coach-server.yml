@@ -37,7 +37,7 @@ jobs:
           MINUTES: ${{ inputs.minutes }}
           SESSION: ${{ inputs.session }}
           LAUNCHER_URL: ${{ vars.COACH_LAUNCHER_URL }}
-          CALLBACK_SECRET: ${{ secrets.COACH_CALLBACK_SECRET }}
+          CALLBACK_SECRET: ${{ secrets.COACH_CALLBACK_SECRET || secrets.CALLBACK_SECRET }}
         run: |
           set -euo pipefail
           if [ -z "${GROQ_API_KEY}" ]; then
@@ -56,7 +56,7 @@ jobs:
               exit 1
             fi
             if [ -z "${LAUNCHER_URL}" ] || [ -z "${CALLBACK_SECRET}" ]; then
-              echo "Faltan la variable COACH_LAUNCHER_URL o el secreto COACH_CALLBACK_SECRET."
+              echo "Faltan la variable COACH_LAUNCHER_URL o el secreto COACH_CALLBACK_SECRET (o CALLBACK_SECRET)."
               exit 1
             fi
             LAUNCHER_URL="${LAUNCHER_URL%/}"
