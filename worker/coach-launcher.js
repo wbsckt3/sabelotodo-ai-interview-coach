@@ -56,6 +56,7 @@ async function countActive(env) {
 }
 
 async function dispatchWorkflow(env, id, minutes) {
+  if (!env.GITHUB_TOKEN) throw new Error('Falta el secreto GITHUB_TOKEN en el Worker.');
   const repo = env.GITHUB_REPO || 'wbsckt3/sabelotodo-ai-interview-coach';
   const workflow = env.WORKFLOW_FILE || 'coach-server.yml';
   const response = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/${workflow}/dispatches`, {
@@ -101,7 +102,7 @@ async function createSession(request, env) {
     await dispatchWorkflow(env, id, minutes);
   } catch (error) {
     await writeSession(env, id, { ...session, status: 'failed', error: error.message });
-    return json(request, env, 502, { error: 'No se pudo encender el servidor del coach.' });
+    return json(request, env, 502, { error: 'No se pudo encender el servidor del coach.', detail: error.message });
   }
   return json(request, env, 201, { id, status: 'starting', minutes });
 }
