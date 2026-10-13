@@ -1,0 +1,481 @@
+ 
+
+ motor de intención gramatical que convierte una conversación con un agente de IA en un curso personalizado de inglés por WhatsApp:
+
+Puedes construir la primera versión exclusivamente con JavaScript. No necesitas Python ni entrenar un modelo propio. Usarías JavaScript para el motor gramatical y la lógica difusa, y un modelo de IA para mantener la conversación, generar ejemplos y evaluar las respuestas.
+
+La clave es que la IA no sea la única responsable de corregir al estudiante. Tu motor tendrá reglas explícitas para reconocer qué tiempo verbal requiere una situación, qué estructura produjo el alumno y por qué una respuesta es incorrecta o poco natural.
+
+1. Cómo funcionaría el agente de inglés
+
+Imaginemos que el alumno le dice al agente de WhatsApp:
+
+I want learn English for a technical interview in software development.
+
+El agente identifica el objetivo profesional y comienza una conversación simulada de entrevista.
+
+Agente de IA
+
+Tell me about a challenging bug you fixed in a previous project.
+
+Estudiante
+
+Yesterday I fix a bug in production.
+
+Motor gramatical
+
+Detecta el marcador temporal yesterday, la forma base fix y la necesidad de expresar una acción terminada en el pasado.
+
+Agente de IA
+
+Almost! Say: “Yesterday, I fixed a bug in production.”
+
+Because you said “yesterday,” you need the simple past: fix → fixed.
+
+Now, what did you do to solve the bug?
+
+Fíjate en algo importante: el agente no termina la clase al corregir. Corrige, explica la regla y continúa la entrevista, de manera que el alumno practique el inglés profesional y no solamente ejercicios gramaticales.
+
+2. La arquitectura: JavaScript de principio a fin
+
+Yo lo construiría como un skill que el agente de WhatsApp puede utilizar cuando detecta que el usuario está aprendiendo inglés.
+
+WhatsApp
+
+El estudiante escribe una respuesta en inglés
+
+Node.js · WhatsApp webhook
+
+Recibe el mensaje y recupera el estado del estudiante
+
+Motor gramatical JS
+
+Tiempos, verbos, reglas y errores
+
+Agente de IA
+
+Entrevista, contexto y explicación
+
+Evaluador intencional con lógica difusa
+
+Contrasta la respuesta con lo que exige la situación comunicativa
+
+Respuesta pedagógica por WhatsApp
+
+Corrección + explicación + siguiente pregunta + seguimiento del progreso
+
+Hay una distinción técnica importante:
+
+Todo el motor puede escribirse en JavaScript: sí.
+
+Todo puede ejecutarse exclusivamente en el frontend del navegador: no, si quieres que funcione como un agente de WhatsApp. Necesitas un backend accesible por Internet para recibir webhooks de Meta, gestionar las credenciales y enviar respuestas.
+
+Necesitas Python: no.
+
+Necesitas un modelo de IA: para una conversación abierta y natural, sí resulta muy conveniente. El análisis gramatical básico puede funcionar sin él.
+
+En tu caso, como ya trabajas con agentes sobre WhatsApp Cloud API, puedes integrar el motor como una skill del agente existente en lugar de crear otro bot independiente.
+
+3. El corazón del sistema: gramática + intención + contexto
+
+Aquí es donde tu idea de lógica difusa aporta valor.
+
+No basta con detectar que una frase contiene un verbo en pasado. El motor necesita saber qué tiempo verbal exige la pregunta que se está respondiendo.
+
+Por ejemplo:
+
+Pregunta de entrevista
+
+	
+
+Objetivo gramatical probable
+
+
+
+
+What do you do in your current role?
+
+	
+
+Presente simple
+
+
+
+
+What did you do to fix the bug?
+
+	
+
+Pasado simple
+
+
+
+
+What are you working on right now?
+
+	
+
+Presente continuo
+
+
+
+
+What will you do if the deployment fails?
+
+	
+
+Futuro con will en la oración principal
+
+
+
+
+What have you learned from that experience?
+
+	
+
+Presente perfecto
+
+El motor mantiene un objeto de contexto como este:
+
+const lessonContext = {
+  goal: "technical_software_interview",
+  language: "en",
+  proficiency: "intermediate",
+  currentScenario: "production_bug",
+  communicativeIntent: "describe_past_experience",
+  expectedGrammar: [
+    "simple_past"
+  ],
+  previousErrors: [
+    {
+      type: "tense_mismatch",
+      rule: "past_time_requires_past_form",
+      example: "Yesterday, I fix a bug."
+    }
+  ]
+};
+
+Este objeto no tiene que decidir toda la conversación. Le entrega al agente las restricciones pedagógicas que debe respetar.
+
+4. Una primera implementación del motor en JavaScript
+
+Puedes comenzar con reglas explícitas y un sistema de puntuación difusa sencillo.
+
+Este ejemplo es funcional como prototipo para detectar una discrepancia frecuente entre una referencia temporal pasada y un verbo en forma base. No es todavía un parser completo de inglés.
+
+
+const pastMarkers = [
+  "yesterday",
+  "last week",
+  "last month",
+  "last year",
+  "two days ago",
+  "in 2024"
+];
+
+const commonVerbs = {
+  fix: { past: "fixed" },
+  deploy: { past: "deployed" },
+  implement: { past: "implemented" },
+  build: { past: "built" },
+  write: { past: "wrote" },
+  find: { past: "found" },
+  make: { past: "made" },
+  do: { past: "did" },
+  go: { past: "went" },
+  have: { past: "had" }
+};
+
+function analyzePastMismatch(sentence) {
+  const text = sentence.toLowerCase().trim();
+
+  const hasPastMarker = pastMarkers.some(
+    marker => text.includes(marker)
+  );
+
+  if (!hasPastMarker) {
+    return {
+      detected: false,
+      reason: "No clear past-time marker found."
+    };
+  }
+
+  const tokens = text.match(/[a-z']+/g) || [];
+
+  const candidate = tokens.find((word, index) =>
+    index > 0 &&
+    Object.hasOwn(commonVerbs, word)
+  );
+
+  if (!candidate) {
+    return {
+      detected: false,
+      reason: "No supported base-form verb found."
+    };
+  }
+
+  const corrected = commonVerbs[candidate].past;
+
+  const score = 0.85; // Illustrative rule score
+
+  return {
+    detected: true,
+    errorType: "possible_tense_mismatch",
+    verb: candidate,
+    suggestedForm: corrected,
+    score,
+    explanation:
+      "A past-time expression may require the simple past."
+  };
+}
+
+console.log(
+  analyzePastMismatch("Yesterday I fix a bug in production.")
+);
+
+Limitación importante: esta versión puede dar falsos positivos. Por ejemplo, en «Yesterday, I did fix the bug», el verbo fix permanece en forma base porque ya existe el auxiliar did. Tampoco identifica correctamente todos los verbos, sujetos, subordinadas o construcciones perfectas.
+
+En producción, sustituiría esta heurística por un parser lingüístico o una combinación de análisis gramatical y validación mediante IA. Las reglas deterministas serían responsables de los errores verificables; el modelo ayudaría con los casos ambiguos.
+
+5. ¿Dónde entra la lógica difusa?
+
+Supongamos que el entrevistador pregunta:
+
+What will you do if the deployment fails?
+
+Y el estudiante responde:
+
+If the deployment will fail, I will restart the service.
+
+El motor no debería limitarse a buscar la palabra will. Tiene que reconocer la estructura condicional: en una condición real futura con if, normalmente se usa presente simple en la cláusula condicional y will en la principal.
+
+Puede evaluar señales como:
+
+Concordancia entre la pregunta y la respuesta.
+
+Presencia de marcadores temporales.
+
+Forma verbal detectada.
+
+Compatibilidad con la estructura gramatical esperada.
+
+Ambigüedad de la frase y fiabilidad del análisis.
+
+Una combinación ilustrativa podría ser:
+
+S=0.35G+0.25C+0.25V+0.15P
+
+Donde:
+
+G: adecuación gramatical.
+
+C: coherencia con el contexto de la pregunta.
+
+V: adecuación verbal y temporal.
+
+P: pertinencia pragmática de la respuesta.
+
+Todos los valores se normalizan entre 0 y 1. Los pesos son iniciales y deben calibrarse con ejemplos reales.
+
+Esto genera una evaluación pedagógica, no una medida científica de la intención interna del alumno. Conviene que el motor también pueda devolver «evidencia insuficiente» en lugar de forzar una corrección.
+
+6. La conversación debe adaptarse al estudiante
+
+Aquí es donde se convierte en un producto educativo y no solamente en un corrector.
+
+El agente puede conservar un historial de errores y utilizarlo para seleccionar el siguiente ejercicio:
+
+Si falla repetidamente el pasado simple, plantea otra pregunta sobre experiencias anteriores.
+
+Si domina el pasado simple, introduce el presente perfecto para hablar de experiencia profesional.
+
+Si falla en preguntas hipotéticas, propone escenarios de incidentes de producción.
+
+Si responde correctamente, aumenta la dificultad y reduce las explicaciones.
+
+Por ejemplo, si el alumno se equivoca varias veces con los tiempos pasados, el agente podría decir:
+
+Let's practice talking about previous projects. Tell me about a bug you fixed last week. Use the past tense.
+
+El motor registra el resultado y, después de varios ejemplos, decide si debe continuar practicando o avanzar.
+
+7. Mi propuesta para construir la primera versión
+
+Yo comenzaría con una sola especialización: English for Software Developer Interviews.
+
+La primera versión tendría:
+
+Conversación textual por WhatsApp.
+
+Simulación de entrevistas técnicas.
+
+Análisis de tiempos verbales y formas de los verbos.
+
+Correcciones explicadas en español, con ejemplos en inglés.
+
+Reglas difusas para combinar contexto, gramática e intención.
+
+Seguimiento de errores y adaptación de las siguientes preguntas.
+
+Después incorporaría vocabulario técnico, fluidez, naturalidad, expresiones profesionales y, más adelante, audio.
+
+La decisión arquitectónica más importante es mantener separadas la skill pedagógica, el motor gramatical en JavaScript y el modelo conversacional. Así puedes reutilizar el motor para otros cursos de idiomas o para enseñar inglés orientado a otras profesiones.
+
+Y sí: puedes desarrollar todo el backend de esa primera versión en JavaScript con Node.js, integrar el modelo de IA que ya utilices y exponerlo como una skill de tu agente de WhatsApp.
+
+Data analysis isn't available right now. Do you want to continue without it?
+
+si continua pero es en javascript ? dice python 
+
+Sí, los cuatro archivos del sistema son HTML y JavaScript, no Python. La herramienta que intenté usar para crear los archivos falló, pero eso no significa que el proyecto requiera Python.
+
+La arquitectura que te propongo para Sabelotodo AI es:
+
+Archivo
+
+	
+
+Tecnología
+
+	
+
+Función
+
+
+
+
+index.html
+
+	
+
+HTML + JavaScript
+
+	
+
+Campo de texto para practicar y probar el sistema.
+
+
+
+
+skill.js
+
+	
+
+JavaScript
+
+	
+
+Define el objetivo pedagógico, el nivel y las reglas de enseñanza.
+
+
+
+
+motorg.js
+
+	
+
+JavaScript
+
+	
+
+Analiza errores gramaticales y propone correcciones.
+
+
+
+
+modc.js
+
+	
+
+JavaScript para Node.js
+
+	
+
+Consulta la API de Groq y genera la respuesta conversacional.
+
+El quinto archivo, architecture.drawio, es un diagrama XML que puedes abrir en 
+draw.io
+.
+
+Importante: modc.js debe ejecutarse en el servidor Node.js porque contiene la llamada a Groq. Tu clave GROQ_API_KEY se configura como variable de entorno; no se escribe en el HTML.
+
+Descarga los archivos
+
+Ya los generé en JavaScript y HTML, con el backend Node.js para llamar a Groq y el plano de arquitectura editable.
+
+Paquete completo
+
+Los cuatro archivos de código, el diagrama Draw.io y las instrucciones.
+
+Descargar todos los archivos ZIP
+
+Archivos individuales
+
+index.html
+
+Interfaz para introducir respuestas y probar el flujo.
+
+Abrir archivo
+
+skill.js
+
+Objetivo de aprendizaje y política pedagógica.
+
+Abrir archivo
+
+motorg.js
+
+Reglas gramaticales y correcciones posibles.
+
+Abrir archivo
+
+modc.js
+
+Servidor Node.js, límites de uso y llamada a Groq.
+
+Abrir archivo
+
+architecture.drawio
+
+Plano de arquitectura editable.
+
+Abrir diagrama
+
+README.txt
+
+Instrucciones de instalación y ejecución.
+
+Abrir instrucciones
+
+Cómo ejecutarlo en Windows
+
+Necesitas Node.js 20 o superior. No necesitas Python ni instalar paquetes adicionales.
+
+Descarga y descomprime el ZIP.
+
+Abre PowerShell en la carpeta del proyecto.
+
+Configura tu clave de Groq y ejecuta el servidor:
+
+$env:GROQ_API_KEY="TU_CLAVE_GROQ"
+$env:GROQ_ENDPOINT="https://api.groq.com/openai/v1"
+$env:GROQ_MODEL="openai/gpt-oss-20b"
+$env:GROQ_REASONING_EFFORT="low"
+
+node modc.js
+
+4. Abre en el navegador:
+
+http://localhost:8787
+
+Escribe una respuesta como Yesterday I fix a bug in production. y pulsa Analizar y generar feedback.
+
+Antes de integrarlo con tu agente de WhatsApp
+
+Hay una precisión importante: este paquete implementa el prototipo web y la conexión con Groq. Para incorporarlo al agente que ya tienes, debes conectar sus funciones al webhook existente, sin crear un segundo agente ni otro webhook.
+
+Además, Motorg utiliza reglas heurísticas iniciales, por lo que aún no es un analizador gramatical completo. Los límites de uso incluidos son locales y en memoria; para producción necesitarás controles persistentes si ejecutas varias instancias.
+
+Por seguridad, tampoco he implementado un bypass de certificados TLS mediante GROQ_INSECURE_TLS=1. Si tu proxy corporativo utiliza un certificado propio, la solución preferible es configurar su certificado de confianza en Node.js.
+
+El siguiente paso recomendado es integrar Motorg y el Skill en el flujo de mensajes de tu agente actual, de manera que cada respuesta recibida por WhatsApp pase por el análisis pedagógico antes de llamar a Groq.

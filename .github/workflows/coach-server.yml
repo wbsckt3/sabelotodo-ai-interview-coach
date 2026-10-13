@@ -1,0 +1,105 @@
+name: Servidor del coach (Groq)
+
+on:
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: Minutos que el servidor permanece activo (entre 5 y 180)
+        default: "60"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: coach-server
+  cancel-in-progress: false
+
+jobs:
+  serve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 200
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Encender Node y publicar la dirección
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          COACH_CORS_ORIGIN: https://wbsckt3.github.io
+          PORT: "8787"
+          MINUTES: ${{ inputs.minutes }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GROQ_API_KEY}" ]; then
+            echo "Falta el secreto GROQ_API_KEY en Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          case "${MINUTES}" in
+            ''|*[!0-9]*) MINUTES=60 ;;
+          esac
+          if [ "${MINUTES}" -gt 180 ]; then MINUTES=180; fi
+          if [ "${MINUTES}" -lt 5 ]; then MINUTES=5; fi
+          echo "El servidor quedará activo ${MINUTES} minutos."
+
+          node modc.js >node.log 2>&1 &
+          echo $! >node.pid
+          ready=0
+          for _ in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:8787/health >/dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          if [ "$ready" != 1 ]; then
+            echo "Node no arrancó."
+            cat node.log
+            exit 1
+          fi
+
+          curl -fsSL -o cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+          chmod +x cloudflared
+          ./cloudflared tunnel --url http://127.0.0.1:8787 --no-autoupdate >tunnel.log 2>&1 &
+          echo $! >tunnel.pid
+          URL=""
+          for _ in $(seq 1 40); do
+            URL=$(grep -oE 'https://[-a-z0-9]+\.trycloudflare\.com' tunnel.log | head -1 || true)
+            if [ -n "$URL" ]; then break; fi
+            sleep 1
+          done
+          if [ -z "$URL" ]; then
+            echo "No apareció la dirección del túnel."
+            cat tunnel.log
+            exit 1
+          fi
+          echo "SERVIDOR_LISTO ${URL}"
+          echo "::notice title=Servidor del coach::${URL}"
+          echo "Servidor listo: ${URL}" >>"$GITHUB_STEP_SUMMARY"
+          printf '%s\n' "{\"api\":\"${URL}\"}" >server.json
+          git add server.json
+          git -c user.email="wbsckt3@gmail.com" -c user.name="wbsckt3" commit -m "Publica la dirección temporal del servidor del coach"
+          git push origin HEAD:main
+
+          cleanup() {
+            if [ -f server.json ] && grep -q "$URL" server.json; then
+              printf '%s\n' '{"api":""}' >server.json
+              git add server.json
+              git -c user.email="wbsckt3@gmail.com" -c user.name="wbsckt3" commit -m "Apaga la dirección temporal del servidor del coach" || true
+              git push origin HEAD:main || true
+            fi
+          }
+          trap cleanup EXIT
+
+          end=$((SECONDS + MINUTES * 60))
+          while [ "$SECONDS" -lt "$end" ]; do
+            if ! kill -0 "$(cat node.pid)" 2>/dev/null; then
+              echo "Node se detuvo."
+              cat node.log
+              exit 1
+            fi
+            if ! kill -0 "$(cat tunnel.pid)" 2>/dev/null; then
+              echo "El túnel se cayó."
+              cat tunnel.log
+              exit 1
+            fi
+            sleep 15
+          done

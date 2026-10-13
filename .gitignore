@@ -1,0 +1,7 @@
+state/
+node_modules/
+.env
+.env.*
+*.pem
+*.jpg
+README.txt
