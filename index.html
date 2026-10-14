@@ -81,8 +81,15 @@ button:disabled{opacity:.55}
 .ped-soon{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:#f8fafc;border:1px dashed #94a3b8;color:#475569}
 @media(max-width:650px){.theory-actions{grid-template-columns:1fr}}
 .theory-actions .btn-note{color:#b7bec8;font-weight:550;font-size:.78rem}
-.actions{display:flex;gap:6px;align-items:center;margin-top:6px}
-.actions .reply-btn,.actions .mic-btn{flex:0 0 auto}
+.field{position:relative}
+.field-float .actor{padding-bottom:54px}
+.float-tools{position:absolute;right:10px;bottom:10px;display:flex;align-items:center;gap:6px;z-index:2}
+.field-float>.repeat-btn{position:absolute;right:10px;bottom:10px;z-index:2;width:42px;height:42px;padding:0;justify-content:center;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,39,.16)}
+.float-tools .icon-btn,.float-tools .feedback-float{box-shadow:0 2px 8px rgba(16,24,39,.16)}
+.feedback-float{height:42px;padding:0 12px;background:#eef2f8;color:#172033;border:1px solid #c5d0e6;border-radius:10px}
+.learn-btn{width:100%;margin-top:6px;background:#fff;color:#233e73;border:1px solid #233e73;font-size:.78rem}
+.change-row{display:flex;align-items:center;gap:4px}
+.actor-interviewer{color:#647084;-webkit-text-fill-color:#647084}
 .icon-btn{width:42px;height:42px;padding:0;display:inline-flex;align-items:center;justify-content:center}
 .icon-btn svg{display:block}
 .mic-btn{background:#9f1239}
@@ -104,7 +111,6 @@ button:disabled{opacity:.55}
 .wave span:nth-child(4){height:18px;animation-delay:.08s}
 .wave span:nth-child(5){height:9px;animation-delay:.18s}
 @keyframes freq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
-.actions .learn-btn{flex:1;background:#fff;color:#233e73;border:1px solid #233e73;font-size:.78rem}
 .actions .ghost{background:#eef2f8;color:#172033}
 #status{margin:4px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .feedback-view{width:100%;min-height:180px;resize:vertical;line-height:1.4;background:#f3f6fb}
@@ -154,7 +160,7 @@ body.class-started .title-tools{display:none}
 .voice-preview{flex:0 0 auto;background:#fff;color:#233e73;border:1px solid #c5d0e6;padding:6px 8px;font-size:.75rem}
 @media(max-width:650px){.voice-row{grid-template-columns:1fr}}
 @media(max-width:650px){.class-card__data{grid-template-columns:1fr 1fr}}
-@media(max-width:650px){body{padding:6px}h1{font-size:.95rem}.subtitle{font-size:.75rem}.actions .learn-btn{font-size:.7rem}.theory-actions{display:grid}}
+@media(max-width:650px){body{padding:6px}h1{font-size:.95rem}.subtitle{font-size:.75rem}.learn-btn{font-size:.7rem}.theory-actions{display:grid}}
 </style>
 </head>
 <body>
@@ -178,7 +184,10 @@ body.class-started .title-tools{display:none}
 </dl>
 <div class="class-card__side">
 <p class="session" id="sessionClock" aria-live="polite">Sesión 00:00</p>
+<div class="change-row">
 <button type="button" class="ghost" id="changeClass" data-i18n="ui.change">Cambiar</button>
+<button type="button" class="q" id="hintChange" data-i18n-aria="hints.changeTitle" aria-label="Cambiar">?</button>
+</div>
 </div>
 </div>
 <div class="voice-row">
@@ -191,20 +200,21 @@ body.class-started .title-tools{display:none}
 <div class="voice-line"><select data-voice-role="professor" data-i18n-aria="ui.professorVoice" aria-label="Voz del profesor"></select><button type="button" class="voice-preview" data-voice-preview="professor" data-i18n="ui.voicePreview">Oír</button></div>
 </div>
 </div>
-<div class="field grow">
-<div class="label-row"><label for="interviewer" data-i18n="ui.interviewer">Entrevistador</label><span class="label-tools"><button type="button" class="repeat-btn" id="repeatQuestionBtn" data-i18n-aria="ui.repeatQuestion" aria-label="Repetir pregunta" title="Repetir pregunta"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5V2L8 6l4 4V7a5 5 0 1 1-4.9 6H5a7 7 0 1 0 7-8z"/></svg><span class="wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span><span data-i18n="ui.repeatQuestion">Repetir pregunta</span></button><button type="button" class="q" id="hintInterviewer" data-i18n-aria="hints.interviewerTitle" aria-label="Entrevistador">?</button></span></div>
+<div class="field grow field-float">
+<div class="label-row"><label for="interviewer" data-i18n="ui.interviewer">Entrevistador</label><button type="button" class="q" id="hintInterviewer" data-i18n-aria="hints.interviewerTitle" aria-label="Entrevistador">?</button></div>
 <textarea id="interviewer" class="actor actor-interviewer" readonly placeholder="El entrevistador está preparando la primera pregunta…"></textarea>
+<button type="button" class="repeat-btn" id="repeatQuestionBtn" data-i18n-aria="ui.repeatQuestion" aria-label="Repetir pregunta" title="Repetir pregunta"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5V2L8 6l4 4V7a5 5 0 1 1-4.9 6H5a7 7 0 1 0 7-8z"/></svg><span class="wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span></button>
 </div>
-<div class="field grow">
+<div class="field grow field-float">
 <div class="label-row"><label for="studentText" data-i18n="ui.student">Tu respuesta</label><button type="button" class="q" id="hintStudent" data-i18n-aria="hints.studentTitle" aria-label="Tu respuesta">?</button></div>
 <textarea id="studentText" class="actor actor-student" placeholder="Tu respuesta"></textarea>
-</div>
-<div class="actions">
+<div class="float-tools">
 <button id="replyBtn" class="reply-btn icon-btn" type="button" data-i18n-aria="ui.reply" aria-label="Responder" title="Responder"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>
 <button id="micBtn" class="mic-btn icon-btn" type="button" aria-pressed="false" data-i18n-aria="ui.mic" aria-label="Hablar" title="Hablar"><svg class="icon-mic" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg><svg class="icon-stop" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg></button>
-<button id="feedbackBtn" class="ghost" type="button" disabled data-i18n="ui.feedback">Feedback</button>
-<button id="learnBtn" class="learn-btn" type="button" data-open-modal="modal-aprende" aria-haspopup="dialog" data-i18n="ui.learn">Aprende más de este motor conversacional</button>
+<button id="feedbackBtn" class="feedback-float" type="button" disabled data-i18n="ui.feedback">Feedback</button>
 </div>
+</div>
+<button id="learnBtn" class="learn-btn" type="button" data-open-modal="modal-aprende" aria-haspopup="dialog" data-i18n="ui.learn">Aprende más de este motor conversacional</button>
 <p id="status" class="muted" role="status" data-i18n="status.opening">Abriendo la entrevista…</p>
 </section>
 </main>
@@ -564,7 +574,7 @@ function setHint(id,text){const el=$(id);if(el)el.dataset.hint=text;}
 function showFeedback(text,open,speechParts){const value=text||'';$('feedback').value=value;$('feedbackBtn').disabled=!value;if(speechParts)lastFeedbackSpeech=speechParts;else if(!value)lastFeedbackSpeech=[];const dialog=$('modal-feedback');if(!value&&dialog.open){speakQuestionOnClose=false;dialog.close();}else if(open&&value){speakQuestionOnClose=true;if(!dialog.open)dialog.showModal();speakFeedback();}}
 function namedLang(code){return tr('learnNames.'+(code||'en'), uiLangName(code));}
 function paintSubtitle(){const el=$('subtitle');if(!el)return;el.textContent=tr('ui.subtitleLearn','Aprende {{learn}} con un profesor en tu idioma nativo {{native}}',{learn:namedLang($('targetLanguage').value),native:namedLang($('explanationLanguage').value)});}
-function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintType',tr('hints.type','Define el puesto, el tono y los temas de la entrevista. Cambiarlo abre otra conversación.'));setHint('hintTarget',tr('hints.target','Idioma a aprender: {{lang}}. Es el idioma del entrevistador y de tu respuesta.',{lang:learn}));setHint('hintLevel',tr('hints.level','Nivel aproximado de tus respuestas.'));setHint('hintExplain',tr('hints.explain','Idioma de explicación: {{lang}}. Es tu idioma y el del profesor en el feedback.',{lang:explain}));setHint('hintInterviewer',tr('hints.interviewer','Pregunta en {{lang}}. Si tu respuesta todavía necesita trabajo, el entrevistador pide aclarar un aspecto. Si ya vale, la valida y pasa a otra. Cambiar el idioma a aprender abre otra conversación.',{lang:learn}));setHint('hintStudent',tr('hints.student','Escribe en {{lang}} y pulsa Responder.',{lang:learn}));$('studentText').placeholder=tr('hints.studentPh','Tu respuesta en {{lang}}',{lang:learn});$('interviewer').placeholder=tr('ui.interviewerPh','El entrevistador está preparando la primera pregunta…');$('feedback').placeholder=tr('ui.feedbackPh','Tema del entrevistador\n\nTu respuesta\n\nCómo mejorar esta respuesta\n\nQué ajustar\n\nAsí podría quedar la respuesta\n\nPregunta del entrevistador');document.title=tr('ui.docTitle','Motor conversacional · Coach de entrevista');refreshTypeLabels();paintSubtitle();const titles={hintType:'hints.typeTitle',hintTarget:'hints.targetTitle',hintLevel:'hints.levelTitle',hintExplain:'hints.explainTitle',hintInterviewer:'hints.interviewerTitle',hintStudent:'hints.studentTitle'};for(const [id,key] of Object.entries(titles)){const el=$(id);if(el)el.dataset.hintTitle=tr(key, el.getAttribute('aria-label')||'');}}
+function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintType',tr('hints.type','Define el puesto, el tono y los temas de la entrevista. Cambiarlo abre otra conversación.'));setHint('hintTarget',tr('hints.target','Idioma a aprender: {{lang}}. Es el idioma del entrevistador y de tu respuesta.',{lang:learn}));setHint('hintLevel',tr('hints.level','Nivel aproximado de tus respuestas.'));setHint('hintExplain',tr('hints.explain','Idioma de explicación: {{lang}}. Es tu idioma y el del profesor en el feedback.',{lang:explain}));setHint('hintInterviewer',tr('hints.interviewer','Pregunta en {{lang}}. Si tu respuesta todavía necesita trabajo, el entrevistador pide aclarar un aspecto. Si ya vale, la valida y pasa a otra. Cambiar el idioma a aprender abre otra conversación.',{lang:learn}));setHint('hintStudent',tr('hints.student','Escribe en {{lang}} y pulsa Responder.',{lang:learn}));setHint('hintChange',tr('hints.change','Vuelve a la preparación de la clase. Ahí puedes cambiar tu idioma nativo, el puesto, el idioma que aprendes, el nivel y las voces. Si cambias el puesto o el idioma a aprender, la conversación empieza de nuevo. El reloj de la sesión no se reinicia.'));$('studentText').placeholder=tr('hints.studentPh','Tu respuesta en {{lang}}',{lang:learn});$('interviewer').placeholder=tr('ui.interviewerPh','El entrevistador está preparando la primera pregunta…');$('feedback').placeholder=tr('ui.feedbackPh','Tema del entrevistador\n\nTu respuesta\n\nCómo mejorar esta respuesta\n\nQué ajustar\n\nAsí podría quedar la respuesta\n\nPregunta del entrevistador');document.title=tr('ui.docTitle','Motor conversacional · Coach de entrevista');refreshTypeLabels();paintSubtitle();const titles={hintType:'hints.typeTitle',hintTarget:'hints.targetTitle',hintLevel:'hints.levelTitle',hintExplain:'hints.explainTitle',hintInterviewer:'hints.interviewerTitle',hintStudent:'hints.studentTitle',hintChange:'hints.changeTitle'};for(const [id,key] of Object.entries(titles)){const el=$(id);if(el)el.dataset.hintTitle=tr(key, el.getAttribute('aria-label')||'');}}
 function learner(){return {level:$('level').value,explanationLanguage:$('explanationLanguage').value,targetLanguage:$('targetLanguage').value};}
 let topicQuestion='';
 let lessonState={communicativeIntent:'',expectedGrammar:[],previousErrors:[]};
