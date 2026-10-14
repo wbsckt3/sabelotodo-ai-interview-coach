@@ -171,8 +171,8 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 .start-grid--2 .start-wide{grid-column:1/-1}
 .start-grid .label-row{margin:0 0 4px}
 .native-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid #c5d0e6;border-radius:10px;background:#f4f7fd}
-.native-row .muted{margin:2px 0 0}
-.native-label{font-weight:650;font-size:.82rem}
+.native-label{font-weight:650;font-size:.82rem;min-width:0}
+.native-row .qa-lang-switch{flex:0 0 auto}
 .native-row .qa-lang-switch__btn{min-width:2.4rem;padding:6px 9px;font-size:.8rem}
 body.class-started .title-tools{display:none}
 .class-card{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #c5d0e6;border-radius:12px;background:#f4f7fd;margin-bottom:4px}
@@ -283,10 +283,7 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 <p class="note" data-i18n="start.lead">Selecciona tu idioma nativo. La página y el profesor quedan en ese idioma. Después elige el tipo de entrevista, el idioma que vas a aprender y tu nivel.</p>
 <div class="start-grid start-grid--2">
 <div class="start-wide native-row">
-<div>
-<span class="native-label" id="nativeLabel" data-i18n="start.native">Selecciona tu idioma nativo</span>
-<p class="muted" data-i18n="start.nativeHint">La interfaz y el profesor usan este idioma. No vuelve a aparecer en la entrevista.</p>
-</div>
+<span class="native-label" id="nativeLabel" data-i18n="start.native">Idioma nativo</span>
 <div class="qa-lang-switch" role="group" aria-labelledby="nativeLabel">
 <button type="button" class="qa-lang-switch__btn qa-lang-switch__btn--active" data-set-locale="es" aria-pressed="true">ES</button>
 <button type="button" class="qa-lang-switch__btn" data-set-locale="en" aria-pressed="false">EN</button>
