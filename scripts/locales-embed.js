@@ -1,8 +1,8 @@
 window.COACH_I18N_RESOURCES = {
   es: { translation: {
     ui: {
-      docTitle: 'Sabelotodo AI · Coach de entrevista',
-      title: 'Sabelotodo AI — Coach de entrevista',
+      docTitle: 'Motor conversacional · Coach de entrevista',
+      title: 'Motor conversacional — Coach de entrevista',
       subtitle: 'Aprende {{learn}} con un profesor en tu idioma nativo {{native}}',
       subtitleLearn: 'Aprende {{learn}} con un profesor en tu idioma nativo {{native}}',
       session: 'Sesión {{time}}',
@@ -145,8 +145,8 @@ window.COACH_I18N_RESOURCES = {
   }},
   en: { translation: {
     ui: {
-      docTitle: 'Sabelotodo AI · Interview Coach',
-      title: 'Sabelotodo AI — Interview Coach',
+      docTitle: 'Conversational engine · Interview Coach',
+      title: 'Conversational engine — Interview Coach',
       subtitle: 'Learn {{learn}} with a teacher in your native language, {{native}}',
       subtitleLearn: 'Learn {{learn}} with a teacher in your native language, {{native}}',
       session: 'Session {{time}}',
@@ -422,8 +422,8 @@ window.COACH_I18N_RESOURCES = {
   }},
   fr: { translation: {
     ui: {
-      docTitle: 'Sabelotodo AI · Coach d\'entretien',
-      title: 'Sabelotodo AI — Coach d\'entretien',
+      docTitle: 'Moteur conversationnel · Coach d\'entretien',
+      title: 'Moteur conversationnel — Coach d\'entretien',
       subtitle: 'Apprends {{learn}} avec un professeur dans ta langue maternelle, {{native}}',
       subtitleLearn: 'Apprends {{learn}} avec un professeur dans ta langue maternelle, {{native}}',
       session: 'Session {{time}}',

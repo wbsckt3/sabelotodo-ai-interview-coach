@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Sabelotodo AI · Interview Coach</title>
+<title>Motor conversacional · Coach de entrevista</title>
 <meta name="coach-launcher" content="https://sabelotodo-ai-interview-coach.jaalza.workers.dev">
 <style>
 :root{font-family:system-ui,Segoe UI,sans-serif;color:#172033;background:#f4f6fa}
@@ -15,7 +15,8 @@ main{height:100%;max-width:950px;margin:auto;display:flex;flex-direction:column;
 header,section{background:#fff;border:1px solid #e1e6ef;border-radius:14px;padding:10px 12px}
 header{flex:0 0 auto}
 .stage{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-.title-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.title-row{display:flex;align-items:center;gap:10px}
+.brand-logo{height:42px;width:auto;flex:0 0 auto;object-fit:contain}
 .title-tools{display:flex;align-items:center;gap:6px;margin-left:auto;flex:0 0 auto}
 h1{margin:0;font-size:1.05rem;line-height:1.2}
 .subtitle{margin:2px 0 0;font-size:.82rem;font-weight:650;color:#233e73}
@@ -160,8 +161,9 @@ body.class-started .title-tools{display:none}
 <main>
 <header>
 <div class="title-row">
+<img class="brand-logo" src="logo-p2l.png" alt="P2L">
 <div>
-<h1 data-i18n="ui.title">Sabelotodo AI — Coach de entrevista</h1>
+<h1 data-i18n="ui.title">Motor conversacional — Coach de entrevista</h1>
 <p class="subtitle" id="subtitle">Aprende inglés con un profesor en tu idioma nativo español</p>
 </div>
 </div>
@@ -562,7 +564,7 @@ function setHint(id,text){const el=$(id);if(el)el.dataset.hint=text;}
 function showFeedback(text,open,speechParts){const value=text||'';$('feedback').value=value;$('feedbackBtn').disabled=!value;if(speechParts)lastFeedbackSpeech=speechParts;else if(!value)lastFeedbackSpeech=[];const dialog=$('modal-feedback');if(!value&&dialog.open){speakQuestionOnClose=false;dialog.close();}else if(open&&value){speakQuestionOnClose=true;if(!dialog.open)dialog.showModal();speakFeedback();}}
 function namedLang(code){return tr('learnNames.'+(code||'en'), uiLangName(code));}
 function paintSubtitle(){const el=$('subtitle');if(!el)return;el.textContent=tr('ui.subtitleLearn','Aprende {{learn}} con un profesor en tu idioma nativo {{native}}',{learn:namedLang($('targetLanguage').value),native:namedLang($('explanationLanguage').value)});}
-function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintType',tr('hints.type','Define el puesto, el tono y los temas de la entrevista. Cambiarlo abre otra conversación.'));setHint('hintTarget',tr('hints.target','Idioma a aprender: {{lang}}. Es el idioma del entrevistador y de tu respuesta.',{lang:learn}));setHint('hintLevel',tr('hints.level','Nivel aproximado de tus respuestas.'));setHint('hintExplain',tr('hints.explain','Idioma de explicación: {{lang}}. Es tu idioma y el del profesor en el feedback.',{lang:explain}));setHint('hintInterviewer',tr('hints.interviewer','Pregunta en {{lang}}. Si tu respuesta todavía necesita trabajo, el entrevistador pide aclarar un aspecto. Si ya vale, la valida y pasa a otra. Cambiar el idioma a aprender abre otra conversación.',{lang:learn}));setHint('hintStudent',tr('hints.student','Escribe en {{lang}} y pulsa Responder.',{lang:learn}));$('studentText').placeholder=tr('hints.studentPh','Tu respuesta en {{lang}}',{lang:learn});$('interviewer').placeholder=tr('ui.interviewerPh','El entrevistador está preparando la primera pregunta…');$('feedback').placeholder=tr('ui.feedbackPh','Tema del entrevistador\n\nTu respuesta\n\nCómo mejorar esta respuesta\n\nQué ajustar\n\nAsí podría quedar la respuesta\n\nPregunta del entrevistador');document.title=tr('ui.docTitle','Sabelotodo AI · Coach de entrevista');refreshTypeLabels();paintSubtitle();const titles={hintType:'hints.typeTitle',hintTarget:'hints.targetTitle',hintLevel:'hints.levelTitle',hintExplain:'hints.explainTitle',hintInterviewer:'hints.interviewerTitle',hintStudent:'hints.studentTitle'};for(const [id,key] of Object.entries(titles)){const el=$(id);if(el)el.dataset.hintTitle=tr(key, el.getAttribute('aria-label')||'');}}
+function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintType',tr('hints.type','Define el puesto, el tono y los temas de la entrevista. Cambiarlo abre otra conversación.'));setHint('hintTarget',tr('hints.target','Idioma a aprender: {{lang}}. Es el idioma del entrevistador y de tu respuesta.',{lang:learn}));setHint('hintLevel',tr('hints.level','Nivel aproximado de tus respuestas.'));setHint('hintExplain',tr('hints.explain','Idioma de explicación: {{lang}}. Es tu idioma y el del profesor en el feedback.',{lang:explain}));setHint('hintInterviewer',tr('hints.interviewer','Pregunta en {{lang}}. Si tu respuesta todavía necesita trabajo, el entrevistador pide aclarar un aspecto. Si ya vale, la valida y pasa a otra. Cambiar el idioma a aprender abre otra conversación.',{lang:learn}));setHint('hintStudent',tr('hints.student','Escribe en {{lang}} y pulsa Responder.',{lang:learn}));$('studentText').placeholder=tr('hints.studentPh','Tu respuesta en {{lang}}',{lang:learn});$('interviewer').placeholder=tr('ui.interviewerPh','El entrevistador está preparando la primera pregunta…');$('feedback').placeholder=tr('ui.feedbackPh','Tema del entrevistador\n\nTu respuesta\n\nCómo mejorar esta respuesta\n\nQué ajustar\n\nAsí podría quedar la respuesta\n\nPregunta del entrevistador');document.title=tr('ui.docTitle','Motor conversacional · Coach de entrevista');refreshTypeLabels();paintSubtitle();const titles={hintType:'hints.typeTitle',hintTarget:'hints.targetTitle',hintLevel:'hints.levelTitle',hintExplain:'hints.explainTitle',hintInterviewer:'hints.interviewerTitle',hintStudent:'hints.studentTitle'};for(const [id,key] of Object.entries(titles)){const el=$(id);if(el)el.dataset.hintTitle=tr(key, el.getAttribute('aria-label')||'');}}
 function learner(){return {level:$('level').value,explanationLanguage:$('explanationLanguage').value,targetLanguage:$('targetLanguage').value};}
 let topicQuestion='';
 let lessonState={communicativeIntent:'',expectedGrammar:[],previousErrors:[]};
