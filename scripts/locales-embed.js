@@ -2,9 +2,10 @@ window.COACH_I18N_RESOURCES = {
   es: { translation: {
     ui: {
       docTitle: 'Refactorii | Practica tu profesión en otro idioma',
-      title: 'Coach de entrevistas con IA',
-      subtitle: 'Aprende {{learn}} con un profesor en tu idioma nativo {{native}}',
-      subtitleLearn: 'Aprende {{learn}} con un profesor en tu idioma nativo {{native}}',
+      title: 'Tu profesión en {{learn}}',
+      titleProfession: '{{profession}}, en {{learn}}',
+      subtitle: 'Practica con un entrevistador de IA y aprende con un profesor que te explica en {{native}}.',
+      subtitleLearn: 'Practica con un entrevistador de IA y aprende con un profesor que te explica en {{native}}.',
       session: 'Sesión {{time}}',
       sessionActive: 'Sesión activa',
       sessionZero: 'Sesión 00:00',
@@ -151,9 +152,10 @@ window.COACH_I18N_RESOURCES = {
   en: { translation: {
     ui: {
       docTitle: 'Refactorii | Practice your profession in another language',
-      title: 'AI Interview Coach',
-      subtitle: 'Learn {{learn}} with a teacher in your native language, {{native}}',
-      subtitleLearn: 'Learn {{learn}} with a teacher in your native language, {{native}}',
+      title: 'Your profession in {{learn}}',
+      titleProfession: '{{profession}}, in {{learn}}',
+      subtitle: 'Practice with an AI interviewer and learn with a teacher who explains in {{native}}.',
+      subtitleLearn: 'Practice with an AI interviewer and learn with a teacher who explains in {{native}}.',
       session: 'Session {{time}}',
       sessionActive: 'Session active',
       sessionZero: 'Session 00:00',
@@ -433,9 +435,10 @@ window.COACH_I18N_RESOURCES = {
   fr: { translation: {
     ui: {
       docTitle: 'Refactorii | Pratiquez votre métier dans une autre langue',
-      title: 'Coach d\'entretiens avec IA',
-      subtitle: 'Apprends {{learn}} avec un professeur dans ta langue maternelle, {{native}}',
-      subtitleLearn: 'Apprends {{learn}} avec un professeur dans ta langue maternelle, {{native}}',
+      title: 'Votre métier en {{learn}}',
+      titleProfession: '{{profession}}, en {{learn}}',
+      subtitle: 'Pratiquez avec un intervieweur IA et apprenez avec un professeur qui vous explique en {{native}}.',
+      subtitleLearn: 'Pratiquez avec un intervieweur IA et apprenez avec un professeur qui vous explique en {{native}}.',
       session: 'Session {{time}}',
       sessionActive: 'Session active',
       sessionZero: 'Session 00:00',
