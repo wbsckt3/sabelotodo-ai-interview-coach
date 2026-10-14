@@ -22,7 +22,7 @@ window.COACH_I18N_RESOURCES = {
       interviewer: 'Entrevistador',
       student: 'Tu respuesta',
       interviewerPh: 'El entrevistador está preparando la primera pregunta…',
-      feedbackPh: 'Corrección de la respuesta\n\nExpectativa de la siguiente respuesta',
+      feedbackPh: 'Tema del entrevistador\n\nTu respuesta\n\nCorrección\n\nQué dimensión falta aclarar\n\nAsí podría quedar la respuesta\n\nPregunta sobre tu respuesta',
       help: 'Ayuda',
       change: 'Cambiar',
       language: 'Idioma de la interfaz'
@@ -54,7 +54,7 @@ window.COACH_I18N_RESOURCES = {
       target: 'Idioma a aprender: {{lang}}. Es el idioma del entrevistador y de tu respuesta.',
       level: 'Nivel aproximado de tus respuestas.',
       explain: 'Idioma de explicación: {{lang}}. Es tu idioma y el del profesor en el feedback.',
-      interviewer: 'Pregunta en {{lang}}. Llega sola al abrir la entrevista y se reemplaza en cada respuesta. Cambiar el idioma a aprender abre otra conversación.',
+      interviewer: 'Pregunta en {{lang}}. Si algo no se entiende, la siguiente pregunta es sobre tu respuesta: pide el qué, el cómo, el cuándo, el dónde, el porqué o el para qué, hasta que quede claro. Cambiar el idioma a aprender abre otra conversación.',
       student: 'Escribe en {{lang}} y pulsa Responder.',
       studentPh: 'Tu respuesta en {{lang}}',
       typeTitle: 'Tipo de entrevista',
@@ -73,8 +73,9 @@ window.COACH_I18N_RESOURCES = {
       noQuestion: 'Todavía no hay pregunta del entrevistador.',
       write: 'Escribe tu respuesta en {{lang}}.',
       thinking: 'El entrevistador y el profesor están respondiendo…',
-      newQuestion: 'Nueva pregunta del entrevistador.',
-      sameQuestion: 'Llegó el feedback. El entrevistador no cambió la pregunta.',
+      newQuestion: 'El entrevistador ya entendió. Nueva pregunta.',
+      refine: 'El entrevistador pregunta sobre tu respuesta para aclarar una dimensión. Corrige, contextualiza o ajusta la oración.',
+      sameQuestion: 'Llegó el feedback. El entrevistador sigue en el mismo tema.',
       error: 'Error: {{message}}'
     },
     usage: {
@@ -148,7 +149,7 @@ window.COACH_I18N_RESOURCES = {
       interviewer: 'Interviewer',
       student: 'Your answer',
       interviewerPh: 'The interviewer is preparing the first question…',
-      feedbackPh: 'Correction of the answer\n\nExpectation of the next answer',
+      feedbackPh: 'Interviewer topic\n\nYour answer\n\nCorrection\n\nWhich dimension still needs clarifying\n\nHow the answer could read\n\nQuestion about your answer',
       help: 'Help',
       change: 'Change',
       language: 'Interface language'
@@ -180,7 +181,7 @@ window.COACH_I18N_RESOURCES = {
       target: 'Language to learn: {{lang}}. It is the interviewer\'s language and the language of your answer.',
       level: 'Approximate level of your answers.',
       explain: 'Explanation language: {{lang}}. It is your language and the teacher\'s language in the feedback.',
-      interviewer: 'Question in {{lang}}. It arrives on its own when the interview opens and is replaced after each answer. Changing the language to learn starts another conversation.',
+      interviewer: 'Question in {{lang}}. If something is unclear, the next question is about your answer: it asks what, how, when, where, why, or what for, until it is clear. Changing the language to learn starts another conversation.',
       student: 'Write in {{lang}} and press Reply.',
       studentPh: 'Your answer in {{lang}}',
       typeTitle: 'Interview type',
@@ -199,8 +200,9 @@ window.COACH_I18N_RESOURCES = {
       noQuestion: 'There is no interviewer question yet.',
       write: 'Write your answer in {{lang}}.',
       thinking: 'The interviewer and the teacher are responding…',
-      newQuestion: 'New question from the interviewer.',
-      sameQuestion: 'Feedback arrived. The interviewer did not change the question.',
+      newQuestion: 'The interviewer understood. New question.',
+      refine: 'The interviewer asks about your answer to clarify one dimension. Correct it, add context, or adjust the sentence.',
+      sameQuestion: 'Feedback arrived. The interviewer is still on the same topic.',
       error: 'Error: {{message}}'
     },
     usage: {
@@ -256,7 +258,7 @@ window.COACH_I18N_RESOURCES = {
 <p>On the published site, the page does not call Groq from your computer. Each question goes to the Node server that the GitHub workflow starts, and that server is the one that calls Groq. The Session counter is the time left on that workflow. At 00:00 the session of that conversation ends.</p>
 <p>The language to learn is the interviewer's language and the language of your answer. The explanation language is yours and the teacher's: feedback comes out there, and the suggestion stays in the language you are learning. Each turn sends both languages to the AI.</p>
 <p>Changing the language to learn opens another conversation and asks for a new question. Changing only the explanation language keeps the current question and applies the new language on the next feedback.</p>
-<p>The same AI carries the thread: it asks the question, reads your answer, and writes the feedback and the next question. Feedback is disabled and has two parts: a correction of the answer and an expectation for the next answer. The grammar engine is only a reference for the skill of the language in progress. There is a context support in English, another in Spanish, and another in French; the one for the language to learn is the one that enters.</p>`,
+<p>The same AI carries the thread of one topic until the answer is understood the way it would be in a real interview. Feedback looks at the dimensions of that answer: what happened, how the sentence is built, when and with which tense, where or in what context, why, and what for. The tense alone is not enough. If one dimension is missing, the next question is about the answer and asks only for that clarification, that context, or that adjustment. A new question arrives only when the interviewer has understood. The grammar engine is only a reference for the skill of the language in progress. There is a context support in English, another in Spanish, and another in French; the one for the language to learn is the one that enters.</p>`,
       profesor: `<p>This is a language trainer for a concrete setting: the technical software interview. It simulates the conversation with a teacher. It corrects, explains one rule, and continues the interview. The student practices the language of that situation, not a loose list of exercises.</p>
 <p>The same AI answers as interviewer and as teacher. The thread — the question, what that question expects, and the next turn — is built in that AI from the student's answer. There are three pieces, and each one is enriched in its own file:</p>
 <ul>
@@ -401,7 +403,7 @@ window.COACH_I18N_RESOURCES = {
       interviewer: 'Intervieweur',
       student: 'Votre réponse',
       interviewerPh: 'L\'intervieweur prépare la première question…',
-      feedbackPh: 'Correction de la réponse\n\nAttente de la réponse suivante',
+      feedbackPh: 'Sujet de l\'intervieweur\n\nVotre réponse\n\nCorrection\n\nQuelle dimension reste à préciser\n\nLa réponse pourrait se lire ainsi\n\nQuestion sur votre réponse',
       help: 'Aide',
       change: 'Modifier',
       language: 'Langue de l\'interface'
@@ -433,7 +435,7 @@ window.COACH_I18N_RESOURCES = {
       target: 'Langue à apprendre : {{lang}}. C\'est la langue de l\'intervieweur et de votre réponse.',
       level: 'Niveau approximatif de vos réponses.',
       explain: 'Langue d\'explication : {{lang}}. C\'est votre langue et celle du professeur dans le feedback.',
-      interviewer: 'Question en {{lang}}. Elle arrive seule à l\'ouverture de l\'entretien et elle est remplacée à chaque réponse. Changer la langue à apprendre ouvre une autre conversation.',
+      interviewer: 'Question en {{lang}}. Si quelque chose n\'est pas clair, la question suivante porte sur votre réponse : elle demande le quoi, le comment, le quand, le où, le pourquoi ou le pour quoi, jusqu\'à ce que ce soit clair. Changer la langue à apprendre ouvre une autre conversation.',
       student: 'Écrivez en {{lang}} et appuyez sur Répondre.',
       studentPh: 'Votre réponse en {{lang}}',
       typeTitle: 'Type d\'entretien',
@@ -452,8 +454,9 @@ window.COACH_I18N_RESOURCES = {
       noQuestion: 'Il n\'y a pas encore de question de l\'intervieweur.',
       write: 'Écrivez votre réponse en {{lang}}.',
       thinking: 'L\'intervieweur et le professeur répondent…',
-      newQuestion: 'Nouvelle question de l\'intervieweur.',
-      sameQuestion: 'Le feedback est arrivé. L\'intervieweur n\'a pas changé la question.',
+      newQuestion: 'L\'intervieweur a compris. Nouvelle question.',
+      refine: 'L\'intervieweur pose une question sur votre réponse pour préciser une dimension. Corrigez, contextualisez ou ajustez la phrase.',
+      sameQuestion: 'Le feedback est arrivé. L\'intervieweur reste sur le même sujet.',
       error: 'Erreur : {{message}}'
     },
     usage: {
@@ -509,7 +512,7 @@ window.COACH_I18N_RESOURCES = {
 <p>Sur le site publié, la page n'appelle pas Groq depuis votre ordinateur. Chaque question part vers le serveur Node que le workflow GitHub allume, et c'est ce serveur qui interroge Groq. Le compteur Session est le temps qui reste de ce workflow. À 00:00 la session de cette conversation se termine.</p>
 <p>La langue à apprendre est celle de l'intervieweur et de votre réponse. La langue d'explication est la vôtre et celle du professeur : le feedback en sort, et la suggestion reste dans la langue que vous apprenez. Chaque tour envoie ces deux langues à l'IA.</p>
 <p>Changer la langue à apprendre ouvre une autre conversation et demande une nouvelle question. Changer seulement la langue d'explication laisse la question actuelle et applique la nouvelle langue au feedback suivant.</p>
-<p>La même IA porte le fil : elle pose la question, lit votre réponse et écrit le feedback et la question suivante. Le feedback est désactivé et comporte deux parties : correction de la réponse et attente de la réponse suivante. Le moteur grammatical n'est qu'une référence pour le skill de la langue en cours. Il y a un appui de contexte en anglais, un autre en espagnol et un autre en français ; celui de la langue à apprendre est celui qui entre.</p>`,
+<p>La même IA porte le fil d'un seul sujet jusqu'à ce que la réponse se comprenne comme dans un entretien réel. Le feedback regarde les dimensions de cette réponse : ce qui s'est passé, comment la phrase est construite, quand et avec quel temps, où ou dans quel contexte, pourquoi et pour quoi. Le temps verbal ne suffit pas. S'il manque une dimension, la question suivante porte sur la réponse et ne demande que cette précision, ce contexte ou cet ajustement. Une nouvelle question n'arrive que lorsque l'intervieweur a compris. Le moteur grammatical n'est qu'une référence pour le skill de la langue en cours. Il y a un appui de contexte en anglais, un autre en espagnol et un autre en français ; celui de la langue à apprendre est celui qui entre.</p>`,
       profesor: `<p>C'est un formateur de langage pour un cadre concret : l'entretien technique de logiciel. Il simule la conversation avec un professeur. Il corrige, explique une règle et poursuit l'entretien. L'élève pratique le langage de cette situation, pas une liste d'exercices détachée.</p>
 <p>La même IA répond comme intervieweur et comme professeur. Le fil — la question, ce que cette question attend et le tour suivant — se construit dans cette IA à partir de la réponse de l'étudiant. Il y a trois pièces, et chacune s'enrichit dans son fichier :</p>
 <ul>
