@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Coach de entrevistas con IA</title>
+<title>Refactorii | Practica tu profesión en otro idioma</title>
 <meta name="coach-launcher" content="https://sabelotodo-ai-interview-coach.jaalza.workers.dev">
 <script>
 (function(){
@@ -171,7 +171,9 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 .start-grid--2 .start-wide{grid-column:1/-1}
 .start-grid .label-row{margin:0 0 4px}
 .native-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid #c5d0e6;border-radius:10px;background:#f4f7fd}
+.native-label-wrap{display:flex;align-items:center;gap:6px;min-width:0}
 .native-label{font-weight:650;font-size:.82rem;min-width:0}
+.voices-kicker{margin:14px 0 6px;font-size:.82rem;font-weight:650;color:var(--ink)}
 .native-row .qa-lang-switch{flex:0 0 auto}
 .native-row .qa-lang-switch__btn{min-width:2.4rem;padding:6px 9px;font-size:.8rem}
 body.class-started .title-tools{display:none}
@@ -278,12 +280,15 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 <dialog class="theory-modal" id="modal-start" aria-labelledby="titulo-start">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="titulo-start" data-i18n="start.title">Prepara la simulación de una entrevista en el idioma que deseas practicar</h2>
+<h2 id="titulo-start" data-i18n="start.title">Configura tu práctica</h2>
 </div>
-<p class="note" data-i18n="start.lead">Selecciona tu idioma nativo. La página y el profesor quedan en ese idioma. Después elige el tipo de entrevista, el idioma que vas a aprender y tu nivel.</p>
+<p class="note" data-i18n="start.lead">Elige tu profesión, el idioma que quieres practicar y tu nivel. Tu entrevistador hablará en ese idioma y tu profesor te explicará en el tuyo.</p>
 <div class="start-grid start-grid--2">
 <div class="start-wide native-row">
-<span class="native-label" id="nativeLabel" data-i18n="start.native">Idioma nativo</span>
+<div class="native-label-wrap">
+<span class="native-label" id="nativeLabel" data-i18n="start.native">Mi idioma</span>
+<button type="button" class="q" id="hintNative" data-i18n-aria="hints.nativeTitle" aria-label="Mi idioma">?</button>
+</div>
 <div class="qa-lang-switch" role="group" aria-labelledby="nativeLabel">
 <button type="button" class="qa-lang-switch__btn qa-lang-switch__btn--active" data-set-locale="es" aria-pressed="true">ES</button>
 <button type="button" class="qa-lang-switch__btn" data-set-locale="en" aria-pressed="false">EN</button>
@@ -291,11 +296,11 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 </div>
 </div>
 <div class="start-wide">
-<div class="label-row"><label for="interviewType" data-i18n="ui.type">Tipo de entrevista</label><button type="button" class="q" id="hintType" data-i18n-aria="hints.typeTitle" aria-label="Tipo de entrevista">?</button></div>
+<div class="label-row"><label for="interviewType" data-i18n="ui.type">Mi profesión o área</label><button type="button" class="q" id="hintType" data-i18n-aria="hints.typeTitle" aria-label="Mi profesión o área">?</button></div>
 <select id="interviewType"></select>
 </div>
 <div>
-<div class="label-row"><label for="targetLanguage" data-i18n="ui.target">Idioma a aprender</label><button type="button" class="q" id="hintTarget" data-i18n-aria="hints.targetTitle" aria-label="Idioma a aprender">?</button></div>
+<div class="label-row"><label for="targetLanguage" data-i18n="ui.target">Idioma que quiero practicar</label><button type="button" class="q" id="hintTarget" data-i18n-aria="hints.targetTitle" aria-label="Idioma que quiero practicar">?</button></div>
 <select id="targetLanguage">
 <option value="es" data-i18n="langOptions.es">Español</option>
 <option value="en" data-i18n="langOptions.en" selected>Inglés</option>
@@ -303,7 +308,7 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 </select>
 </div>
 <div>
-<div class="label-row"><label for="level" data-i18n="ui.level">Nivel aproximado</label><button type="button" class="q" id="hintLevel" data-i18n-aria="hints.levelTitle" aria-label="Nivel aproximado">?</button></div>
+<div class="label-row"><label for="level" data-i18n="ui.level">Mi nivel</label><button type="button" class="q" id="hintLevel" data-i18n-aria="hints.levelTitle" aria-label="Mi nivel">?</button></div>
 <select id="level">
 <option value="beginner" data-i18n="levels.beginner">Principiante</option>
 <option value="intermediate" data-i18n="levels.intermediate" selected>Intermedio</option>
@@ -319,18 +324,19 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 </select>
 </div>
 </div>
+<p class="voices-kicker" data-i18n="ui.voicesOptional">Voces (opcional)</p>
 <div class="voice-row">
 <div class="voice-field" data-voice-field="interviewer">
 <label data-i18n="ui.interviewerVoice">Voz del entrevistador</label>
-<div class="voice-line"><input type="text" data-voice-role="interviewer" readonly data-i18n-aria="ui.interviewerVoice" aria-label="Voz del entrevistador" value="Google US English (en-US)"><button type="button" class="voice-preview" data-voice-preview="interviewer" data-i18n="ui.voicePreview">Oír</button></div>
+<div class="voice-line"><input type="text" data-voice-role="interviewer" readonly data-i18n-aria="ui.interviewerVoice" aria-label="Voz del entrevistador" value="Google US English (en-US)"><button type="button" class="voice-preview" data-voice-preview="interviewer" data-i18n="ui.voicePreview">Escuchar</button></div>
 </div>
 <div class="voice-field" data-voice-field="professor">
 <label data-i18n="ui.professorVoice">Voz del profesor</label>
-<div class="voice-line"><input type="text" data-voice-role="professor" readonly data-i18n-aria="ui.professorVoice" aria-label="Voz del profesor" value="Google español (es-ES)"><button type="button" class="voice-preview" data-voice-preview="professor" data-i18n="ui.voicePreview">Oír</button></div>
+<div class="voice-line"><input type="text" data-voice-role="professor" readonly data-i18n-aria="ui.professorVoice" aria-label="Voz del profesor" value="Google español (es-ES)"><button type="button" class="voice-preview" data-voice-preview="professor" data-i18n="ui.voicePreview">Escuchar</button></div>
 </div>
 </div>
 <div class="start-actions">
-<button type="button" id="startBegin" data-i18n="start.begin">Comenzar entrevista</button>
+<button type="button" id="startBegin" data-i18n="start.begin">Empezar a practicar</button>
 </div>
 </div>
 </dialog>
@@ -603,7 +609,7 @@ function setHint(id,text){const el=$(id);if(el)el.dataset.hint=text;}
 function showFeedback(text,open,speechParts,blocks){const value=text||'';$('feedback').value=value;$('feedbackBtn').disabled=!value;if(speechParts)lastFeedbackSpeech=speechParts;else if(!value)lastFeedbackSpeech=[];renderFeedback(blocks&&blocks.length?blocks:(value?[{label:'',text:value,tone:'native'}]:[]));const dialog=$('modal-feedback');if(!value&&dialog.open){speakQuestionOnClose=false;dialog.close();}else if(open&&value){speakQuestionOnClose=true;if(!dialog.open)dialog.showModal();speakFeedback();}}
 function namedLang(code){return tr('learnNames.'+(code||'en'), uiLangName(code));}
 function paintSubtitle(){const el=$('subtitle');if(!el)return;const learn=namedLang($('targetLanguage').value), native=namedLang($('explanationLanguage').value);const marked=tr('ui.subtitleLearn','Aprende {{learn}} con un profesor en tu idioma nativo {{native}}',{learn:'@@LEARN@@',native:'@@NATIVE@@'});el.replaceChildren();for(const bit of marked.split(/(@@LEARN@@|@@NATIVE@@)/)){if(bit==='@@LEARN@@'||bit==='@@NATIVE@@'){const chip=document.createElement('span');chip.className=bit==='@@LEARN@@'?'chip-learn':'chip-native';chip.textContent=bit==='@@LEARN@@'?learn:native;el.appendChild(chip);}else if(bit)el.appendChild(document.createTextNode(bit));}}
-function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintType',tr('hints.type','Define el puesto, el tono y los temas de la entrevista. Cambiarlo abre otra conversación.'));setHint('hintTarget',tr('hints.target','Idioma a aprender: {{lang}}. Es el idioma del entrevistador y de tu respuesta.',{lang:learn}));setHint('hintLevel',tr('hints.level','Nivel aproximado de tus respuestas.'));setHint('hintExplain',tr('hints.explain','Idioma de explicación: {{lang}}. Es tu idioma y el del profesor en el feedback.',{lang:explain}));setHint('hintInterviewer',tr('hints.interviewer','Pregunta en {{lang}}. Si tu respuesta todavía necesita trabajo, el entrevistador pide aclarar un aspecto. Si ya vale, la valida y pasa a otra. Cambiar el idioma a aprender abre otra conversación.',{lang:learn}));setHint('hintStudent',tr('hints.student','Escribe en {{lang}} y pulsa Responder.',{lang:learn}));setHint('hintChange',tr('hints.change','Vuelve a la preparación de la clase. Ahí puedes cambiar tu idioma nativo, el puesto, el idioma que aprendes y el nivel. La voz queda fija en Google, según esos idiomas. Si cambias el puesto o el idioma a aprender, la conversación empieza de nuevo. El reloj de la sesión no se reinicia.'));$('studentText').placeholder=tr('hints.studentPh','Tu respuesta en {{lang}}',{lang:learn});$('interviewer').placeholder=tr('ui.interviewerPh','El entrevistador está preparando la primera pregunta…');$('feedback').placeholder=tr('ui.feedbackPh','Tema del entrevistador\n\nTu respuesta\n\nCómo mejorar esta respuesta\n\nQué ajustar\n\nAsí podría quedar la respuesta\n\nPregunta del entrevistador');if(!$('feedback').value.trim())renderFeedback([]);document.title=tr('ui.docTitle','Coach de entrevistas con IA');refreshTypeLabels();paintSubtitle();const titles={hintType:'hints.typeTitle',hintTarget:'hints.targetTitle',hintLevel:'hints.levelTitle',hintExplain:'hints.explainTitle',hintInterviewer:'hints.interviewerTitle',hintStudent:'hints.studentTitle',hintChange:'hints.changeTitle'};for(const [id,key] of Object.entries(titles)){const el=$(id);if(el)el.dataset.hintTitle=tr(key, el.getAttribute('aria-label')||'');}paintVoiceSelects();}
+function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintNative',tr('hints.native','La página y tu profesor usarán este idioma.'));setHint('hintType',tr('hints.type','Elige tu profesión o área. El entrevistador hará preguntas de ese campo. Cambiarla abre otra conversación.'));setHint('hintTarget',tr('hints.target','Idioma que quieres practicar: {{lang}}. Tu entrevistador hablará en ese idioma.',{lang:learn}));setHint('hintLevel',tr('hints.level','Tu nivel en ese idioma. Ajusta lo que el profesor te pide.'));setHint('hintExplain',tr('hints.explain','Idioma de explicación: {{lang}}. Es tu idioma y el del profesor en el feedback.',{lang:explain}));setHint('hintInterviewer',tr('hints.interviewer','Pregunta en {{lang}}. Si tu respuesta todavía necesita trabajo, el entrevistador pide aclarar un aspecto. Si ya vale, la valida y pasa a otra. Cambiar el idioma a aprender abre otra conversación.',{lang:learn}));setHint('hintStudent',tr('hints.student','Escribe en {{lang}} y pulsa Responder.',{lang:learn}));setHint('hintChange',tr('hints.change','Vuelve a la preparación de la clase. Ahí puedes cambiar tu idioma nativo, el puesto, el idioma que aprendes y el nivel. La voz queda fija en Google, según esos idiomas. Si cambias el puesto o el idioma a aprender, la conversación empieza de nuevo. El reloj de la sesión no se reinicia.'));$('studentText').placeholder=tr('hints.studentPh','Tu respuesta en {{lang}}',{lang:learn});$('interviewer').placeholder=tr('ui.interviewerPh','El entrevistador está preparando la primera pregunta…');$('feedback').placeholder=tr('ui.feedbackPh','Tema del entrevistador\n\nTu respuesta\n\nCómo mejorar esta respuesta\n\nQué ajustar\n\nAsí podría quedar la respuesta\n\nPregunta del entrevistador');if(!$('feedback').value.trim())renderFeedback([]);document.title=tr('ui.docTitle','Refactorii | Practica tu profesión en otro idioma');refreshTypeLabels();paintSubtitle();const titles={hintNative:'hints.nativeTitle',hintType:'hints.typeTitle',hintTarget:'hints.targetTitle',hintLevel:'hints.levelTitle',hintExplain:'hints.explainTitle',hintInterviewer:'hints.interviewerTitle',hintStudent:'hints.studentTitle',hintChange:'hints.changeTitle'};for(const [id,key] of Object.entries(titles)){const el=$(id);if(el)el.dataset.hintTitle=tr(key, el.getAttribute('aria-label')||'');}paintVoiceSelects();}
 function learner(){return {level:$('level').value,explanationLanguage:$('explanationLanguage').value,targetLanguage:$('targetLanguage').value};}
 let topicQuestion='';
 let lessonState={communicativeIntent:'',expectedGrammar:[],previousErrors:[]};
