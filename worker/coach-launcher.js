@@ -164,7 +164,14 @@ export default {
         },
       });
     }
-    if (request.method === 'GET' && url.pathname === '/health') return json(request, env, 200, { ok: true });
+    if (request.method === 'GET' && url.pathname === '/health') {
+      return json(request, env, 200, {
+        ok: true,
+        githubToken: Boolean(env.GITHUB_TOKEN),
+        callbackSecret: Boolean(env.CALLBACK_SECRET),
+        sessionsKv: Boolean(env.SESSIONS),
+      });
+    }
     if (request.method === 'POST' && url.pathname === '/sessions') return createSession(request, env);
     const match = url.pathname.match(/^\/sessions\/([^/]+)(?:\/(ready|end))?$/);
     if (match && ID_PATTERN.test(match[1])) {
