@@ -1,8 +1,8 @@
 window.COACH_I18N_RESOURCES = {
   es: { translation: {
     ui: {
-      docTitle: 'Motor conversacional · Coach de entrevista',
-      title: 'Motor conversacional — Coach de entrevista',
+      docTitle: 'Coach de entrevistas con IA',
+      title: 'Coach de entrevistas con IA',
       subtitle: 'Aprende {{learn}} con un profesor en tu idioma nativo {{native}}',
       subtitleLearn: 'Aprende {{learn}} con un profesor en tu idioma nativo {{native}}',
       session: 'Sesión {{time}}',
@@ -147,8 +147,8 @@ window.COACH_I18N_RESOURCES = {
   }},
   en: { translation: {
     ui: {
-      docTitle: 'Conversational engine · Interview Coach',
-      title: 'Conversational engine — Interview Coach',
+      docTitle: 'AI Interview Coach',
+      title: 'AI Interview Coach',
       subtitle: 'Learn {{learn}} with a teacher in your native language, {{native}}',
       subtitleLearn: 'Learn {{learn}} with a teacher in your native language, {{native}}',
       session: 'Session {{time}}',
@@ -426,8 +426,8 @@ window.COACH_I18N_RESOURCES = {
   }},
   fr: { translation: {
     ui: {
-      docTitle: 'Moteur conversationnel · Coach d\'entretien',
-      title: 'Moteur conversationnel — Coach d\'entretien',
+      docTitle: 'Coach d\'entretiens avec IA',
+      title: 'Coach d\'entretiens avec IA',
       subtitle: 'Apprends {{learn}} avec un professeur dans ta langue maternelle, {{native}}',
       subtitleLearn: 'Apprends {{learn}} avec un professeur dans ta langue maternelle, {{native}}',
       session: 'Session {{time}}',
