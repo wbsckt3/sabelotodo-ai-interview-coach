@@ -51,16 +51,21 @@ function isActive(meta, now) {
   return false;
 }
 
+async function listSessionKeys(env) {
+  const keys = [];
+  let cursor = '';
+  do {
+    const page = await env.SESSIONS.list(cursor ? { prefix: 's:', cursor } : { prefix: 's:' });
+    keys.push(...page.keys);
+    cursor = page.list_complete ? '' : (page.cursor || '');
+  } while (cursor);
+  return keys;
+}
+
 async function countActive(env) {
   const now = Date.now();
-  let active = 0;
-  let cursor;
-  do {
-    const page = await env.SESSIONS.list({ prefix: 's:', cursor });
-    for (const key of page.keys) if (isActive(key.metadata, now)) active += 1;
-    cursor = page.list_complete ? undefined : page.cursor;
-  } while (cursor);
-  return active;
+  const keys = await listSessionKeys(env);
+  return keys.reduce((active, key) => active + (isActive(key.metadata, now) ? 1 : 0), 0);
 }
 
 async function dispatchWorkflow(env, id, minutes) {
@@ -216,26 +221,23 @@ async function listBoard(request, env) {
   if (!callbackAuthorized(request, env)) return json(request, env, 401, { error: 'No autorizado.' });
   const now = Date.now();
   const classes = [];
-  let cursor;
-  do {
-    const page = await env.SESSIONS.list({ prefix: 's:', cursor });
-    for (const key of page.keys) {
-      const meta = key.metadata || {};
-      classes.push({
-        id: key.name.slice(2),
-        status: visibleStatus(meta, now),
-        until: meta.until || '',
-        createdAt: meta.createdAt || '',
-        minutes: meta.minutes || 0,
-        type: meta.type || '',
-        lang: meta.lang || '',
-      });
-    }
-    cursor = page.list_complete ? undefined : page.cursor;
-  } while (cursor);
+  for (const key of await listSessionKeys(env)) {
+    const meta = key.metadata || {};
+    classes.push({
+      id: key.name.slice(2),
+      status: visibleStatus(meta, now),
+      until: meta.until || '',
+      createdAt: meta.createdAt || '',
+      minutes: meta.minutes || 0,
+      type: meta.type || '',
+      lang: meta.lang || '',
+    });
+  }
   classes.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
   const day = new Date().toISOString().slice(0, 10);
-  const aiUsage = (await env.SESSIONS.get(`usage:${day}`, 'json')) || {
+  let storedUsage = null;
+  try { storedUsage = await env.SESSIONS.get(`usage:${day}`, 'json'); } catch { storedUsage = null; }
+  const aiUsage = storedUsage || {
     day,
     provider: 'groq',
     model: '',

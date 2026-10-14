@@ -86,7 +86,7 @@ window.COACH_I18N_RESOURCES = {
       write: 'Escribe tu respuesta en {{lang}}.',
       thinking: 'El entrevistador y el profesor están respondiendo…',
       newQuestion: 'La respuesta vale. Nueva pregunta del entrevistador.',
-      refine: 'El entrevistador pide aclarar un aspecto de tu respuesta.',
+      refine: 'La misma pregunta sigue. Ajusta la respuesta y envíala otra vez.',
       sameQuestion: 'Llegó el feedback. El entrevistador sigue en el mismo tema.',
       error: 'Error: {{message}}'
     },
@@ -232,7 +232,7 @@ window.COACH_I18N_RESOURCES = {
       write: 'Write your answer in {{lang}}.',
       thinking: 'The interviewer and the teacher are responding…',
       newQuestion: 'The answer stands. New question from the interviewer.',
-      refine: 'The interviewer asks you to clarify one aspect of your answer.',
+      refine: 'The same question stays. Adjust your answer and send it again.',
       sameQuestion: 'Feedback arrived. The interviewer is still on the same topic.',
       error: 'Error: {{message}}'
     },
@@ -511,7 +511,7 @@ window.COACH_I18N_RESOURCES = {
       write: 'Écrivez votre réponse en {{lang}}.',
       thinking: 'L\'intervieweur et le professeur répondent…',
       newQuestion: 'La réponse tient. Nouvelle question de l\'intervieweur.',
-      refine: 'L\'intervieweur demande de préciser un aspect de votre réponse.',
+      refine: 'La même question reste. Ajustez la réponse et envoyez-la encore.',
       sameQuestion: 'Le feedback est arrivé. L\'intervieweur reste sur le même sujet.',
       error: 'Erreur : {{message}}'
     },
