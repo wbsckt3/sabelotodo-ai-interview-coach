@@ -88,23 +88,18 @@ window.COACH_I18N_RESOURCES = {
       estimated: ' · estimado'
     },
     learn: {
-      lead: 'Así decide este entrenador. Las notas sirven al profesor que va a enriquecer las reglas y al estudiante que quiere ver la fórmula con la que se lee su frase.',
+      lead: 'Cuatro lecturas de la misma entrevista.',
       guide: 'Guía de uso',
-      guideNote: '(Para el profesor)',
-      dims: '6 dimensiones',
-      dimsNote: '(Para el profesor que quiere profundizar en metodologías con IA)',
-      verbs: 'Verbos y tiempos',
-      verbsNote: '(Para los puristas)',
-      fuzzy: 'Lógica difusa',
-      fuzzyNote: '(Para los matemáticos)',
-      witt: 'Wittgenstein y el uso',
-      wittNote: '(Para los filósofos)'
+      dims: 'Contexto gramatical',
+      intent: 'Intención comunicativa',
+      verbs: 'Verbos y tiempos'
     },
     modals: {
       learn: 'Aprende más de este motor LLM',
       guide: 'Guía de uso',
-      profesor: 'Para el profesor: el motor y las 6 dimensiones de la intención',
-      verbs: 'Verbos y tiempos: la pieza central',
+      profesor: 'Contexto gramatical',
+      intencion: 'Intención comunicativa',
+      verbs: 'Verbos y tiempos',
       fuzzy: 'Lógica difusa: cómo se resuelve una interpretación',
       witt: 'Qué aporta Wittgenstein a este motor',
       feedback: 'Feedback',
@@ -215,23 +210,18 @@ window.COACH_I18N_RESOURCES = {
       estimated: ' · estimated'
     },
     learn: {
-      lead: 'This is how the trainer decides. The notes are for the teacher who will enrich the rules and for the student who wants to see the formula used to read their sentence.',
+      lead: 'Four readings of the same interview.',
       guide: 'Usage guide',
-      guideNote: '(For the teacher)',
-      dims: '6 dimensions',
-      dimsNote: '(For the teacher who wants to go deeper into AI methodologies)',
-      verbs: 'Verbs and tenses',
-      verbsNote: '(For the purists)',
-      fuzzy: 'Fuzzy logic',
-      fuzzyNote: '(For the mathematicians)',
-      witt: 'Wittgenstein and use',
-      wittNote: '(For the philosophers)'
+      dims: 'Grammatical context',
+      intent: 'Communicative intention',
+      verbs: 'Verbs and tenses'
     },
     modals: {
       learn: 'Learn more about this LLM engine',
       guide: 'Usage guide',
-      profesor: 'For the teacher: the engine and the 6 dimensions of intention',
-      verbs: 'Verbs and tenses: the central piece',
+      profesor: 'Grammatical context',
+      intencion: 'Communicative intention',
+      verbs: 'Verbs and tenses',
       fuzzy: 'Fuzzy logic: how an interpretation is resolved',
       witt: 'What Wittgenstein adds to this engine',
       feedback: 'Feedback',
@@ -356,6 +346,16 @@ window.COACH_I18N_RESOURCES = {
 <p class="note">S does not measure what the student «meant inside». It measures how much public evidence there is for a pedagogical decision. The numbers in the example are illustrative; the shape of the formula and the degree μ of each rule are the stable criterion.</p>
 <h3>The rules inside: regular expressions</h3>
 <p>The three engines (English, Spanish, and French) recognize markers, tenses, and structures with JavaScript regular expressions. Each match is the literal evidence that then receives a degree μ. To read them or write new rules: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions" target="_blank" rel="noopener noreferrer">JavaScript regular expressions guide (MDN)</a>.</p>`,
+      intencion: `<p>Communicative intention is the context of the interview in the area you chose. Engineering, call center, restaurant, store, hotel, nursing, office, delivery, teaching, or sales change the topics. The questions with which the interviewer understands an answer stay the same.</p>
+<ul>
+<li><strong>What</strong> happened or what was done.</li>
+<li><strong>How</strong> it was done.</li>
+<li><strong>When</strong> it happened, with the tense that question asks for.</li>
+<li><strong>Where</strong>, or in what part of the job.</li>
+<li><strong>Why</strong>, the cause.</li>
+<li><strong>What for</strong>, the effect that was sought.</li>
+</ul>
+<p>A sentence can have the right tense and still not say what was done, where, or why. The interviewer asks you to clarify only that point. If the context is already clear and the tense coheres with the question, the answer is validated and the interview moves on.</p>`,
       wittgenstein: `<p>The theory is in the <em>Philosophical Investigations</em>. The sentence that orients the engine is the one in paragraph 43: the meaning of a word is its use in the language. Applied to a language class, it says something concrete: a verb form does not have an eternal verdict. It has a value inside the activity in which it appears.</p>
 <h3>In other words</h3>
 <p>The technical interview is a language game, with moves and with rules the participants recognize. «Correct» means: this move fulfills the rule the question has just put on the table. The engine does not look for a hidden sense behind the student's sentence. It looks at whether the sentence, said here, does the work the question asked for.</p>
@@ -469,23 +469,18 @@ window.COACH_I18N_RESOURCES = {
       estimated: ' · estimé'
     },
     learn: {
-      lead: 'Voici comment ce formateur décide. Les notes servent au professeur qui va enrichir les règles et à l\'étudiant qui veut voir la formule avec laquelle sa phrase est lue.',
+      lead: 'Quatre lectures du même entretien.',
       guide: 'Guide d\'utilisation',
-      guideNote: '(Pour l\'enseignant)',
-      dims: '6 dimensions',
-      dimsNote: '(Pour l\'enseignant qui veut approfondir les méthodologies avec l\'IA)',
-      verbs: 'Verbes et temps',
-      verbsNote: '(Pour les puristes)',
-      fuzzy: 'Logique floue',
-      fuzzyNote: '(Pour les mathématiciens)',
-      witt: 'Wittgenstein et l\'usage',
-      wittNote: '(Pour les philosophes)'
+      dims: 'Contexte grammatical',
+      intent: 'Intention communicative',
+      verbs: 'Verbes et temps'
     },
     modals: {
       learn: 'En savoir plus sur ce moteur LLM',
       guide: 'Guide d\'utilisation',
-      profesor: 'Pour l\'enseignant : le moteur et les 6 dimensions de l\'intention',
-      verbs: 'Verbes et temps : la pièce centrale',
+      profesor: 'Contexte grammatical',
+      intencion: 'Intention communicative',
+      verbs: 'Verbes et temps',
       fuzzy: 'Logique floue : comment une interprétation se résout',
       witt: 'Ce que Wittgenstein apporte à ce moteur',
       feedback: 'Feedback',
@@ -610,6 +605,16 @@ window.COACH_I18N_RESOURCES = {
 <p class="note">S ne mesure pas ce que l'élève « a voulu dire à l'intérieur ». Il mesure combien de preuve publique il y a pour une décision pédagogique. Les nombres de l'exemple sont illustratifs ; la forme de la formule et le degré μ de chaque règle sont le critère stable.</p>
 <h3>Les règles à l'intérieur : expressions régulières</h3>
 <p>Les trois moteurs (anglais, espagnol et français) reconnaissent marqueurs, temps et structures avec des expressions régulières JavaScript. Chaque correspondance est la preuve littérale qui reçoit ensuite un degré μ. Pour les lire ou écrire de nouvelles règles : <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Guide/Regular_expressions" target="_blank" rel="noopener noreferrer">Guide des expressions régulières en JavaScript (MDN)</a>.</p>`,
+      intencion: `<p>L'intention communicative est le contexte de l'entretien dans le domaine que vous avez choisi. Ingénierie, centre d'appels, restaurant, magasin, hôtel, soins, bureau, livraison, enseignement ou vente changent les thèmes. Les questions avec lesquelles l'intervieweur comprend une réponse restent les mêmes.</p>
+<ul>
+<li><strong>Quoi</strong> s'est passé ou qu'est-ce qui a été fait.</li>
+<li><strong>Comment</strong> cela a été fait.</li>
+<li><strong>Quand</strong> cela s'est produit, avec le temps que cette question demande.</li>
+<li><strong>Où</strong>, ou dans quelle partie du travail.</li>
+<li><strong>Pourquoi</strong>, la cause.</li>
+<li><strong>Pour quoi</strong>, l'effet recherché.</li>
+</ul>
+<p>Une phrase peut avoir le bon temps et ne pas dire encore ce qui a été fait, où ni pourquoi. L'intervieweur demande de préciser seulement ce point. Si le contexte est déjà clair et que le temps est cohérent avec la question, la réponse est validée et l'entretien passe à une autre.</p>`,
       wittgenstein: `<p>La théorie est dans les <em>Investigations philosophiques</em>. La phrase qui oriente le moteur est celle du paragraphe 43 : la signification d'un mot est son usage dans la langue. Appliquée à un cours de langage, elle dit quelque chose de concret : une forme verbale n'a pas un verdict éternel. Elle a une valeur à l'intérieur de l'activité où elle apparaît.</p>
 <h3>Autrement dit</h3>
 <p>L'entretien technique est un jeu de langage, avec des coups et des règles que les participants reconnaissent. « Correct » veut dire : ce coup respecte la règle que la question vient de poser sur la table. Le moteur ne cherche pas un sens caché derrière la phrase de l'élève. Il regarde si la phrase, dite ici, fait le travail que la question a demandé.</p>

@@ -281,15 +281,12 @@ body.class-started .title-tools{display:none}
 <h2 id="titulo-aprende" data-i18n="modals.learn">Aprende más de este motor LLM</h2>
 <button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
-<p class="theory-lead" data-i18n="learn.lead">Así decide este entrenador. Las notas sirven al profesor que va a enriquecer las reglas y al estudiante que quiere ver la fórmula con la que se lee su frase.</p>
+<p class="theory-lead" data-i18n="learn.lead">Cuatro lecturas de la misma entrevista.</p>
 <div class="theory-actions">
-<button type="button" data-open-modal="modal-guia" aria-haspopup="dialog"><span data-i18n="learn.guide">Guía de uso</span> <span class="btn-note" data-i18n="learn.guideNote">(Para el profesor)</span></button>
-<button type="button" data-open-modal="modal-profesor" aria-haspopup="dialog"><span data-i18n="learn.dims">6 dimensiones</span> <span class="btn-note" data-i18n="learn.dimsNote">(Para el profesor que quiere profundizar en metodologías con IA)</span></button>
-<button type="button" data-open-modal="modal-verbos" aria-haspopup="dialog"><span data-i18n="learn.verbs">Verbos y tiempos</span> <span class="btn-note" data-i18n="learn.verbsNote">(Para los puristas)</span></button>
-<!-- Lógica difusa en pausa: no participa en el turno.
-<button type="button" data-open-modal="modal-difusa" aria-haspopup="dialog"><span data-i18n="learn.fuzzy">Lógica difusa</span> <span class="btn-note" data-i18n="learn.fuzzyNote">(Para los matemáticos)</span></button>
--->
-<button type="button" data-open-modal="modal-wittgenstein" aria-haspopup="dialog"><span data-i18n="learn.witt">Wittgenstein y el uso</span> <span class="btn-note" data-i18n="learn.wittNote">(Para los filósofos)</span></button>
+<button type="button" data-open-modal="modal-guia" aria-haspopup="dialog" data-i18n="learn.guide">Guía de uso</button>
+<button type="button" data-open-modal="modal-profesor" aria-haspopup="dialog" data-i18n="learn.dims">Contexto gramatical</button>
+<button type="button" data-open-modal="modal-intencion" aria-haspopup="dialog" data-i18n="learn.intent">Intención comunicativa</button>
+<button type="button" data-open-modal="modal-verbos" aria-haspopup="dialog" data-i18n="learn.verbs">Verbos y tiempos</button>
 </div>
 </div>
 </dialog>
@@ -314,7 +311,7 @@ body.class-started .title-tools{display:none}
 <dialog class="theory-modal" id="modal-profesor" aria-labelledby="titulo-profesor">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="titulo-profesor" data-i18n="modals.profesor">Para el profesor: el motor y las 6 dimensiones de la intención</h2>
+<h2 id="titulo-profesor" data-i18n="modals.profesor">Contexto gramatical</h2>
 <button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
 <div data-i18n-html="html.profesor">
@@ -328,7 +325,7 @@ body.class-started .title-tools{display:none}
 <h3>Qué significa «intención» aquí</h3>
 <p>La intención que el motor lee es pública: qué jugada hace la frase dentro de la pregunta que está abierta. Una misma cadena de palabras cambia de valor cuando cambia la pregunta. Por eso el análisis recibe la pregunta junto con la respuesta.</p>
 <h3>Las seis dimensiones</h3>
-<p>Cada dimensión se observa en la frase y se valora como un grado entre 0 y 1. Más adelante se comprimen en cuatro puntajes (G, C, V y P), que explica el botón de lógica difusa.</p>
+<p>El profesor usa estas seis para explicar cómo mejorar la oración. El tiempo verbal tiene que ser coherente con la pregunta, en el idioma que se practica.</p>
 <table>
 <thead><tr><th>Dimensión</th><th>Qué se observa</th><th>Ejemplo en la entrevista</th></tr></thead>
 <tbody>
@@ -356,10 +353,31 @@ body.class-started .title-tools{display:none}
 </div>
 </dialog>
 
+<dialog class="theory-modal" id="modal-intencion" aria-labelledby="titulo-intencion">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-intencion" data-i18n="modals.intencion">Intención comunicativa</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
+</div>
+<div data-i18n-html="html.intencion">
+<p>La intención comunicativa es el contexto de la entrevista en el área que elegiste. Ingeniería, call center, restaurante, tienda, hotel, enfermería, oficina, reparto, docencia o ventas cambian los temas. Las preguntas con las que el entrevistador entiende una respuesta siguen siendo las mismas.</p>
+<ul>
+<li><strong>Qué</strong> pasó o qué se hizo.</li>
+<li><strong>Cómo</strong> se hizo.</li>
+<li><strong>Cuándo</strong> ocurrió, con el tiempo verbal que esa pregunta pide.</li>
+<li><strong>Dónde</strong>, o en qué parte del trabajo.</li>
+<li><strong>Por qué</strong>, la causa.</li>
+<li><strong>Para qué</strong>, el efecto que se buscaba.</li>
+</ul>
+<p>Una oración puede tener el tiempo bien y aun así no decir qué se hizo, dónde ni por qué. El entrevistador pide aclarar solo ese punto. Si el contexto ya se entiende y el tiempo es coherente con la pregunta, valida la respuesta y pasa a otra.</p>
+</div>
+</div>
+</dialog>
+
 <dialog class="theory-modal" id="modal-verbos" aria-labelledby="titulo-verbos">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="titulo-verbos" data-i18n="modals.verbs">Verbos y tiempos: la pieza central</h2>
+<h2 id="titulo-verbos" data-i18n="modals.verbs">Verbos y tiempos</h2>
 <button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
 <div data-i18n-html="html.verbos">
@@ -385,91 +403,6 @@ body.class-started .title-tools{display:none}
 <h3>Un límite que el profesor debe respetar</h3>
 <p><em>Yesterday, I did fix the bug</em> es enfático y gramatical: did ya marca el pasado y fix permanece en forma base. Motorg comprueba si hay un auxiliar (did, was, had, will, would) antes de proponer el pasado. Las reglas actuales son heurísticas: no analizan todas las subordinadas ni todos los verbos del lenguaje. Una frase que ninguna regla reconoce permanece como frase no clasificada. No pasa a ser un error por silencio del motor.</p>
 <p class="note">Cuando se amplíe el ámbito (otra profesión, otro curso), se amplía el léxico y el mapa pregunta → tiempo. La pieza central sigue siendo el verbo dentro de la situación, no una lista memorizada fuera de la entrevista.</p>
-</div>
-</div>
-</dialog>
-
-<dialog class="theory-modal" id="modal-difusa" aria-labelledby="titulo-difusa">
-<div class="modal-card">
-<div class="modal-top">
-<h2 id="titulo-difusa" data-i18n="modals.fuzzy">Lógica difusa: cómo se resuelve una interpretación</h2>
-<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
-</div>
-<div data-i18n-html="html.difusa">
-<p>Una frase de entrevista casi nunca es del todo correcta o del todo incorrecta. Puede contar el incidente justo y fallar el tiempo. Puede ser gramatical y no contestar la pregunta. La lógica difusa, a partir de los conjuntos de Zadeh (1965), asigna a cada lectura un grado de pertenencia μ entre 0 y 1, en lugar de un sí o un no.</p>
-<p>Motorg ya publica ese grado en cada hallazgo. La regla de pasado usa 0.86 y la del condicional usa 0.78: la frase pertenece en ese grado al conjunto «posible desajuste de esa regla». Es evidencia, no una sentencia.</p>
-<h3>De seis dimensiones a cuatro puntajes</h3>
-<p>Las seis dimensiones se comprimen así, para poder sumarlas:</p>
-<ul>
-<li><strong>G</strong>, adecuación gramatical. Se apoya en la dimensión estructural.</li>
-<li><strong>V</strong>, adecuación verbal y temporal. Reúne temporal, aspectual y modal. Si una de esas tres falla, V baja: un marcador de pasado no se compensa con un modal bien puesto.</li>
-<li><strong>C</strong>, coherencia con la pregunta. Mira si el acto ilocutivo es el que la pregunta pidió.</li>
-<li><strong>P</strong>, pertinencia pragmática. Mira si el contenido sigue dentro del tema técnico.</li>
-</ul>
-<p>Cada una queda en el intervalo [0, 1]. La nota global es una combinación convexa. Los pesos suman 1, así que S también queda en [0, 1]:</p>
-<div class="formula">S = 0.35 G + 0.25 C + 0.25 V + 0.15 P</div>
-<p>El peso mayor está en G porque este entrenador existe para hacer visible la regla gramatical. C y V pesan igual: la frase tiene que responder a la pregunta y con el tiempo que esa pregunta exige. P pesa menos para no premiar un tema pertinente escrito con el tiempo equivocado, ni castigar toda la respuesta cuando solo falla una forma. Los pesos son iniciales. Se calibran con entrevistas reales.</p>
-<h3>Ejemplo con la fórmula aplicada</h3>
-<p>Pregunta: <em>What will you do if the deployment fails?</em><br>Respuesta: <em>If the deployment will fail, I will restart the service.</em></p>
-<table>
-<thead><tr><th>Símbolo</th><th>Lectura ilustrativa</th><th>Valor</th><th>Peso</th><th>Aporte</th></tr></thead>
-<tbody>
-<tr><td>G</td><td>La cláusula con if lleva will. La estructura del condicional real no se cumple.</td><td>0.25</td><td>0.35</td><td>0.0875</td></tr>
-<tr><td>C</td><td>Sí contesta qué haría si el despliegue falla.</td><td>0.90</td><td>0.25</td><td>0.2250</td></tr>
-<tr><td>V</td><td>El tiempo de la condición no es el presente.</td><td>0.30</td><td>0.25</td><td>0.0750</td></tr>
-<tr><td>P</td><td>Reiniciar el servicio es un plan pertinente.</td><td>0.85</td><td>0.15</td><td>0.1275</td></tr>
-<tr><td>S</td><td>0.0875 + 0.2250 + 0.0750 + 0.1275</td><td></td><td></td><td>0.5150</td></tr>
-</tbody>
-</table>
-<p>S = 0.515 dice que la respuesta es a medias adecuada: el plan sirve, la forma de la condición no. Motorg aporta además μ = 0.78 para esa regla. Con un hallazgo así se corrige solo la cláusula if y se conserva «I will restart the service». La entrevista continúa.</p>
-<h3>Cuando hay dos interpretaciones</h3>
-<p>A veces compiten dos lecturas. Por ejemplo, «I have fixed the bug yesterday» puede leerse como presente perfecto de experiencia o como un pasado simple que el marcador yesterday está pidiendo. Para cada lectura i se calcula su pertenencia μ(I<sub>i</sub>). La lectura elegida es la de mayor grado:</p>
-<div class="formula">I* = argmax<sub>i</sub> μ(I<sub>i</sub>)</div>
-<p>Si la mejor y la segunda quedan demasiado juntas, no hay ganadora clara. El umbral ilustrativo, pendiente de calibrar, es:</p>
-<div class="formula">si μ(I*) − μ(I<sub>2</sub>) &lt; 0.15, el resultado es evidencia insuficiente</div>
-<p>El mismo criterio de abstención se usa cuando la confianza que devuelve Motorg es baja. En ese caso el profesor pregunta y no fuerza la corrección.</p>
-<h3>Cómo usar S al enriquecer el skill</h3>
-<ul>
-<li>S alto, en la zona de 0.80 o más, y sin hallazgo de regla con μ ≥ 0.75: la jugada encaja. Se puede subir la dificultad y acortar la explicación.</li>
-<li>Hay un hallazgo con μ ≥ 0.75: se corrige esa regla aunque C y P sean altos. S recuerda que el resto de la respuesta puede valer.</li>
-<li>Dos lecturas a menos de 0.15, o un hallazgo débil: evidencia insuficiente.</li>
-</ul>
-<p class="note">S no mide lo que el alumno «quiso decir por dentro». Mide cuánta evidencia pública hay para una decisión pedagógica. Los números del ejemplo son ilustrativos; la forma de la fórmula y el grado μ de cada regla son el criterio estable.</p>
-<h3>Las reglas por dentro: expresiones regulares</h3>
-<p>Los tres motores (inglés, español y francés) reconocen marcadores, tiempos y estructuras con expresiones regulares de JavaScript. Cada coincidencia es la evidencia literal que luego recibe un grado μ. Para leerlas o escribir reglas nuevas: <a href="https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Regular_expressions" target="_blank" rel="noopener noreferrer">Guía de expresiones regulares en JavaScript (MDN)</a>.</p>
-</div>
-</div>
-</dialog>
-
-<dialog class="theory-modal" id="modal-wittgenstein" aria-labelledby="titulo-wittgenstein">
-<div class="modal-card">
-<div class="modal-top">
-<h2 id="titulo-wittgenstein" data-i18n="modals.witt">Qué aporta Wittgenstein a este motor</h2>
-<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
-</div>
-<div data-i18n-html="html.wittgenstein">
-<p>La teoría está en las <em>Investigaciones filosóficas</em>. La frase que orienta el motor es la del parágrafo 43: el significado de una palabra es su uso en el lenguaje. Aplicada a una clase de lenguaje, dice algo concreto: una forma verbal no tiene un veredicto eterno. Tiene un valor dentro de la actividad en la que aparece.</p>
-<h3>En otras palabras</h3>
-<p>La entrevista técnica es un juego de lenguaje, con jugadas y con reglas que los participantes reconocen. «Correcto» quiere decir: esta jugada cumple la regla que la pregunta acaba de poner en la mesa. El motor no busca un sentido escondido detrás de la frase del alumno. Mira si la frase, dicha aquí, hace el trabajo que la pregunta pidió.</p>
-<p>Por eso la misma cadena cambia de papel:</p>
-<ul>
-<li>En el juego de «What do you do in your current role?», <em>I fix bugs</em> es una jugada válida. Presente simple, hábito del puesto.</li>
-<li>En el juego de «What did you do yesterday?», <em>I fix bugs</em> deja de cumplir la regla. Ese juego pide pasado simple: <em>I fixed a bug</em>.</li>
-</ul>
-<p>Corregir sin mirar la pregunta sería tratar la gramática como un objeto fuera del uso. El motor recibe siempre la pregunta junto con la respuesta para no hacer eso.</p>
-<h3>Parecidos de familia</h3>
-<p>Wittgenstein llamó parecido de familia al hecho de que los miembros de un grupo se reconocen por rasgos compartidos de a pocos, no por una sola marca que todos tengan. El pasado del lenguaje funciona así. fixed y deployed llevan -ed. built, wrote, went y found no. Igual pertenecen al uso «acción terminada en el pasado». El léxico del motor guarda esas formas una a una, y la lógica difusa les pone un grado, porque la frontera entre «esta forma cumple el juego» y «esta forma se sale» no es siempre un borde nítido.</p>
-<h3>Seguir una regla, sin leer la mente</h3>
-<p>Seguir la regla del pasado se muestra en público: ante yesterday, el alumno produce la forma que esa entrevista reconoce. El motor observa esa jugada. No tiene acceso a una intención privada, y la teoría dice que ese acceso no hace falta para enseñar. Lo que se puede practicar es el uso compartido.</p>
-<p>De ahí sale la abstención. Si las dimensiones no separan dos lecturas, declarar un error sería inventar una intención que la frase no muestra. El resultado honesto es evidencia insuficiente y una pregunta. El skill ya pide eso: si la confianza es baja o la frase puede ser válida, se dice con cuidado y se pide una aclaración.</p>
-<h3>Cómo queda armado con el resto</h3>
-<ul>
-<li>Las seis dimensiones describen la jugada pública: cuándo, con qué aspecto, con qué modalidad, con qué acto, con qué ajuste a la pregunta y con qué forma.</li>
-<li>El grado μ y la suma S dicen con qué seguridad podemos afirmar que la jugada se salió de la regla de este juego.</li>
-<li>El skill traduce ese resultado a una corrección breve y a la siguiente pregunta de la entrevista.</li>
-<li>El modelo de lenguaje lleva la conversación. La regla sigue viviendo en el motor.</li>
-</ul>
-<p class="note">Quien enriquezca el motor puede añadir ámbitos —otras profesiones, otras preguntas— como nuevos juegos de lenguaje. Cada juego trae sus tiempos esperados. La teoría no cambia: el sentido de la forma es el uso dentro del juego que está en curso.</p>
 </div>
 </div>
 </dialog>
