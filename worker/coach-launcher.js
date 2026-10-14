@@ -51,21 +51,47 @@ function isActive(meta, now) {
   return false;
 }
 
-async function listSessionKeys(env) {
-  const keys = [];
-  let cursor = '';
-  do {
-    const page = await env.SESSIONS.list(cursor ? { prefix: 's:', cursor } : { prefix: 's:' });
-    keys.push(...page.keys);
-    cursor = page.list_complete ? '' : (page.cursor || '');
-  } while (cursor);
-  return keys;
+const CLASS_INDEX_KEY = 'idx:classes';
+const CLASS_INDEX_LIMIT = 40;
+
+async function readClassIndex(env) {
+  const rows = await env.SESSIONS.get(CLASS_INDEX_KEY, 'json');
+  return Array.isArray(rows) ? rows : [];
+}
+
+async function writeClassIndex(env, rows) {
+  const trimmed = rows
+    .filter((row) => row && row.id)
+    .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
+    .slice(0, CLASS_INDEX_LIMIT);
+  await env.SESSIONS.put(CLASS_INDEX_KEY, JSON.stringify(trimmed));
+}
+
+function classIndexRow(id, session) {
+  return {
+    id,
+    status: session.status || '',
+    until: session.until || '',
+    createdAt: session.createdAt || '',
+    minutes: session.minutes || 0,
+    type: session.type || '',
+    lang: session.lang || '',
+  };
+}
+
+async function rememberClass(env, id, session) {
+  const rows = await readClassIndex(env);
+  const next = classIndexRow(id, session);
+  const index = rows.findIndex((row) => row.id === id);
+  if (index >= 0) rows[index] = next;
+  else rows.push(next);
+  await writeClassIndex(env, rows);
 }
 
 async function countActive(env) {
   const now = Date.now();
-  const keys = await listSessionKeys(env);
-  return keys.reduce((active, key) => active + (isActive(key.metadata, now) ? 1 : 0), 0);
+  const rows = await readClassIndex(env);
+  return rows.reduce((active, row) => active + (isActive(row, now) ? 1 : 0), 0);
 }
 
 async function dispatchWorkflow(env, id, minutes) {
@@ -110,10 +136,13 @@ async function createSession(request, env) {
   const id = crypto.randomUUID();
   const session = { status: 'starting', minutes, lang, type, createdAt: new Date().toISOString(), api: '', until: '' };
   await writeSession(env, id, session);
+  await rememberClass(env, id, session);
   try {
     await dispatchWorkflow(env, id, minutes);
   } catch (error) {
-    await writeSession(env, id, { ...session, status: 'failed', error: error.message });
+    const failed = { ...session, status: 'failed', error: error.message };
+    await writeSession(env, id, failed);
+    await rememberClass(env, id, failed);
     return json(request, env, 502, { error: 'No se pudo encender el servidor del coach.', detail: error.message });
   }
   await env.SESSIONS.put(hourKey, String(used + 1), { expirationTtl: 3700 });
@@ -220,19 +249,15 @@ async function reportUsage(request, env, id) {
 async function listBoard(request, env) {
   if (!callbackAuthorized(request, env)) return json(request, env, 401, { error: 'No autorizado.' });
   const now = Date.now();
-  const classes = [];
-  for (const key of await listSessionKeys(env)) {
-    const meta = key.metadata || {};
-    classes.push({
-      id: key.name.slice(2),
-      status: visibleStatus(meta, now),
-      until: meta.until || '',
-      createdAt: meta.createdAt || '',
-      minutes: meta.minutes || 0,
-      type: meta.type || '',
-      lang: meta.lang || '',
-    });
-  }
+  const classes = (await readClassIndex(env)).map((row) => ({
+    id: row.id,
+    status: visibleStatus(row, now),
+    until: row.until || '',
+    createdAt: row.createdAt || '',
+    minutes: row.minutes || 0,
+    type: row.type || '',
+    lang: row.lang || '',
+  }));
   classes.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
   const day = new Date().toISOString().slice(0, 10);
   let storedUsage = null;
@@ -267,9 +292,13 @@ async function updateFromWorkflow(request, env, id, action) {
     const api = typeof body.api === 'string' && /^https:\/\/[-a-z0-9]+\.trycloudflare\.com$/.test(body.api) ? body.api : '';
     if (!api) return json(request, env, 400, { error: 'Dirección de túnel inválida.' });
     const until = Number.isFinite(Date.parse(body.until)) ? body.until : '';
-    await writeSession(env, id, { ...session, status: 'ready', api, until });
+    const ready = { ...session, status: 'ready', api, until };
+    await writeSession(env, id, ready);
+    await rememberClass(env, id, ready);
   } else {
-    await writeSession(env, id, { ...session, status: body.failed ? 'failed' : 'ended', api: '' });
+    const closed = { ...session, status: body.failed ? 'failed' : 'ended', api: '' };
+    await writeSession(env, id, closed);
+    await rememberClass(env, id, closed);
   }
   return json(request, env, 200, { ok: true });
 }
