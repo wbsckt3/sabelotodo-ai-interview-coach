@@ -13,6 +13,8 @@ window.COACH_I18N_RESOURCES = {
       usageAria: 'Consumo de IA del día',
       close: 'Cerrar',
       reply: 'Responder',
+      mic: 'Hablar',
+      micStop: 'Detener',
       feedback: 'Feedback',
       learn: 'Aprende más de este motor LLM',
       type: 'Tipo de entrevista',
@@ -78,6 +80,13 @@ window.COACH_I18N_RESOURCES = {
       sameQuestion: 'Llegó el feedback. El entrevistador sigue en el mismo tema.',
       error: 'Error: {{message}}'
     },
+    voice: {
+      micDenied: 'El navegador no permitió el micrófono.',
+      recording: 'Grabando tu respuesta… Pulsa Detener al terminar.',
+      transcribing: 'Pasando tu voz a texto…',
+      empty: 'No se escuchó audio.',
+      sttError: 'No se pudo transcribir: {{message}}'
+    },
     usage: {
       calls: 'llamadas',
       quota: 'del cupo diario',
@@ -135,6 +144,8 @@ window.COACH_I18N_RESOURCES = {
       usageAria: 'AI usage today',
       close: 'Close',
       reply: 'Reply',
+      mic: 'Speak',
+      micStop: 'Stop',
       feedback: 'Feedback',
       learn: 'Learn more about this LLM engine',
       type: 'Interview type',
@@ -199,6 +210,13 @@ window.COACH_I18N_RESOURCES = {
       refine: 'The interviewer asks you to clarify one aspect of your answer.',
       sameQuestion: 'Feedback arrived. The interviewer is still on the same topic.',
       error: 'Error: {{message}}'
+    },
+    voice: {
+      micDenied: 'The browser did not allow the microphone.',
+      recording: 'Recording your answer… Press Stop when you finish.',
+      transcribing: 'Turning your voice into text…',
+      empty: 'No audio was heard.',
+      sttError: 'Could not transcribe: {{message}}'
     },
     usage: {
       calls: 'calls',
@@ -394,6 +412,8 @@ window.COACH_I18N_RESOURCES = {
       usageAria: 'Consommation d\'IA du jour',
       close: 'Fermer',
       reply: 'Répondre',
+      mic: 'Parler',
+      micStop: 'Arrêter',
       feedback: 'Feedback',
       learn: 'En savoir plus sur ce moteur LLM',
       type: 'Type d\'entretien',
@@ -458,6 +478,13 @@ window.COACH_I18N_RESOURCES = {
       refine: 'L\'intervieweur demande de préciser un aspect de votre réponse.',
       sameQuestion: 'Le feedback est arrivé. L\'intervieweur reste sur le même sujet.',
       error: 'Erreur : {{message}}'
+    },
+    voice: {
+      micDenied: 'Le navigateur n\'a pas autorisé le microphone.',
+      recording: 'Enregistrement de votre réponse… Appuyez sur Arrêter à la fin.',
+      transcribing: 'Conversion de votre voix en texte…',
+      empty: 'Aucun audio n\'a été entendu.',
+      sttError: 'Transcription impossible : {{message}}'
     },
     usage: {
       calls: 'appels',
