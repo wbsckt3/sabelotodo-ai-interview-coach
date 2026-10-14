@@ -30,7 +30,11 @@ window.COACH_I18N_RESOURCES = {
       feedbackPh: 'Tema del entrevistador\n\nTu respuesta\n\nCómo mejorar esta respuesta\n\nQué ajustar\n\nAsí podría quedar la respuesta\n\nPregunta del entrevistador',
       help: 'Ayuda',
       change: 'Cambiar',
-      language: 'Idioma de la interfaz'
+      language: 'Idioma de la interfaz',
+      interviewerVoice: 'Voz del entrevistador',
+      professorVoice: 'Voz del profesor',
+      voicePreview: 'Oír',
+      voiceEmpty: 'Sin voces de este idioma en el navegador'
     },
     start: {
       title: 'Prepara tu clase',
@@ -170,7 +174,11 @@ window.COACH_I18N_RESOURCES = {
       feedbackPh: 'Interviewer topic\n\nYour answer\n\nHow to improve this answer\n\nWhat to adjust\n\nHow the answer could read\n\nInterviewer question',
       help: 'Help',
       change: 'Change',
-      language: 'Interface language'
+      language: 'Interface language',
+      interviewerVoice: 'Interviewer voice',
+      professorVoice: 'Teacher voice',
+      voicePreview: 'Listen',
+      voiceEmpty: 'This browser has no voices for this language'
     },
     start: {
       title: 'Set up your class',
@@ -443,6 +451,10 @@ window.COACH_I18N_RESOURCES = {
       feedbackPh: 'Sujet de l\'intervieweur\n\nVotre réponse\n\nComment améliorer cette réponse\n\nQuoi ajuster\n\nLa réponse pourrait se lire ainsi\n\nQuestion de l\'intervieweur',
       help: 'Aide',
       change: 'Modifier',
+      interviewerVoice: 'Voix de l\'intervieweur',
+      professorVoice: 'Voix du professeur',
+      voicePreview: 'Écouter',
+      voiceEmpty: 'Ce navigateur n\'a pas de voix pour cette langue',
       language: 'Langue de l\'interface'
     },
     start: {
