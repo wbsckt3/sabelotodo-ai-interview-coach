@@ -16,12 +16,34 @@
     return 'es'
   }
 
+  function localeFromPath() {
+    const parts = location.pathname.split('/').filter(Boolean)
+    const last = String(parts[parts.length - 1] || '').toLowerCase()
+    if (last === 'en' || last === 'es' || last === 'fr') return last
+    return ''
+  }
+
   function getSavedLocale() {
     try {
       return normalizeLocale(localStorage.getItem(STORAGE_KEY) || DEFAULT_LANG)
     } catch (_) {
       return DEFAULT_LANG
     }
+  }
+
+  function initialLocale() {
+    return localeFromPath() || getSavedLocale()
+  }
+
+  function syncLocalePath(code) {
+    if (location.protocol === 'file:') return
+    const lang = normalizeLocale(code)
+    let path = location.pathname.replace(/\/(en|es|fr)\/?$/i, '')
+    if (!path.endsWith('/')) path += '/'
+    const next = path + lang + '/'
+    const current = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/'
+    if (current === next) return
+    history.replaceState(null, '', next + location.search + location.hash)
   }
 
   function persistLocale(code) {
@@ -99,6 +121,7 @@
 
   async function setLocale(code, opts = {}) {
     const lang = persistLocale(code)
+    syncLocalePath(lang)
     await i18next.changeLanguage(lang)
     syncLangSwitch(lang)
     applyStaticTranslations()
@@ -120,7 +143,7 @@
     }
 
     captureHtmlOriginals()
-    const initial = getSavedLocale()
+    const initial = initialLocale()
     persistLocale(initial)
 
     await i18next.init({

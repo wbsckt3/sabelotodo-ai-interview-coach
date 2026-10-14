@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>AI Interview Coach</title>
+<script>
+(function () {
+  if (!/\/$/.test(location.pathname)) {
+    location.replace(location.pathname + '/' + location.search + location.hash)
+    return
+  }
+  var root = location.pathname.replace(/\/(en|es|fr)\/$/i, '/')
+  fetch(root + 'index.html', { cache: 'no-store' })
+    .then(function (response) { return response.text() })
+    .then(function (html) {
+      html = html.replace(/<head[^>]*>/i, function (tag) {
+        return tag + '<base href="' + root + '">'
+      })
+      document.open()
+      document.write(html)
+      document.close()
+    })
+    .catch(function () {
+      document.body.textContent = 'No se pudo abrir la clase.'
+    })
+})()
+</script>
+</head>
+<body></body>
+</html>
