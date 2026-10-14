@@ -1,3 +1,5 @@
+/* EN PAUSA. Este motor y su lógica difusa no entran en el turno.
+   El skill deja el análisis gramatical a la IA. El archivo se conserva. */
 /* Motorg: reglas gramaticales del idioma a aprender y lógica difusa común. Referencia para el skill; no escribe el feedback. */
 import {analyzeSpanish} from './motorg-es.js';
 import {analyzeFrench} from './motorg-fr.js';

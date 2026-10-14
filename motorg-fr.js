@@ -1,3 +1,4 @@
+/* EN PAUSA. Este motor no entra en el turno. El archivo se conserva. */
 /* Motorg francés: reglas gramaticales y rasgos verbales. Referencia para el skill; no escribe el feedback. */
 const PAST_MARKER=/(?<![\p{L}])(?:hier|avant-hier|la semaine derni[eè]re|le mois dernier|l'ann[eé]e derni[eè]re|il y a\s+\d+\s+(?:jours|semaines|mois|ans))(?![\p{L}])/iu;
 const PRESENT_TO_PARTICIPLE=[['corrige','corrigé'],['corriges','corrigé'],['corrigent','corrigé'],['déploie','déployé'],['deploie','déployé'],['deploye','déployé'],['implémente','implémenté'],['implemente','implémenté'],['teste','testé'],['testes','testé'],['testent','testé'],['crée','créé'],['cree','créé'],['creent','créé'],['trouve','trouvé'],['trouves','trouvé'],['trouvent','trouvé'],['fais','fait'],['vais','allé'],['redémarre','redémarré'],['redemarre','redémarré'],['vérifie','vérifié'],['verifie','vérifié'],['résous','résolu'],['resous','résolu']];
