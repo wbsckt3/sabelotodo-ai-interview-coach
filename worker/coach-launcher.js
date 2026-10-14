@@ -276,6 +276,16 @@ async function updateFromWorkflow(request, env, id, action) {
 
 export default {
   async fetch(request, env) {
+    try {
+      return await route(request, env);
+    } catch (error) {
+      const message = error && error.message ? error.message : 'El lanzador falló.';
+      return json(request, env, 500, { error: message });
+    }
+  },
+};
+
+async function route(request, env) {
     const url = new URL(request.url);
     if (request.method === 'OPTIONS') {
       const origin = allowedOrigin(request, env);
@@ -308,5 +318,4 @@ export default {
       if (request.method === 'POST' && match[2]) return updateFromWorkflow(request, env, match[1], match[2]);
     }
     return json(request, env, 404, { error: 'Ruta no encontrada.' });
-  },
-};
+}
