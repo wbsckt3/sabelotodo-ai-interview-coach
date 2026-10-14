@@ -43,6 +43,8 @@ h2{font-size:1.15rem}
 .muted{color:#647084;font-size:.78rem}
 label{font-weight:650;font-size:.82rem}
 input,select,textarea{width:100%;border:1px solid #cbd3e1;border-radius:8px;padding:8px;font:inherit;font-size:16px;background:#fff}
+#targetLanguage{background:var(--student-bg);border-color:var(--student-border)}
+#titulo-start{font-size:1.05rem;line-height:1.35}
 .field{min-height:0;display:flex;flex-direction:column}
 .field.grow{flex:1}
 .label-row{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:4px 0}
@@ -137,6 +139,10 @@ button:disabled{opacity:.55}
 .feedback-label{margin:0 0 4px;font-size:.75rem;font-weight:750;color:#647084}
 .feedback-text,.feedback-empty{margin:0;white-space:pre-wrap}
 .feedback-empty{color:#647084}
+.feedback-voices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 8px}
+.feedback-voices .voice-field label{font-size:.75rem;font-weight:750;color:#647084}
+.feedback-voices input[data-voice-role]{width:100%;cursor:default;color:#172033;-webkit-text-fill-color:#172033}
+@media(max-width:640px){.feedback-voices{grid-template-columns:1fr}}
 #modal-feedback{width:min(980px,calc(100vw - 12px));max-width:none;height:calc(100vh - 12px);max-height:calc(100vh - 12px)}
 #modal-feedback .modal-card{height:100%;max-height:none;display:flex;flex-direction:column;overflow:hidden}
 #modal-feedback .feedback-view{flex:1;min-height:0;height:auto;resize:none;font-size:1.05rem;line-height:1.5}
@@ -253,6 +259,16 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 <button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
 </div>
+<div class="feedback-voices">
+<div class="voice-field">
+<label for="feedbackProfessorVoice" data-i18n="ui.professorVoice">Voz del profesor</label>
+<input id="feedbackProfessorVoice" type="text" data-voice-role="professor" readonly data-i18n-aria="ui.professorVoice" aria-label="Voz del profesor" value="Google español (es-ES)">
+</div>
+<div class="voice-field" data-voice-field="feedback-learn">
+<label for="feedbackInterviewerVoice" data-i18n="ui.interviewerVoice">Voz del entrevistador</label>
+<input id="feedbackInterviewerVoice" type="text" data-voice-role="interviewer" readonly data-i18n-aria="ui.interviewerVoice" aria-label="Voz del entrevistador" value="Google US English (en-US)">
+</div>
+</div>
 <textarea id="feedback" class="feedback-store" hidden aria-hidden="true"></textarea>
 <div id="feedbackView" class="feedback-view" role="region" aria-labelledby="titulo-feedback"></div>
 </div>
@@ -261,7 +277,7 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 <dialog class="theory-modal" id="modal-start" aria-labelledby="titulo-start">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="titulo-start" data-i18n="start.title">Prepara tu clase</h2>
+<h2 id="titulo-start" data-i18n="start.title">Prepara la simulación de una entrevista en el idioma que deseas practicar</h2>
 </div>
 <p class="note" data-i18n="start.lead">Selecciona tu idioma nativo. La página y el profesor quedan en ese idioma. Después elige el tipo de entrevista, el idioma que vas a aprender y tu nivel.</p>
 <div class="start-grid start-grid--2">
@@ -556,9 +572,11 @@ let speechToken=0, activeUtter=null, lastFeedbackSpeech=[];
 function setSpeaking(who){$('repeatQuestionBtn').classList.toggle('is-speaking',who==='question');$('repeatFeedbackBtn').classList.toggle('is-speaking',who==='feedback');}
 function stopSpeech(){speechToken++;activeUtter=null;setSpeaking(null);if(window.speechSynthesis)speechSynthesis.cancel();}
 function fixedVoice(lang){return FIXED_VOICE[lang]||FIXED_VOICE.en;}
-function chosenVoice(lang){const fixed=fixedVoice(lang);if(!window.speechSynthesis)return null;const name=fixed.name.toLowerCase();const code=fixed.lang.toLowerCase();const voices=speechSynthesis.getVoices();return voices.find(voice=>String(voice.name||'').toLowerCase()===name&&String(voice.lang||'').toLowerCase()===code)||voices.find(voice=>String(voice.name||'').toLowerCase()===name)||null;}
-function paintVoiceSelects(){const target=$('targetLanguage').value||'en';const explain=$('explanationLanguage').value||'es';document.querySelectorAll('[data-voice-field="professor"]').forEach(field=>{field.hidden=target===explain;});const interviewer=document.querySelector('input[data-voice-role="interviewer"]');const professor=document.querySelector('input[data-voice-role="professor"]');if(interviewer)interviewer.value=fixedVoice(target).label;if(professor)professor.value=fixedVoice(explain).label;}
-function speakSequence(parts){if(!window.speechSynthesis){setSpeaking(null);return;}const queue=(Array.isArray(parts)?parts:[]).map(item=>({text:String(item&&item.text||'').trim(),lang:item&&item.lang,who:item&&item.who})).filter(item=>item.text);if(!queue.length){setSpeaking(null);return;}const token=++speechToken;speechSynthesis.cancel();const step=index=>{if(token!==speechToken)return;if(index>=queue.length){activeUtter=null;setSpeaking(null);return;}const item=queue[index];const utter=new SpeechSynthesisUtterance(item.text);const voice=chosenVoice(item.lang);utter.lang=(voice&&voice.lang)||fixedVoice(item.lang).lang;utter.rate=0.95;utter.pitch=1;if(voice)utter.voice=voice;utter.onend=()=>{if(token===speechToken)step(index+1);};utter.onerror=()=>{if(token===speechToken){activeUtter=null;setSpeaking(null);}};activeUtter=utter;setSpeaking(item.who||null);speechSynthesis.speak(utter);};step(0);}
+function chosenVoice(lang){const fixed=fixedVoice(lang);if(!window.speechSynthesis)return null;const name=fixed.name.toLowerCase();const code=fixed.lang.toLowerCase();const voices=speechSynthesis.getVoices();const named=voice=>String(voice.name||'').toLowerCase()===name;const sameLang=voice=>String(voice.lang||'').toLowerCase()===code;return voices.find(voice=>named(voice)&&sameLang(voice))||voices.find(named)||voices.find(voice=>String(voice.name||'').toLowerCase().includes(name)&&String(voice.lang||'').toLowerCase().startsWith(code.slice(0,2)))||null;}
+function speechChunks(text){const bits=String(text||'').split(/\n+|(?<=[.!?…])\s+/).map(bit=>bit.trim()).filter(Boolean);const chunks=[];let buf='';for(const bit of bits){const next=buf?`${buf} ${bit}`:bit;if(buf&&next.length>220){chunks.push(buf);buf=bit;}else buf=next;}if(buf)chunks.push(buf);return chunks;}
+function voicesReady(){return new Promise(resolve=>{if(!window.speechSynthesis||speechSynthesis.getVoices().length){resolve();return;}let settled=false;const done=()=>{if(settled)return;settled=true;speechSynthesis.removeEventListener('voiceschanged',done);resolve();};speechSynthesis.addEventListener('voiceschanged',done);speechSynthesis.getVoices();setTimeout(done,500);});}
+function paintVoiceSelects(){const target=$('targetLanguage').value||'en';const explain=$('explanationLanguage').value||'es';document.querySelectorAll('[data-voice-field="professor"],[data-voice-field="feedback-learn"]').forEach(field=>{field.hidden=target===explain;});document.querySelectorAll('input[data-voice-role="interviewer"]').forEach(input=>{input.value=fixedVoice(target).label;});document.querySelectorAll('input[data-voice-role="professor"]').forEach(input=>{input.value=fixedVoice(explain).label;});}
+function speakSequence(parts){if(!window.speechSynthesis){setSpeaking(null);return;}const queue=(Array.isArray(parts)?parts:[]).flatMap(item=>speechChunks(item&&item.text).map(text=>({text,lang:item&&item.lang,who:item&&item.who})));if(!queue.length){setSpeaking(null);return;}const token=++speechToken;speechSynthesis.cancel();const step=index=>{if(token!==speechToken)return;if(index>=queue.length){activeUtter=null;setSpeaking(null);return;}const item=queue[index];const utter=new SpeechSynthesisUtterance(item.text);const voice=chosenVoice(item.lang);const fixed=fixedVoice(item.lang);if(voice)utter.voice=voice;utter.lang=(voice&&voice.lang)||fixed.lang;utter.rate=0.95;utter.pitch=1;let moved=false;const next=()=>{if(moved||token!==speechToken)return;moved=true;step(index+1);};utter.onend=next;utter.onerror=event=>{if(event&&event.error==='interrupted')return;next();};activeUtter=utter;setSpeaking(item.who||null);speechSynthesis.speak(utter);};voicesReady().then(()=>{if(token!==speechToken)return;setTimeout(()=>{if(token===speechToken)step(0);},80);});}
 function speak(text,lang,who){speakSequence([{text,lang,who}]);}
 function paintVoiceLabels(){const reply=tr('ui.reply','Responder');replyBtn.setAttribute('aria-label',reply);replyBtn.title=reply;const recording=micBtn.classList.contains('is-recording');const micLabel=recording?tr('ui.micStop','Detener'):tr('ui.mic','Hablar');micBtn.setAttribute('aria-label',micLabel);micBtn.title=micLabel;const questionLabel=tr('ui.repeatQuestion','Repetir pregunta');const feedbackLabel=tr('ui.repeatFeedback','Repetir feedback');$('repeatQuestionBtn').title=questionLabel;$('repeatFeedbackBtn').title=feedbackLabel;}
 function setMicIdle(){micBtn.classList.remove('is-recording');micBtn.setAttribute('aria-pressed','false');paintVoiceLabels();}

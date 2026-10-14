@@ -37,7 +37,7 @@ window.COACH_I18N_RESOURCES = {
       voiceEmpty: 'Sin voces de este idioma en el navegador'
     },
     start: {
-      title: 'Prepara tu clase',
+      title: 'Prepara la simulación de una entrevista en el idioma que deseas practicar',
       lead: 'Selecciona tu idioma nativo. La página y el profesor quedan en ese idioma. Después elige el tipo de entrevista, el idioma que vas a aprender y tu nivel.',
       begin: 'Comenzar entrevista',
       native: 'Selecciona tu idioma nativo',
@@ -183,7 +183,7 @@ window.COACH_I18N_RESOURCES = {
       voiceEmpty: 'This browser has no voices for this language'
     },
     start: {
-      title: 'Set up your class',
+      title: 'Prepare an interview simulation in the language you want to practice',
       lead: 'Choose your native language. The page and the teacher stay in that language. Then pick the interview type, the language you will learn and your level.',
       begin: 'Start interview',
       native: 'Choose your native language',
@@ -462,7 +462,7 @@ window.COACH_I18N_RESOURCES = {
       language: 'Langue de l\'interface'
     },
     start: {
-      title: 'Préparez votre cours',
+      title: 'Préparez la simulation d\'un entretien dans la langue que vous voulez pratiquer',
       lead: 'Choisissez votre langue maternelle. La page et le professeur restent dans cette langue. Ensuite, choisissez le type d\'entretien, la langue à apprendre et votre niveau.',
       begin: 'Commencer l\'entretien',
       native: 'Choisissez votre langue maternelle',
