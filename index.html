@@ -53,9 +53,27 @@ button:disabled{opacity:.55}
 .theory-actions .btn-note{color:#b7bec8;font-weight:550;font-size:.78rem}
 .actions{display:flex;gap:6px;align-items:center;margin-top:6px}
 .actions .reply-btn,.actions .mic-btn{flex:0 0 auto}
+.icon-btn{width:42px;height:42px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.icon-btn svg{display:block}
 .mic-btn{background:#9f1239}
+.mic-btn .icon-stop{display:none}
+.mic-btn.is-recording .icon-mic{display:none}
+.mic-btn.is-recording .icon-stop{display:block}
 .mic-btn.is-recording{background:#7f1d1d;animation:mic-pulse 1s ease-in-out infinite}
 @keyframes mic-pulse{50%{opacity:.65}}
+.label-tools,.modal-tools{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto}
+.repeat-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#233e73;border:1px solid #233e73;padding:6px 10px;font-size:.78rem}
+.repeat-btn svg{display:block;flex:0 0 auto}
+.repeat-btn .wave{display:none;align-items:center;gap:3px;height:18px}
+.repeat-btn.is-speaking .wave{display:inline-flex}
+.repeat-btn.is-speaking svg,.repeat-btn.is-speaking [data-i18n]{display:none}
+.wave span{width:3px;border-radius:99px;background:currentColor;transform-origin:center;animation:freq .85s ease-in-out infinite}
+.wave span:nth-child(1){height:7px;animation-delay:0s}
+.wave span:nth-child(2){height:16px;animation-delay:.12s}
+.wave span:nth-child(3){height:11px;animation-delay:.22s}
+.wave span:nth-child(4){height:18px;animation-delay:.08s}
+.wave span:nth-child(5){height:9px;animation-delay:.18s}
+@keyframes freq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
 .actions .learn-btn{flex:1;background:#fff;color:#233e73;border:1px solid #233e73;font-size:.78rem}
 .actions .ghost{background:#eef2f8;color:#172033}
 #status{margin:4px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -108,14 +126,7 @@ body.class-started .title-tools{display:none}
 <div class="title-row">
 <div>
 <h1 data-i18n="ui.title">Sabelotodo AI — Coach de entrevista</h1>
-<p class="subtitle" data-i18n="ui.subtitle">Motor de inferencia gramatical</p>
-</div>
-<div class="title-tools">
-<div class="qa-lang-switch" role="group" data-i18n-aria="ui.language" aria-label="Idioma de la interfaz">
-<button type="button" class="qa-lang-switch__btn qa-lang-switch__btn--active" data-set-locale="es" aria-pressed="true">ES</button>
-<button type="button" class="qa-lang-switch__btn" data-set-locale="en" aria-pressed="false">EN</button>
-<button type="button" class="qa-lang-switch__btn" data-set-locale="fr" aria-pressed="false">FR</button>
-</div>
+<p class="subtitle" id="subtitle">Aprende inglés con un profesor en tu idioma nativo español</p>
 </div>
 </div>
 </header>
@@ -133,7 +144,7 @@ body.class-started .title-tools{display:none}
 </div>
 </div>
 <div class="field grow">
-<div class="label-row"><label for="interviewer" data-i18n="ui.interviewer">Entrevistador</label><button type="button" class="q" id="hintInterviewer" data-i18n-aria="hints.interviewerTitle" aria-label="Entrevistador">?</button></div>
+<div class="label-row"><label for="interviewer" data-i18n="ui.interviewer">Entrevistador</label><span class="label-tools"><button type="button" class="repeat-btn" id="repeatQuestionBtn" data-i18n-aria="ui.repeatQuestion" aria-label="Repetir pregunta" title="Repetir pregunta"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5V2L8 6l4 4V7a5 5 0 1 1-4.9 6H5a7 7 0 1 0 7-8z"/></svg><span class="wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span><span data-i18n="ui.repeatQuestion">Repetir pregunta</span></button><button type="button" class="q" id="hintInterviewer" data-i18n-aria="hints.interviewerTitle" aria-label="Entrevistador">?</button></span></div>
 <textarea id="interviewer" class="actor actor-interviewer" readonly placeholder="El entrevistador está preparando la primera pregunta…"></textarea>
 </div>
 <div class="field grow">
@@ -141,8 +152,8 @@ body.class-started .title-tools{display:none}
 <textarea id="studentText" class="actor actor-student" placeholder="Tu respuesta"></textarea>
 </div>
 <div class="actions">
-<button id="replyBtn" class="reply-btn" type="button" data-i18n="ui.reply">Responder</button>
-<button id="micBtn" class="mic-btn" type="button" aria-pressed="false" data-i18n="ui.mic">Hablar</button>
+<button id="replyBtn" class="reply-btn icon-btn" type="button" data-i18n-aria="ui.reply" aria-label="Responder" title="Responder"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>
+<button id="micBtn" class="mic-btn icon-btn" type="button" aria-pressed="false" data-i18n-aria="ui.mic" aria-label="Hablar" title="Hablar"><svg class="icon-mic" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg><svg class="icon-stop" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg></button>
 <button id="feedbackBtn" class="ghost" type="button" disabled data-i18n="ui.feedback">Feedback</button>
 <button id="learnBtn" class="learn-btn" type="button" data-open-modal="modal-aprende" aria-haspopup="dialog" data-i18n="ui.learn">Aprende más de este motor LLM</button>
 </div>
@@ -164,7 +175,10 @@ body.class-started .title-tools{display:none}
 <div class="modal-card">
 <div class="modal-top">
 <h2 id="titulo-feedback" data-i18n="modals.feedback">Feedback</h2>
+<div class="modal-tools">
+<button type="button" class="repeat-btn" id="repeatFeedbackBtn" data-i18n-aria="ui.repeatFeedback" aria-label="Repetir feedback" title="Repetir feedback"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5V2L8 6l4 4V7a5 5 0 1 1-4.9 6H5a7 7 0 1 0 7-8z"/></svg><span class="wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span><span data-i18n="ui.repeatFeedback">Repetir feedback</span></button>
 <button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
+</div>
 </div>
 <textarea id="feedback" class="feedback-view" readonly placeholder="Pregunta del entrevistador&#10;&#10;Tu respuesta&#10;&#10;Corrección&#10;&#10;Qué falta para cumplir esta pregunta&#10;&#10;Así podría quedar la respuesta"></textarea>
 </div>
@@ -175,12 +189,12 @@ body.class-started .title-tools{display:none}
 <div class="modal-top">
 <h2 id="titulo-start" data-i18n="start.title">Prepara tu clase</h2>
 </div>
-<p class="note" data-i18n="start.lead">Selecciona el tipo de entrevista, el lenguaje que quieres practicar, tu nivel y el idioma de las explicaciones.</p>
+<p class="note" data-i18n="start.lead">Selecciona tu idioma nativo. La página y el profesor quedan en ese idioma. Después elige el tipo de entrevista, el idioma que vas a aprender y tu nivel.</p>
 <div class="start-grid start-grid--2">
 <div class="start-wide native-row">
 <div>
-<span class="native-label" id="nativeLabel" data-i18n="start.native">Idioma nativo</span>
-<p class="muted" data-i18n="start.nativeHint">Toda la página y las explicaciones se muestran en tu idioma.</p>
+<span class="native-label" id="nativeLabel" data-i18n="start.native">Selecciona tu idioma nativo</span>
+<p class="muted" data-i18n="start.nativeHint">La interfaz y el profesor usan este idioma. No vuelve a aparecer en la entrevista.</p>
 </div>
 <div class="qa-lang-switch" role="group" aria-labelledby="nativeLabel">
 <button type="button" class="qa-lang-switch__btn qa-lang-switch__btn--active" data-set-locale="es" aria-pressed="true">ES</button>
@@ -208,12 +222,12 @@ body.class-started .title-tools{display:none}
 <option value="advanced" data-i18n="levels.advanced">Avanzado</option>
 </select>
 </div>
-<div class="start-wide">
+<div class="start-wide" hidden>
 <div class="label-row"><label for="explanationLanguage" data-i18n="ui.explain">Idioma de explicación</label><button type="button" class="q" id="hintExplain" data-i18n-aria="hints.explainTitle" aria-label="Idioma de explicación">?</button></div>
 <select id="explanationLanguage">
-<option value="es" selected>Español</option>
-<option value="en">English</option>
-<option value="fr">Français</option>
+<option value="es" data-i18n="langOptions.es" selected>Español</option>
+<option value="en" data-i18n="langOptions.en">Inglés</option>
+<option value="fr" data-i18n="langOptions.fr">Francés</option>
 </select>
 </div>
 </div>
@@ -229,6 +243,7 @@ body.class-started .title-tools{display:none}
 <h2 id="titulo-launch" data-i18n="start.launchTitle">Iniciar la clase</h2>
 </div>
 <p class="note" id="launchSummary"></p>
+<p class="note" data-i18n="start.network">En esta misma red hay cupo para 3 clases por hora. Cada clase enciende su propio servidor y su reloj de sesión corre solo para esa clase. Si ya abriste 3 y quieres otra antes de que pase la hora, cambia de red: por ejemplo, pasa del wifi a los datos del celular.</p>
 <div class="start-grid">
 <div>
 <label for="startMinutes" data-i18n="start.minutes">Duración de la clase (minutos)</label>
@@ -267,7 +282,7 @@ body.class-started .title-tools{display:none}
 <button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
 <div data-i18n-html="html.guia">
-<p>Hay cuatro controles arriba de la entrevista: tipo de entrevista, idioma a aprender (español, inglés o francés), nivel e idioma de explicación (español, inglés o francés).</p>
+<p>En la preparación eliges tu idioma nativo con ES, EN o FR. La página y el profesor quedan en ese idioma, y el interruptor no se muestra durante la entrevista. Después eliges el tipo de entrevista, el idioma a aprender (español, inglés o francés) y el nivel.</p>
 <p>El tipo de entrevista fija el puesto (ingeniería de software, call center, mesero de restaurante, retail, recepción de hotel, enfermería, asistente administrativo, reparto, docencia o ventas), el tono y los temas de las preguntas. Cambiarlo abre otra conversación con una pregunta nueva de ese puesto. Las reglas gramaticales no cambian: el tiempo verbal lo sigue pidiendo cada pregunta.</p>
 <p>En el sitio publicado, la página no llama a Groq desde tu computador. Cada pregunta sale hacia el servidor Node que enciende el workflow de GitHub, y ese servidor es quien consulta a Groq. El contador Sesión es el tiempo que queda de ese workflow. En 00:00 la sesión de esa conversación termina.</p>
 <p>El idioma a aprender es el del entrevistador y el de tu respuesta. El de explicación es el tuyo y el del profesor: el feedback sale ahí, y la sugerencia queda en el idioma que estás aprendiendo. Cada turno le manda esos dos idiomas a la IA.</p>
@@ -430,9 +445,12 @@ const replyBtn=$('replyBtn');
 const micBtn=$('micBtn');
 const SPEECH_LANG={es:'es-ES',en:'en-US',fr:'fr-FR'};
 let speakQuestionOnClose=false, recorder=null, recordChunks=[];
-function stopSpeech(){if(window.speechSynthesis)speechSynthesis.cancel();}
-function speak(text,lang){if(!window.speechSynthesis||!String(text||'').trim())return;stopSpeech();const utter=new SpeechSynthesisUtterance(String(text).trim());utter.lang=SPEECH_LANG[lang]||'en-US';const voice=(speechSynthesis.getVoices()||[]).find(item=>item.lang.toLowerCase().startsWith(utter.lang.slice(0,2).toLowerCase()));if(voice)utter.voice=voice;speechSynthesis.speak(utter);}
-function setMicIdle(){micBtn.classList.remove('is-recording');micBtn.setAttribute('aria-pressed','false');micBtn.textContent=tr('ui.mic','Hablar');}
+let speechToken=0;
+function setSpeaking(who){$('repeatQuestionBtn').classList.toggle('is-speaking',who==='question');$('repeatFeedbackBtn').classList.toggle('is-speaking',who==='feedback');}
+function stopSpeech(){speechToken++;setSpeaking(null);if(window.speechSynthesis)speechSynthesis.cancel();}
+function speak(text,lang,who){if(!window.speechSynthesis||!String(text||'').trim()){setSpeaking(null);return;}const token=++speechToken;speechSynthesis.cancel();const utter=new SpeechSynthesisUtterance(String(text).trim());utter.lang=SPEECH_LANG[lang]||'en-US';const voice=(speechSynthesis.getVoices()||[]).find(item=>item.lang.toLowerCase().startsWith(utter.lang.slice(0,2).toLowerCase()));if(voice)utter.voice=voice;const done=()=>{if(token===speechToken)setSpeaking(null);};utter.onend=done;utter.onerror=done;setSpeaking(who||null);speechSynthesis.speak(utter);}
+function paintVoiceLabels(){const reply=tr('ui.reply','Responder');replyBtn.setAttribute('aria-label',reply);replyBtn.title=reply;const recording=micBtn.classList.contains('is-recording');const micLabel=recording?tr('ui.micStop','Detener'):tr('ui.mic','Hablar');micBtn.setAttribute('aria-label',micLabel);micBtn.title=micLabel;const questionLabel=tr('ui.repeatQuestion','Repetir pregunta');const feedbackLabel=tr('ui.repeatFeedback','Repetir feedback');$('repeatQuestionBtn').title=questionLabel;$('repeatFeedbackBtn').title=feedbackLabel;}
+function setMicIdle(){micBtn.classList.remove('is-recording');micBtn.setAttribute('aria-pressed','false');paintVoiceLabels();}
 if(window.speechSynthesis)speechSynthesis.addEventListener('voiceschanged',()=>{});
 let busy=false, generation=0;
 function parseCoachTurn(raw){const text=String(raw||'').trim();const candidates=[];const fenced=text.match(/```(?:json)?\s*([\s\S]*?)```/i);if(fenced)candidates.push(fenced[1].trim());const brace=text.match(/\{[\s\S]*\}/);if(brace)candidates.push(brace[0]);candidates.push(text);function field(data,name){const direct=data[name];if(typeof direct==='string'&&direct.trim())return direct.trim();for(const key of Object.keys(data)){if(key===name||key.startsWith(name+'_')){const value=data[key];if(typeof value==='string'&&value.trim())return value.trim();}}return '';}
@@ -450,8 +468,10 @@ function appendTurn(entry){if(!sessionId)beginConversation();const list=readConv
 function targetName(){return uiLangName($('targetLanguage').value||'en');}
 function explanationName(){return uiLangName($('explanationLanguage').value||'es');}
 function setHint(id,text){const el=$(id);if(el)el.dataset.hint=text;}
-function showFeedback(text,open){const value=text||'';$('feedback').value=value;$('feedbackBtn').disabled=!value;const dialog=$('modal-feedback');if(!value&&dialog.open){speakQuestionOnClose=false;dialog.close();}else if(open&&value){speakQuestionOnClose=true;if(!dialog.open)dialog.showModal();speak(value,$('explanationLanguage').value);}}
-function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintType',tr('hints.type','Define el puesto, el tono y los temas de la entrevista. Cambiarlo abre otra conversación.'));setHint('hintTarget',tr('hints.target','Idioma a aprender: {{lang}}. Es el idioma del entrevistador y de tu respuesta.',{lang:learn}));setHint('hintLevel',tr('hints.level','Nivel aproximado de tus respuestas.'));setHint('hintExplain',tr('hints.explain','Idioma de explicación: {{lang}}. Es tu idioma y el del profesor en el feedback.',{lang:explain}));setHint('hintInterviewer',tr('hints.interviewer','Pregunta en {{lang}}. Si tu respuesta todavía necesita trabajo, el entrevistador pide aclarar un aspecto. Si ya vale, la valida y pasa a otra. Cambiar el idioma a aprender abre otra conversación.',{lang:learn}));setHint('hintStudent',tr('hints.student','Escribe en {{lang}} y pulsa Responder.',{lang:learn}));$('studentText').placeholder=tr('hints.studentPh','Tu respuesta en {{lang}}',{lang:learn});$('interviewer').placeholder=tr('ui.interviewerPh','El entrevistador está preparando la primera pregunta…');$('feedback').placeholder=tr('ui.feedbackPh','Tema del entrevistador\n\nTu respuesta\n\nCómo mejorar esta respuesta\n\nQué ajustar\n\nAsí podría quedar la respuesta\n\nPregunta del entrevistador');document.title=tr('ui.docTitle','Sabelotodo AI · Coach de entrevista');refreshTypeLabels();const titles={hintType:'hints.typeTitle',hintTarget:'hints.targetTitle',hintLevel:'hints.levelTitle',hintExplain:'hints.explainTitle',hintInterviewer:'hints.interviewerTitle',hintStudent:'hints.studentTitle'};for(const [id,key] of Object.entries(titles)){const el=$(id);if(el)el.dataset.hintTitle=tr(key, el.getAttribute('aria-label')||'');}}
+function showFeedback(text,open){const value=text||'';$('feedback').value=value;$('feedbackBtn').disabled=!value;const dialog=$('modal-feedback');if(!value&&dialog.open){speakQuestionOnClose=false;dialog.close();}else if(open&&value){speakQuestionOnClose=true;if(!dialog.open)dialog.showModal();speak(value,$('explanationLanguage').value,'feedback');}}
+function namedLang(code){return tr('learnNames.'+(code||'en'), uiLangName(code));}
+function paintSubtitle(){const el=$('subtitle');if(!el)return;el.textContent=tr('ui.subtitleLearn','Aprende {{learn}} con un profesor en tu idioma nativo {{native}}',{learn:namedLang($('targetLanguage').value),native:namedLang($('explanationLanguage').value)});}
+function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintType',tr('hints.type','Define el puesto, el tono y los temas de la entrevista. Cambiarlo abre otra conversación.'));setHint('hintTarget',tr('hints.target','Idioma a aprender: {{lang}}. Es el idioma del entrevistador y de tu respuesta.',{lang:learn}));setHint('hintLevel',tr('hints.level','Nivel aproximado de tus respuestas.'));setHint('hintExplain',tr('hints.explain','Idioma de explicación: {{lang}}. Es tu idioma y el del profesor en el feedback.',{lang:explain}));setHint('hintInterviewer',tr('hints.interviewer','Pregunta en {{lang}}. Si tu respuesta todavía necesita trabajo, el entrevistador pide aclarar un aspecto. Si ya vale, la valida y pasa a otra. Cambiar el idioma a aprender abre otra conversación.',{lang:learn}));setHint('hintStudent',tr('hints.student','Escribe en {{lang}} y pulsa Responder.',{lang:learn}));$('studentText').placeholder=tr('hints.studentPh','Tu respuesta en {{lang}}',{lang:learn});$('interviewer').placeholder=tr('ui.interviewerPh','El entrevistador está preparando la primera pregunta…');$('feedback').placeholder=tr('ui.feedbackPh','Tema del entrevistador\n\nTu respuesta\n\nCómo mejorar esta respuesta\n\nQué ajustar\n\nAsí podría quedar la respuesta\n\nPregunta del entrevistador');document.title=tr('ui.docTitle','Sabelotodo AI · Coach de entrevista');refreshTypeLabels();paintSubtitle();const titles={hintType:'hints.typeTitle',hintTarget:'hints.targetTitle',hintLevel:'hints.levelTitle',hintExplain:'hints.explainTitle',hintInterviewer:'hints.interviewerTitle',hintStudent:'hints.studentTitle'};for(const [id,key] of Object.entries(titles)){const el=$(id);if(el)el.dataset.hintTitle=tr(key, el.getAttribute('aria-label')||'');}}
 function learner(){return {level:$('level').value,explanationLanguage:$('explanationLanguage').value,targetLanguage:$('targetLanguage').value};}
 let topicQuestion='';
 let lessonState={communicativeIntent:'',expectedGrammar:[],previousErrors:[]};
@@ -459,13 +479,15 @@ function resetLesson(){lessonState={communicativeIntent:'',expectedGrammar:[],pr
 function rememberLesson(turn){if(Array.isArray(turn.expectedGrammar)&&turn.expectedGrammar.length)lessonState.expectedGrammar=turn.expectedGrammar.slice(0,3);if(turn.communicativeIntent)lessonState.communicativeIntent=turn.communicativeIntent;if(turn.error&&turn.error.example&&!lessonState.previousErrors.some(item=>item.example===turn.error.example))lessonState.previousErrors=lessonState.previousErrors.concat(turn.error).slice(-5);}
 function skillFor(userText,question,nextAction,scenario,cue){const type=currentType();const skillInput=buildPedagogicalContext({userText,learner:learner(),lesson:{goal:type.id,scenario:scenario||type.id,communicativeIntent:lessonState.communicativeIntent,expectedGrammar:lessonState.expectedGrammar,previousErrors:lessonState.previousErrors},conversation:{lastQuestion:question,topicQuestion:topicQuestion||question,nextAction}});skillInput.variationCue=cue||'';return skillInput;}
 async function postCoach(body){if(remoteMissing())throw new Error(tr('ui.noSession','Sin sesión activa.'));const response=await fetch(apiUrl('/api/coach'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);return result;}
-async function startInterview(){const gen=++generation;busy=true;replyBtn.disabled=true;micBtn.disabled=true;stopSpeech();speakQuestionOnClose=false;resetLesson();if(remoteMissing()){setStatus('ui.noSession','Sin sesión activa.');busy=false;replyBtn.disabled=false;micBtn.disabled=false;return;}setStatus('status.preparing','El entrevistador está preparando una pregunta en {{lang}}…');const type=currentType();const cue=type.openings[Math.floor(Math.random()*type.openings.length)];try{const result=await postCoach({action:'start',skillInput:skillFor('','','open_interview',type.id,`${cue} Phrase a new question.`)});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');if(!turn.interviewer)throw new Error(tr('status.noQuestionFromAi','El entrevistador no envió una pregunta.'));beginConversation();resetLesson();rememberLesson(turn);topicQuestion=turn.interviewer;appendTurn({role:'interviewer',text:turn.interviewer,expectedGrammar:lessonState.expectedGrammar,communicativeIntent:lessonState.communicativeIntent});showFeedback('',false);$('interviewer').value=turn.interviewer;$('studentText').value='';setStatus('status.ready','Pregunta lista. Responde en {{lang}}.');speak(turn.interviewer,$('targetLanguage').value);$('studentText').focus();}catch(e){if(gen===generation)setStatus('status.openError','No se pudo abrir la entrevista: {{message}}',{message:e.message});}finally{if(gen===generation){busy=false;replyBtn.disabled=false;micBtn.disabled=false;}}}
+async function startInterview(){const gen=++generation;busy=true;replyBtn.disabled=true;micBtn.disabled=true;stopSpeech();speakQuestionOnClose=false;resetLesson();if(remoteMissing()){setStatus('ui.noSession','Sin sesión activa.');busy=false;replyBtn.disabled=false;micBtn.disabled=false;return;}setStatus('status.preparing','El entrevistador está preparando una pregunta en {{lang}}…');const type=currentType();const cue=type.openings[Math.floor(Math.random()*type.openings.length)];try{const result=await postCoach({action:'start',skillInput:skillFor('','','open_interview',type.id,`${cue} Phrase a new question.`)});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');if(!turn.interviewer)throw new Error(tr('status.noQuestionFromAi','El entrevistador no envió una pregunta.'));beginConversation();resetLesson();rememberLesson(turn);topicQuestion=turn.interviewer;appendTurn({role:'interviewer',text:turn.interviewer,expectedGrammar:lessonState.expectedGrammar,communicativeIntent:lessonState.communicativeIntent});showFeedback('',false);$('interviewer').value=turn.interviewer;$('studentText').value='';setStatus('status.ready','Pregunta lista. Responde en {{lang}}.');speak(turn.interviewer,$('targetLanguage').value,'question');$('studentText').focus();}catch(e){if(gen===generation)setStatus('status.openError','No se pudo abrir la entrevista: {{message}}',{message:e.message});}finally{if(gen===generation){busy=false;replyBtn.disabled=false;micBtn.disabled=false;}}}
 async function sendReply(){const gen=generation;const userText=$('studentText').value.trim();const question=$('interviewer').value.trim();if(!question){setStatus('status.noQuestion','Todavía no hay pregunta del entrevistador.');return;}if(!userText){setStatus('status.write','Escribe tu respuesta en {{lang}}.');return;}if(busy)return;stopSpeech();busy=true;replyBtn.disabled=true;micBtn.disabled=true;setStatus('status.thinking','El entrevistador y el profesor están respondiendo…');try{const topic=topicQuestion||question;const result=await postCoach({action:'reply',skillInput:skillFor(userText,question,'interview',currentType().id,'Use question as a generic contract in the target language: grammar, intention, context, and the tense this question asks for. Do not apply another language\'s tense table. If one point still fails, ask about it. If tense, intention, and context are clear, set satisfied true, validate, and ask a new question.')});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');rememberLesson(turn);const next=turn.interviewer.trim();const understood=Boolean(turn.satisfied&&next&&next!==topic);const probe=!understood&&next&&next!==question?next:'';appendTurn({role:'student',text:userText,answeredQuestion:question,topic});appendTurn({role:'professor',feedback:formatFeedback(turn,topic,userText,probe),correction:turn.correction,expectation:turn.expectation,suggestion:turn.suggestion,satisfied:understood});if(next)appendTurn({role:'interviewer',text:next,clarification:!understood});showFeedback(formatFeedback(turn,topic,userText,probe),true);if(understood){topicQuestion=next;lessonState.expectedGrammar=[];lessonState.communicativeIntent='';$('interviewer').value=next;$('studentText').value='';}else if(probe)$('interviewer').value=probe;$('studentText').focus();setStatus(understood?'status.newQuestion':'status.refine',understood?'La respuesta vale. Nueva pregunta del entrevistador.':'El entrevistador pide aclarar un aspecto de tu respuesta.');}catch(e){if(gen===generation)setStatus('status.error','Error: {{message}}',{message:e.message});}finally{if(gen===generation){busy=false;replyBtn.disabled=false;micBtn.disabled=false;}}}
 replyBtn.addEventListener('click',()=>{sendReply();});
 async function finishRecording(){setMicIdle();const blob=new Blob(recordChunks,{type:(recorder&&recorder.mimeType)||'audio/webm'});recorder=null;if(!blob.size){setStatus('voice.empty','No se escuchó audio.');return;}busy=true;replyBtn.disabled=true;micBtn.disabled=true;setStatus('voice.transcribing','Pasando tu voz a texto…');try{const lang=$('targetLanguage').value||'en';const response=await fetch(apiUrl(`/api/transcribe?lang=${encodeURIComponent(lang)}`),{method:'POST',headers:{'Content-Type':blob.type||'audio/webm'},body:blob});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);$('studentText').value=result.text||'';busy=false;replyBtn.disabled=false;micBtn.disabled=false;await sendReply();}catch(e){setStatus('voice.sttError','No se pudo transcribir: {{message}}',{message:e.message});busy=false;replyBtn.disabled=false;micBtn.disabled=false;}}
-micBtn.addEventListener('click',async()=>{if(recorder&&recorder.state==='recording'){recorder.stop();return;}if(busy)return;if(!$('interviewer').value.trim()){setStatus('status.noQuestion','Todavía no hay pregunta del entrevistador.');return;}stopSpeech();let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true});}catch{setStatus('voice.micDenied','El navegador no permitió el micrófono.');return;}const preferred=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(type=>window.MediaRecorder&&MediaRecorder.isTypeSupported(type));recorder=preferred?new MediaRecorder(stream,{mimeType:preferred}):new MediaRecorder(stream);recordChunks=[];recorder.ondataavailable=event=>{if(event.data&&event.data.size)recordChunks.push(event.data);};recorder.onstop=()=>{stream.getTracks().forEach(track=>track.stop());finishRecording();};recorder.start();micBtn.classList.add('is-recording');micBtn.setAttribute('aria-pressed','true');micBtn.textContent=tr('ui.micStop','Detener');setStatus('voice.recording','Grabando tu respuesta… Pulsa Detener al terminar.');});
-$('modal-feedback').addEventListener('close',()=>{if(!speakQuestionOnClose)return;speakQuestionOnClose=false;const question=$('interviewer').value.trim();if(question)speak(question,$('targetLanguage').value);});
-$('feedbackBtn').addEventListener('click',()=>{const text=$('feedback').value.trim();if(!text)return;speakQuestionOnClose=true;speak(text,$('explanationLanguage').value);});
+micBtn.addEventListener('click',async()=>{if(recorder&&recorder.state==='recording'){recorder.stop();return;}if(busy)return;if(!$('interviewer').value.trim()){setStatus('status.noQuestion','Todavía no hay pregunta del entrevistador.');return;}stopSpeech();let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true});}catch{setStatus('voice.micDenied','El navegador no permitió el micrófono.');return;}const preferred=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(type=>window.MediaRecorder&&MediaRecorder.isTypeSupported(type));recorder=preferred?new MediaRecorder(stream,{mimeType:preferred}):new MediaRecorder(stream);recordChunks=[];recorder.ondataavailable=event=>{if(event.data&&event.data.size)recordChunks.push(event.data);};recorder.onstop=()=>{stream.getTracks().forEach(track=>track.stop());finishRecording();};recorder.start();micBtn.classList.add('is-recording');micBtn.setAttribute('aria-pressed','true');paintVoiceLabels();setStatus('voice.recording','Grabando tu respuesta… Pulsa Detener al terminar.');});
+$('repeatQuestionBtn').addEventListener('click',()=>{const question=$('interviewer').value.trim();if(!question){setStatus('status.noQuestion','Todavía no hay pregunta del entrevistador.');return;}speak(question,$('targetLanguage').value,'question');});
+$('repeatFeedbackBtn').addEventListener('click',()=>{const text=$('feedback').value.trim();if(!text)return;speak(text,$('explanationLanguage').value,'feedback');});
+$('modal-feedback').addEventListener('close',()=>{if(!speakQuestionOnClose)return;speakQuestionOnClose=false;const question=$('interviewer').value.trim();if(question)speak(question,$('targetLanguage').value,'question');});
+$('feedbackBtn').addEventListener('click',()=>{const text=$('feedback').value.trim();if(!text)return;speakQuestionOnClose=true;speak(text,$('explanationLanguage').value,'feedback');});
 function restartInterview(){stopSpeech();speakQuestionOnClose=false;topicQuestion='';resetLesson();updateLanguageHints();$('interviewer').value='';showFeedback('',false);$('studentText').value='';startInterview();}
 for(const id of CHOICE_IDS)$(id).addEventListener('change',updateLanguageHints);
 updateLanguageHints();
@@ -476,7 +498,7 @@ setStatus('start.pick','Elige el tipo de entrevista y el idioma para iniciar la 
 if(useLauncher){const pending=sessionStorage.getItem(LAUNCH_KEY);if(pending){launchStartedAt=Date.now();launchSummary();$('modal-launch').showModal();pollLaunch(pending);}else openStartModal();}
 else{setInterval(loadServer,30000);loadServer();openStartModal();}
 function refreshOpenHint(){const dialog=$('modal-hint');const btn=window.__coachOpenHint&&$(window.__coachOpenHint);if(!dialog||!dialog.open||!btn)return;$('hintTitle').textContent=btn.dataset.hintTitle||btn.getAttribute('aria-label')||'';$('hintBody').textContent=btn.dataset.hint||'';}
-function refreshChrome(){updateLanguageHints();renderSession();paintStatus();refreshOpenHint();renderCard();if(useLauncher){launchSummary();if(launchTimer)paintLaunching();}}
+function refreshChrome(){updateLanguageHints();renderSession();paintStatus();refreshOpenHint();renderCard();paintVoiceLabels();if(useLauncher){launchSummary();if(launchTimer)paintLaunching();}}
 window.onCoachLocaleChange=refreshChrome;
 function syncNativeLanguage(){const locale=window.coachI18n&&window.coachI18n.getLocale&&window.coachI18n.getLocale();if(locale&&!document.body.classList.contains('class-started'))$('explanationLanguage').value=locale;refreshChrome();}
 window.onCoachI18nReady=syncNativeLanguage;

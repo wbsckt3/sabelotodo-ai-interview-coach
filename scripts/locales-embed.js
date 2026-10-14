@@ -3,7 +3,8 @@ window.COACH_I18N_RESOURCES = {
     ui: {
       docTitle: 'Sabelotodo AI · Coach de entrevista',
       title: 'Sabelotodo AI — Coach de entrevista',
-      subtitle: 'Motor de inferencia gramatical',
+      subtitle: 'Aprende {{learn}} con un profesor en tu idioma nativo {{native}}',
+      subtitleLearn: 'Aprende {{learn}} con un profesor en tu idioma nativo {{native}}',
       session: 'Sesión {{time}}',
       sessionActive: 'Sesión activa',
       sessionZero: 'Sesión 00:00',
@@ -15,6 +16,8 @@ window.COACH_I18N_RESOURCES = {
       reply: 'Responder',
       mic: 'Hablar',
       micStop: 'Detener',
+      repeatQuestion: 'Repetir pregunta',
+      repeatFeedback: 'Repetir feedback',
       feedback: 'Feedback',
       learn: 'Aprende más de este motor LLM',
       type: 'Tipo de entrevista',
@@ -31,10 +34,11 @@ window.COACH_I18N_RESOURCES = {
     },
     start: {
       title: 'Prepara tu clase',
-      lead: 'Selecciona el tipo de entrevista, el lenguaje que quieres practicar, tu nivel y el idioma de las explicaciones.',
+      lead: 'Selecciona tu idioma nativo. La página y el profesor quedan en ese idioma. Después elige el tipo de entrevista, el idioma que vas a aprender y tu nivel.',
       begin: 'Comenzar entrevista',
-      native: 'Idioma nativo',
-      nativeHint: 'Toda la página y las explicaciones se muestran en tu idioma.',
+      native: 'Selecciona tu idioma nativo',
+      nativeHint: 'La interfaz y el profesor usan este idioma. No vuelve a aparecer en la entrevista.',
+      network: 'En esta misma red hay cupo para 3 clases por hora. Cada clase enciende su propio servidor y su reloj de sesión corre solo para esa clase. Si ya abriste 3 y quieres otra antes de que pase la hora, cambia de red: por ejemplo, pasa del wifi a los datos del celular.',
       launchTitle: 'Iniciar la clase',
       summary: 'Entrevista: {{type}} · Idioma: {{lang}}',
       minutes: 'Duración de la clase (minutos)',
@@ -46,7 +50,7 @@ window.COACH_I18N_RESOURCES = {
       failed: 'No se pudo iniciar la clase: {{message}}',
       expired: 'la sesión ya no existe.',
       serverDown: 'el servidor no arrancó.',
-      tooMany: 'ya iniciaste varias clases en la última hora. Intenta más tarde.',
+      tooMany: 'en esta red ya se abrieron 3 clases en la última hora. Espera a que pase la hora o cambia de red para abrir otra.',
       full: 'todas las aulas están ocupadas. Intenta en unos minutos.',
       pick: 'Elige el tipo de entrevista y el idioma para iniciar la clase.',
       ended: 'La clase terminó. Inicia otra cuando quieras.'
@@ -116,6 +120,7 @@ window.COACH_I18N_RESOURCES = {
     },
     levels: { beginner: 'Principiante', intermediate: 'Intermedio', advanced: 'Avanzado' },
     langs: { es: 'español', en: 'inglés', fr: 'francés' },
+    learnNames: { es: 'español', en: 'inglés', fr: 'francés' },
     langOptions: { es: 'Español', en: 'Inglés', fr: 'Francés' },
     types: {
       software_engineer: 'Ingeniero/a de software (técnica)',
@@ -134,7 +139,8 @@ window.COACH_I18N_RESOURCES = {
     ui: {
       docTitle: 'Sabelotodo AI · Interview Coach',
       title: 'Sabelotodo AI — Interview Coach',
-      subtitle: 'Grammatical inference engine',
+      subtitle: 'Learn {{learn}} with a teacher in your native language, {{native}}',
+      subtitleLearn: 'Learn {{learn}} with a teacher in your native language, {{native}}',
       session: 'Session {{time}}',
       sessionActive: 'Session active',
       sessionZero: 'Session 00:00',
@@ -146,6 +152,8 @@ window.COACH_I18N_RESOURCES = {
       reply: 'Reply',
       mic: 'Speak',
       micStop: 'Stop',
+      repeatQuestion: 'Repeat question',
+      repeatFeedback: 'Repeat feedback',
       feedback: 'Feedback',
       learn: 'Learn more about this LLM engine',
       type: 'Interview type',
@@ -162,10 +170,11 @@ window.COACH_I18N_RESOURCES = {
     },
     start: {
       title: 'Set up your class',
-      lead: 'Choose the interview type, the language you want to practice, your level and the language of the explanations.',
+      lead: 'Choose your native language. The page and the teacher stay in that language. Then pick the interview type, the language you will learn and your level.',
       begin: 'Start interview',
-      native: 'Native language',
-      nativeHint: 'The whole page and the explanations are shown in your language.',
+      native: 'Choose your native language',
+      nativeHint: 'The interface and the teacher use this language. It does not appear again during the interview.',
+      network: 'On this same network there is room for 3 classes per hour. Each class starts its own server, and its session clock runs only for that class. If you already opened 3 and want another before the hour is up, switch networks: for example, move from Wi-Fi to your phone\'s mobile data.',
       launchTitle: 'Start the class',
       summary: 'Interview: {{type}} · Language: {{lang}}',
       minutes: 'Class length (minutes)',
@@ -177,7 +186,7 @@ window.COACH_I18N_RESOURCES = {
       failed: 'The class could not start: {{message}}',
       expired: 'the session no longer exists.',
       serverDown: 'the server did not start.',
-      tooMany: 'you already started several classes in the last hour. Try again later.',
+      tooMany: 'this network already opened 3 classes in the last hour. Wait for the hour to pass, or switch networks to open another one.',
       full: 'all classrooms are busy. Try again in a few minutes.',
       pick: 'Choose the interview type and the language to start the class.',
       ended: 'The class is over. Start another one whenever you like.'
@@ -247,6 +256,7 @@ window.COACH_I18N_RESOURCES = {
     },
     levels: { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced' },
     langs: { es: 'Spanish', en: 'English', fr: 'French' },
+    learnNames: { es: 'Spanish', en: 'English', fr: 'French' },
     langOptions: { es: 'Spanish', en: 'English', fr: 'French' },
     types: {
       software_engineer: 'Software engineer (technical)',
@@ -261,7 +271,7 @@ window.COACH_I18N_RESOURCES = {
       sales_executive: 'Sales executive'
     },
     html: {
-      guia: `<p>There are four controls above the interview: interview type, language to learn (Spanish, English, or French), level, and explanation language (Spanish, English, or French).</p>
+      guia: `<p>During setup you choose your native language with ES, EN, or FR. The page and the teacher stay in that language, and the switch is not shown during the interview. Then you choose the interview type, the language to learn (Spanish, English, or French), and the level.</p>
 <p>The interview type sets the role (software engineering, call center, restaurant server, retail, hotel reception, nursing, administrative assistant, delivery, teaching, or sales), the tone, and the topics of the questions. Changing it opens another conversation with a new question for that role. The grammar rules do not change: each question still asks for its own tense.</p>
 <p>On the published site, the page does not call Groq from your computer. Each question goes to the Node server that the GitHub workflow starts, and that server is the one that calls Groq. The Session counter is the time left on that workflow. At 00:00 the session of that conversation ends.</p>
 <p>The language to learn is the interviewer's language and the language of your answer. The explanation language is yours and the teacher's: feedback comes out there, and the suggestion stays in the language you are learning. Each turn sends both languages to the AI.</p>
@@ -402,7 +412,8 @@ window.COACH_I18N_RESOURCES = {
     ui: {
       docTitle: 'Sabelotodo AI · Coach d\'entretien',
       title: 'Sabelotodo AI — Coach d\'entretien',
-      subtitle: 'Moteur d\'inférence grammaticale',
+      subtitle: 'Apprends {{learn}} avec un professeur dans ta langue maternelle, {{native}}',
+      subtitleLearn: 'Apprends {{learn}} avec un professeur dans ta langue maternelle, {{native}}',
       session: 'Session {{time}}',
       sessionActive: 'Session active',
       sessionZero: 'Session 00:00',
@@ -414,6 +425,8 @@ window.COACH_I18N_RESOURCES = {
       reply: 'Répondre',
       mic: 'Parler',
       micStop: 'Arrêter',
+      repeatQuestion: 'Répéter la question',
+      repeatFeedback: 'Répéter le feedback',
       feedback: 'Feedback',
       learn: 'En savoir plus sur ce moteur LLM',
       type: 'Type d\'entretien',
@@ -430,10 +443,11 @@ window.COACH_I18N_RESOURCES = {
     },
     start: {
       title: 'Préparez votre cours',
-      lead: 'Choisissez le type d\'entretien, la langue que vous voulez pratiquer, votre niveau et la langue des explications.',
+      lead: 'Choisissez votre langue maternelle. La page et le professeur restent dans cette langue. Ensuite, choisissez le type d\'entretien, la langue à apprendre et votre niveau.',
       begin: 'Commencer l\'entretien',
-      native: 'Langue maternelle',
-      nativeHint: 'Toute la page et les explications s\'affichent dans votre langue.',
+      native: 'Choisissez votre langue maternelle',
+      nativeHint: 'L\'interface et le professeur utilisent cette langue. Le sélecteur ne réapparaît pas pendant l\'entretien.',
+      network: 'Sur ce même réseau, il y a de la place pour 3 cours par heure. Chaque cours allume son propre serveur et son horloge de session ne compte que pour ce cours. Si vous en avez déjà ouvert 3 et que vous en voulez un autre avant la fin de l\'heure, changez de réseau : par exemple, passez du wifi aux données mobiles.',
       launchTitle: 'Commencer le cours',
       summary: 'Entretien : {{type}} · Langue : {{lang}}',
       minutes: 'Durée du cours (minutes)',
@@ -445,7 +459,7 @@ window.COACH_I18N_RESOURCES = {
       failed: 'Le cours n\'a pas pu commencer : {{message}}',
       expired: 'la session n\'existe plus.',
       serverDown: 'le serveur n\'a pas démarré.',
-      tooMany: 'vous avez déjà lancé plusieurs cours dans la dernière heure. Réessayez plus tard.',
+      tooMany: 'ce réseau a déjà ouvert 3 cours dans la dernière heure. Attendez la fin de l\'heure, ou changez de réseau pour en ouvrir un autre.',
       full: 'toutes les salles sont occupées. Réessayez dans quelques minutes.',
       pick: 'Choisissez le type d\'entretien et la langue pour commencer le cours.',
       ended: 'Le cours est terminé. Lancez-en un autre quand vous voulez.'
@@ -515,6 +529,7 @@ window.COACH_I18N_RESOURCES = {
     },
     levels: { beginner: 'Débutant', intermediate: 'Intermédiaire', advanced: 'Avancé' },
     langs: { es: 'espagnol', en: 'anglais', fr: 'français' },
+    learnNames: { es: 'l\'espagnol', en: 'l\'anglais', fr: 'le français' },
     langOptions: { es: 'Espagnol', en: 'Anglais', fr: 'Français' },
     types: {
       software_engineer: 'Ingénieur logiciel (technique)',
@@ -529,7 +544,7 @@ window.COACH_I18N_RESOURCES = {
       sales_executive: 'Commercial'
     },
     html: {
-      guia: `<p>Il y a quatre commandes au-dessus de l'entretien : type d'entretien, langue à apprendre (espagnol, anglais ou français), niveau et langue d'explication (espagnol, anglais ou français).</p>
+      guia: `<p>À la préparation, vous choisissez votre langue maternelle avec ES, EN ou FR. La page et le professeur restent dans cette langue, et le sélecteur n'apparaît pas pendant l'entretien. Ensuite vous choisissez le type d'entretien, la langue à apprendre (espagnol, anglais ou français) et le niveau.</p>
 <p>Le type d'entretien fixe le poste (ingénierie logicielle, centre d'appels, serveur de restaurant, vente au détail, réception d'hôtel, soins infirmiers, assistant administratif, livraison, enseignement ou vente), le ton et les thèmes des questions. Le changer ouvre une autre conversation avec une nouvelle question pour ce poste. Les règles grammaticales ne changent pas : chaque question continue de demander son temps verbal.</p>
 <p>Sur le site publié, la page n'appelle pas Groq depuis votre ordinateur. Chaque question part vers le serveur Node que le workflow GitHub allume, et c'est ce serveur qui interroge Groq. Le compteur Session est le temps qui reste de ce workflow. À 00:00 la session de cette conversation se termine.</p>
 <p>La langue à apprendre est celle de l'intervieweur et de votre réponse. La langue d'explication est la vôtre et celle du professeur : le feedback en sort, et la suggestion reste dans la langue que vous apprenez. Chaque tour envoie ces deux langues à l'IA.</p>
