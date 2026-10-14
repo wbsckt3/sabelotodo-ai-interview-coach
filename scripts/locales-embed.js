@@ -73,7 +73,7 @@ window.COACH_I18N_RESOURCES = {
       explainTitle: 'Idioma de explicación',
       interviewerTitle: 'Entrevistador',
       studentTitle: 'Tu respuesta',
-      change: 'Vuelve a la preparación de la clase. Ahí puedes cambiar tu idioma nativo, el puesto, el idioma que aprendes, el nivel y las voces. Si cambias el puesto o el idioma a aprender, la conversación empieza de nuevo. El reloj de la sesión no se reinicia.',
+      change: 'Vuelve a la preparación de la clase. Ahí puedes cambiar tu idioma nativo, el puesto, el idioma que aprendes y el nivel. La voz queda fija en Google, según esos idiomas. Si cambias el puesto o el idioma a aprender, la conversación empieza de nuevo. El reloj de la sesión no se reinicia.',
       changeTitle: 'Cambiar'
     },
     status: {
@@ -219,7 +219,7 @@ window.COACH_I18N_RESOURCES = {
       explainTitle: 'Explanation language',
       interviewerTitle: 'Interviewer',
       studentTitle: 'Your answer',
-      change: 'Opens class setup again. There you can change your native language, the role, the language you are learning, the level, and the voices. If you change the role or the language to learn, the conversation starts over. The session clock does not restart.',
+      change: 'Opens class setup again. There you can change your native language, the role, the language you are learning, and the level. The voice stays fixed on Google, following those languages. If you change the role or the language to learn, the conversation starts over. The session clock does not restart.',
       changeTitle: 'Change'
     },
     status: {
@@ -498,7 +498,7 @@ window.COACH_I18N_RESOURCES = {
       explainTitle: 'Langue d\'explication',
       interviewerTitle: 'Intervieweur',
       studentTitle: 'Votre réponse',
-      change: 'Rouvre la préparation du cours. Là vous pouvez changer votre langue maternelle, le poste, la langue à apprendre, le niveau et les voix. Si vous changez le poste ou la langue à apprendre, la conversation recommence. L\'horloge de la session ne redémarre pas.',
+      change: 'Rouvre la préparation du cours. Là vous pouvez changer votre langue maternelle, le poste, la langue à apprendre et le niveau. La voix reste fixe sur Google, selon ces langues. Si vous changez le poste ou la langue à apprendre, la conversation recommence. L\'horloge de la session ne redémarre pas.',
       changeTitle: 'Modifier'
     },
     status: {
