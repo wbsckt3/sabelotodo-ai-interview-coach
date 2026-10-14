@@ -60,26 +60,6 @@ button:disabled{opacity:.55}
 #modal-feedback{width:min(980px,calc(100vw - 12px));max-width:none;height:calc(100vh - 12px);max-height:calc(100vh - 12px)}
 #modal-feedback .modal-card{height:100%;max-height:none;display:flex;flex-direction:column;overflow:hidden}
 #modal-feedback .feedback-view{flex:1;min-height:0;height:auto;resize:none;font-size:1.05rem;line-height:1.5}
-.jc-ai-usage{margin:0 0 6px;padding:6px 8px;border:1px solid #bbf7d0;border-radius:10px;background:#dcfce7;flex:0 0 auto}
-.jc-ai-usage--open{box-shadow:0 2px 8px rgba(15,23,42,.06)}
-.jc-ai-usage__toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;padding:2px 0;border:0;background:none;color:#14532d;cursor:pointer;font:inherit;text-align:left}
-.jc-ai-usage__toggle-label{font-size:.82rem;font-weight:700}
-.jc-ai-usage__toggle-meta{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;font-weight:700;color:#166534}
-.jc-ai-usage__body{padding-top:8px}
-.jc-ai-usage__summary{margin:0 0 6px;font-size:.78rem;font-weight:600;color:#166534;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
-.jc-ai-usage__summary.is-warn{color:#c2410c}
-.jc-ai-usage__summary.is-danger{color:#b91c1c}
-.jc-ai-usage__sep{color:#86efac}
-.jc-ai-usage__cost{color:#14532d;font-weight:800}
-.jc-ai-usage__warn{color:#b91c1c;font-weight:700}
-.jc-ai-usage__bar{height:8px;border-radius:999px;background:#ecfdf5;overflow:hidden;margin-bottom:8px}
-.jc-ai-usage__fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#4ade80,#22c55e);width:0}
-.jc-ai-usage__fill.is-warn{background:linear-gradient(90deg,#fb923c,#f97316)}
-.jc-ai-usage__fill.is-danger{background:linear-gradient(90deg,#f87171,#dc2626)}
-.jc-ai-usage__tokens{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:.72rem;color:#3f6212}
-.jc-ai-usage__token-main{font-weight:700;color:#14532d}
-.jc-ai-usage__token-raw{color:#4d7c0f;font-size:.68rem}
-.jc-ai-usage__last{margin:8px 0 0;font-size:.72rem;color:#3f6212}
 dialog.theory-modal{border:0;padding:0;border-radius:16px;max-width:760px;width:calc(100% - 28px);color:#172033;box-shadow:0 24px 60px rgba(16,24,39,.28)}
 dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 .modal-card{max-height:min(82vh,860px);overflow:auto;padding:22px 22px 18px}
@@ -137,21 +117,6 @@ body.class-started .title-tools{display:none}
 </div>
 </header>
 <section class="stage">
-<div class="jc-ai-usage" id="aiUsage" data-i18n-aria="ui.usageAria" aria-label="Consumo de IA del día">
-<button type="button" class="jc-ai-usage__toggle" id="aiUsageToggle" aria-expanded="false">
-<span class="jc-ai-usage__toggle-label" data-i18n="ui.usage">Consumo de IA</span>
-<span class="jc-ai-usage__toggle-meta"><span id="aiUsageCount">0 / 0</span> <span id="aiUsageCaret" aria-hidden="true">▾</span></span>
-</button>
-<div class="jc-ai-usage__body" id="aiUsageBody" hidden>
-<p class="jc-ai-usage__summary" id="aiUsageSummary"></p>
-<div class="jc-ai-usage__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="aiUsageBar"><div class="jc-ai-usage__fill" id="aiUsageFill"></div></div>
-<div class="jc-ai-usage__tokens">
-<span><span class="jc-ai-usage__token-main" id="aiUsageIn">0 tok</span> input <span class="jc-ai-usage__token-raw" id="aiUsageInCost">$0.00</span></span>
-<span><span class="jc-ai-usage__token-main" id="aiUsageOut">0 tok</span> output <span class="jc-ai-usage__token-raw" id="aiUsageOutCost">$0.00</span></span>
-</div>
-<p class="jc-ai-usage__last" id="aiUsageLast"></p>
-</div>
-</div>
 <div class="class-card" id="classCard">
 <dl class="class-card__data">
 <div><dt data-i18n="ui.type">Tipo de entrevista</dt><dd id="cardType"></dd></div>
@@ -421,7 +386,6 @@ function uiLangName(code){return tr('langs.'+code,{es:'español',en:'inglés',fr
 function refreshTypeLabels(){for(const option of $('interviewType').options){const type=INTERVIEW_TYPES[option.value];if(type)option.textContent=tr('types.'+option.value, type.label);}}
 let apiBase='', sessionUntil=0, sessionLive=false;
 let statusState={key:'status.opening', fallback:'Abriendo la entrevista…', extra:null};
-let lastUsage=null;
 function setStatus(key, fallback, extra){statusState={key, fallback, extra:extra||null};paintStatus();}
 function paintStatus(){const vars={...(statusState.extra||{})};if(statusState.key==='status.preparing'||statusState.key==='status.ready'||statusState.key==='status.write')vars.lang=targetName();$('status').textContent=tr(statusState.key, statusState.fallback, vars);}
 const SERVER_SOURCES=['https://api.github.com/repos/wbsckt3/sabelotodo-ai-interview-coach/contents/server.json?ref=main','https://raw.githubusercontent.com/wbsckt3/sabelotodo-ai-interview-coach/main/server.json',new URL('server.json',document.baseURI).href];
@@ -447,7 +411,7 @@ function openStartModal(){const pending=useLauncher&&!sessionLive&&sessionStorag
 function stopLaunchTimer(){if(launchTimer){clearInterval(launchTimer);launchTimer=null;}}
 function paintLaunching(){launchStatus(tr('start.starting','Encendiendo el servidor del coach… {{time}}. Suele tardar 1 o 2 minutos.',{time:formatRemain(Date.now()-launchStartedAt)}));}
 function launchFailed(message){stopLaunchTimer();launchPollId++;sessionStorage.removeItem(LAUNCH_KEY);$('launchBtn').disabled=false;$('launchBack').disabled=false;launchStatus(tr('start.failed','No se pudo iniciar la clase: {{message}}',{message}),true);if(!$('modal-launch').open)$('modal-launch').showModal();}
-async function pollLaunch(id){const poll=++launchPollId;$('launchBtn').disabled=true;$('launchBack').disabled=true;stopLaunchTimer();paintLaunching();launchTimer=setInterval(paintLaunching,1000);while(poll===launchPollId){let data=null;try{const response=await fetch(`${LAUNCHER}/sessions/${encodeURIComponent(id)}`,{cache:'no-store'});if(response.status===404){launchFailed(tr('start.expired','la sesión ya no existe.'));return;}data=await response.json();}catch{/* reintenta en el siguiente ciclo */}if(poll!==launchPollId)return;if(data&&data.status==='ready'&&applyServer(data)){stopLaunchTimer();$('launchBtn').disabled=false;$('launchBack').disabled=false;launchStatus('');if($('modal-launch').open)$('modal-launch').close();restartInterview();refreshUsage();return;}if(data&&(data.status==='failed'||data.status==='ended')){launchFailed(tr('start.serverDown','el servidor no arrancó.'));return;}await new Promise(resolve=>setTimeout(resolve,5000));}}
+async function pollLaunch(id){const poll=++launchPollId;$('launchBtn').disabled=true;$('launchBack').disabled=true;stopLaunchTimer();paintLaunching();launchTimer=setInterval(paintLaunching,1000);while(poll===launchPollId){let data=null;try{const response=await fetch(`${LAUNCHER}/sessions/${encodeURIComponent(id)}`,{cache:'no-store'});if(response.status===404){launchFailed(tr('start.expired','la sesión ya no existe.'));return;}data=await response.json();}catch{/* reintenta en el siguiente ciclo */}if(poll!==launchPollId)return;if(data&&data.status==='ready'&&applyServer(data)){stopLaunchTimer();$('launchBtn').disabled=false;$('launchBack').disabled=false;launchStatus('');if($('modal-launch').open)$('modal-launch').close();restartInterview();return;}if(data&&(data.status==='failed'||data.status==='ended')){launchFailed(tr('start.serverDown','el servidor no arrancó.'));return;}await new Promise(resolve=>setTimeout(resolve,5000));}}
 async function launchClass(){const minutes=Math.min(180,Math.max(5,Number.parseInt($('startMinutes').value,10)||60));$('startMinutes').value=String(minutes);$('launchBtn').disabled=true;$('launchBack').disabled=true;launchStatus(tr('start.requesting','Pidiendo un servidor para tu clase…'));try{const response=await fetch(`${LAUNCHER}/sessions`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({minutes,type:$('interviewType').value,lang:$('targetLanguage').value})});const data=await response.json().catch(()=>({}));if(!response.ok){const known={429:'start.tooMany',503:'start.full'}[response.status];launchFailed(known?tr(known,data.error||''):(data.error||`HTTP ${response.status}`));return;}sessionStorage.setItem(LAUNCH_KEY,data.id);launchStartedAt=Date.now();pollLaunch(data.id);}catch(e){launchFailed(e.message);}}
 function sessionEnded(){sessionStorage.removeItem(LAUNCH_KEY);setStatus('start.ended','La clase terminó. Inicia otra cuando quieras.');openStartModal();}
 $('modal-start').addEventListener('close',()=>{if(!choiceSnapshot)return;const snapshot=choiceSnapshot;choiceSnapshot=null;if(choiceConfirmed){if(useLauncher&&!sessionLive){launchStatus('');launchSummary();$('modal-launch').showModal();return;}if(snapshot.restart)restartInterview();return;}if(CHOICE_IDS.every(id=>snapshot.values[id]===$(id).value))return;for(const [id,value] of Object.entries(snapshot.values))$(id).value=value;updateLanguageHints();});
@@ -458,7 +422,6 @@ $('changeClass').addEventListener('click',openStartModal);
 document.querySelectorAll('#modal-start [data-set-locale]').forEach(btn=>btn.addEventListener('click',()=>{$('explanationLanguage').value=btn.dataset.setLocale;updateLanguageHints();}));
 $('sessionClock').addEventListener('click',()=>{if(useLauncher&&!sessionLive)openStartModal();});
 function apiUrl(path){return `${apiBase}${path}`;}
-const INPUT_USD=0.05, OUTPUT_USD=0.08;
 const replyBtn=$('replyBtn');
 let busy=false, generation=0;
 function parseCoachTurn(raw){const text=String(raw||'').trim();const candidates=[];const fenced=text.match(/```(?:json)?\s*([\s\S]*?)```/i);if(fenced)candidates.push(fenced[1].trim());const brace=text.match(/\{[\s\S]*\}/);if(brace)candidates.push(brace[0]);candidates.push(text);function field(data,name){const direct=data[name];if(typeof direct==='string'&&direct.trim())return direct.trim();for(const key of Object.keys(data)){if(key===name||key.startsWith(name+'_')){const value=data[key];if(typeof value==='string'&&value.trim())return value.trim();}}return '';}
@@ -484,15 +447,9 @@ let lessonState={communicativeIntent:'',expectedGrammar:[],previousErrors:[]};
 function resetLesson(){lessonState={communicativeIntent:'',expectedGrammar:[],previousErrors:[]};}
 function rememberLesson(turn){if(Array.isArray(turn.expectedGrammar)&&turn.expectedGrammar.length)lessonState.expectedGrammar=turn.expectedGrammar.slice(0,3);if(turn.communicativeIntent)lessonState.communicativeIntent=turn.communicativeIntent;if(turn.error&&turn.error.example&&!lessonState.previousErrors.some(item=>item.example===turn.error.example))lessonState.previousErrors=lessonState.previousErrors.concat(turn.error).slice(-5);}
 function skillFor(userText,question,nextAction,scenario,cue){const type=currentType();const skillInput=buildPedagogicalContext({userText,learner:learner(),lesson:{goal:type.id,scenario:scenario||type.id,communicativeIntent:lessonState.communicativeIntent,expectedGrammar:lessonState.expectedGrammar,previousErrors:lessonState.previousErrors},conversation:{lastQuestion:question,topicQuestion:topicQuestion||question,nextAction}});skillInput.variationCue=cue||'';return skillInput;}
-async function postCoach(body){if(remoteMissing())throw new Error(tr('ui.noSession','Sin sesión activa.'));const response=await fetch(apiUrl('/api/coach'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);if(result.aiUsage)renderUsage(result.aiUsage);else refreshUsage();return result;}
+async function postCoach(body){if(remoteMissing())throw new Error(tr('ui.noSession','Sin sesión activa.'));const response=await fetch(apiUrl('/api/coach'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);return result;}
 async function startInterview(){const gen=++generation;busy=true;replyBtn.disabled=true;resetLesson();if(remoteMissing()){setStatus('ui.noSession','Sin sesión activa.');busy=false;replyBtn.disabled=false;return;}setStatus('status.preparing','El entrevistador está preparando una pregunta en {{lang}}…');const type=currentType();const cue=type.openings[Math.floor(Math.random()*type.openings.length)];try{const result=await postCoach({action:'start',skillInput:skillFor('','','open_interview',type.id,`${cue} Phrase a new question.`)});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');if(!turn.interviewer)throw new Error(tr('status.noQuestionFromAi','El entrevistador no envió una pregunta.'));beginConversation();resetLesson();rememberLesson(turn);topicQuestion=turn.interviewer;appendTurn({role:'interviewer',text:turn.interviewer,expectedGrammar:lessonState.expectedGrammar,communicativeIntent:lessonState.communicativeIntent});showFeedback('',false);$('interviewer').value=turn.interviewer;$('studentText').value='';setStatus('status.ready','Pregunta lista. Responde en {{lang}}.');$('studentText').focus();}catch(e){if(gen===generation)setStatus('status.openError','No se pudo abrir la entrevista: {{message}}',{message:e.message});}finally{if(gen===generation){busy=false;replyBtn.disabled=false;}}}
 replyBtn.addEventListener('click',async()=>{const gen=generation;const userText=$('studentText').value.trim();const question=$('interviewer').value.trim();if(!question){setStatus('status.noQuestion','Todavía no hay pregunta del entrevistador.');return;}if(!userText){setStatus('status.write','Escribe tu respuesta en {{lang}}.');return;}if(busy)return;busy=true;replyBtn.disabled=true;setStatus('status.thinking','El entrevistador y el profesor están respondiendo…');try{const topic=topicQuestion||question;const result=await postCoach({action:'reply',skillInput:skillFor(userText,question,'interview',currentType().id,'Use question as a generic contract in the target language: grammar, intention, context, and the tense this question asks for. Do not apply another language\'s tense table. If one point still fails, ask about it. If tense, intention, and context are clear, set satisfied true, validate, and ask a new question.')});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');rememberLesson(turn);const next=turn.interviewer.trim();const understood=Boolean(turn.satisfied&&next&&next!==topic);const probe=!understood&&next&&next!==question?next:'';appendTurn({role:'student',text:userText,answeredQuestion:question,topic});appendTurn({role:'professor',feedback:formatFeedback(turn,topic,userText,probe),correction:turn.correction,expectation:turn.expectation,suggestion:turn.suggestion,satisfied:understood});if(next)appendTurn({role:'interviewer',text:next,clarification:!understood});showFeedback(formatFeedback(turn,topic,userText,probe),true);if(understood){topicQuestion=next;lessonState.expectedGrammar=[];lessonState.communicativeIntent='';$('interviewer').value=next;$('studentText').value='';}else if(probe)$('interviewer').value=probe;$('studentText').focus();setStatus(understood?'status.newQuestion':'status.refine',understood?'La respuesta vale. Nueva pregunta del entrevistador.':'El entrevistador pide aclarar un aspecto de tu respuesta.');}catch(e){if(gen===generation)setStatus('status.error','Error: {{message}}',{message:e.message});}finally{if(gen===generation){busy=false;replyBtn.disabled=false;}}});
-function money(n){const v=Math.max(0,Number(n)||0);if(v===0)return '$0.00';if(v>=0.01)return `$${v.toFixed(2)}`;return `$${v.toFixed(8)}`;}
-function tokens(n){const loc={es:'es-CO',en:'en-US',fr:'fr-FR'}[(window.coachI18n&&window.coachI18n.getLocale&&window.coachI18n.getLocale())||'es']||'es-CO';return Math.max(0,Number(n)||0).toLocaleString(loc);}
-function costOf(prompt,completion){const input=(Math.max(0,Number(prompt)||0)*INPUT_USD)/1e6;const output=(Math.max(0,Number(completion)||0)*OUTPUT_USD)/1e6;return {input,output,total:input+output};}
-function renderUsage(usage){if(!usage)return;lastUsage=usage;const pct=Math.max(0,Math.min(100,Number(usage.percentUsed)||0));const level=pct>=95||usage.quotaExhausted?'is-danger':pct>=75?'is-warn':'';const day=costOf(usage.promptTokens,usage.completionTokens);$('aiUsageCount').textContent=`${usage.requests||0} / ${usage.limit||0}`;$('aiUsageSummary').className=`jc-ai-usage__summary ${level}`.trim();$('aiUsageSummary').textContent='';const warn=usage.quotaExhausted?` <span class="jc-ai-usage__warn">— ${tr('usage.exhausted','agotado')}</span>`:'';$('aiUsageSummary').insertAdjacentHTML('beforeend',`${usage.requests||0} / ${usage.limit||0} ${tr('usage.calls','llamadas')} <span class="jc-ai-usage__sep">|</span> ${pct}% ${tr('usage.quota','del cupo diario')} <span class="jc-ai-usage__sep">|</span> <span class="jc-ai-usage__cost">${tr('usage.cost','Costo')} ${money(day.total)}</span>${warn}`);$('aiUsageBar').setAttribute('aria-valuenow',String(pct));$('aiUsageFill').style.width=`${pct}%`;$('aiUsageFill').className=`jc-ai-usage__fill ${level}`.trim();$('aiUsageIn').textContent=`${tokens(usage.promptTokens)} tok`;$('aiUsageOut').textContent=`${tokens(usage.completionTokens)} tok`;$('aiUsageInCost').textContent=money(day.input);$('aiUsageOutCost').textContent=money(day.output);const last=usage.lastCall;if(!last){$('aiUsageLast').textContent=tr('usage.none','Todavía no hay llamadas hoy.');return;}const lastCost=costOf(last.promptTokens,last.completionTokens);$('aiUsageLast').textContent=tr('usage.last','Última llamada: {{input}} input · {{output}} output · Costo {{cost}}{{estimated}}',{input:tokens(last.promptTokens),output:tokens(last.completionTokens),cost:money(lastCost.total),estimated:last.estimated?tr('usage.estimated',' · estimado'):''});}
-async function refreshUsage(){try{if(remoteMissing())return;const response=await fetch(apiUrl('/api/ai-usage'));if(!response.ok)return;renderUsage(await response.json());}catch{/* la barra se queda en el último valor conocido */}}
-$('aiUsageToggle').addEventListener('click',()=>{const body=$('aiUsageBody');const open=body.hidden;body.hidden=!open;$('aiUsageToggle').setAttribute('aria-expanded',String(open));$('aiUsage').classList.toggle('jc-ai-usage--open',open);$('aiUsageCaret').textContent=open?'▴':'▾';});
 function restartInterview(){topicQuestion='';resetLesson();updateLanguageHints();$('interviewer').value='';showFeedback('',false);$('studentText').value='';startInterview();}
 for(const id of CHOICE_IDS)$(id).addEventListener('change',updateLanguageHints);
 updateLanguageHints();
@@ -501,9 +458,9 @@ renderSession();
 setInterval(renderSession,1000);
 setStatus('start.pick','Elige el tipo de entrevista y el idioma para iniciar la clase.');
 if(useLauncher){const pending=sessionStorage.getItem(LAUNCH_KEY);if(pending){launchStartedAt=Date.now();launchSummary();$('modal-launch').showModal();pollLaunch(pending);}else openStartModal();}
-else{setInterval(loadServer,30000);loadServer().finally(()=>refreshUsage());openStartModal();}
+else{setInterval(loadServer,30000);loadServer();openStartModal();}
 function refreshOpenHint(){const dialog=$('modal-hint');const btn=window.__coachOpenHint&&$(window.__coachOpenHint);if(!dialog||!dialog.open||!btn)return;$('hintTitle').textContent=btn.dataset.hintTitle||btn.getAttribute('aria-label')||'';$('hintBody').textContent=btn.dataset.hint||'';}
-function refreshChrome(){updateLanguageHints();renderSession();paintStatus();refreshOpenHint();if(lastUsage)renderUsage(lastUsage);renderCard();if(useLauncher){launchSummary();if(launchTimer)paintLaunching();}}
+function refreshChrome(){updateLanguageHints();renderSession();paintStatus();refreshOpenHint();renderCard();if(useLauncher){launchSummary();if(launchTimer)paintLaunching();}}
 window.onCoachLocaleChange=refreshChrome;
 function syncNativeLanguage(){const locale=window.coachI18n&&window.coachI18n.getLocale&&window.coachI18n.getLocale();if(locale&&!document.body.classList.contains('class-started'))$('explanationLanguage').value=locale;refreshChrome();}
 window.onCoachI18nReady=syncNativeLanguage;

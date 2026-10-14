@@ -1,6 +1,7 @@
 const ID_PATTERN = /^[a-z0-9-]{8,40}$/;
 const LANGS = new Set(['es', 'en', 'fr']);
 const STARTING_TIMEOUT_MS = 8 * 60 * 1000;
+const HISTORY_TTL_SECONDS = 14 * 24 * 3600;
 
 function intVar(value, fallback) {
   const n = Number.parseInt(value, 10);
@@ -29,10 +30,17 @@ async function readSession(env, id) {
 }
 
 async function writeSession(env, id, session) {
-  const ttl = Math.max(600, session.minutes * 60 + 1800);
+  const classTtl = Math.max(600, (session.minutes || 60) * 60 + 1800);
   await env.SESSIONS.put(`s:${id}`, JSON.stringify(session), {
-    expirationTtl: ttl,
-    metadata: { status: session.status, until: session.until || '', createdAt: session.createdAt },
+    expirationTtl: Math.max(classTtl, HISTORY_TTL_SECONDS),
+    metadata: {
+      status: session.status,
+      until: session.until || '',
+      createdAt: session.createdAt || '',
+      minutes: session.minutes || 0,
+      type: session.type || '',
+      lang: session.lang || '',
+    },
   });
 }
 
@@ -130,6 +138,123 @@ function callbackAuthorized(request, env) {
   return Boolean(expected) && header === `Bearer ${expected}`;
 }
 
+function positiveNumber(value) {
+  const n = Number(value);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
+
+function visibleStatus(meta, now) {
+  let status = meta?.status || '';
+  if (status === 'starting' && now - Date.parse(meta.createdAt) >= STARTING_TIMEOUT_MS) status = 'failed';
+  if (status === 'ready' && meta.until && Date.parse(meta.until) <= now) status = 'ended';
+  return status;
+}
+
+async function reportUsage(request, env, id) {
+  if (!callbackAuthorized(request, env)) return json(request, env, 401, { error: 'No autorizado.' });
+  const session = await readSession(env, id);
+  if (!session) return json(request, env, 404, { error: 'La sesión no existe.' });
+  let body = {};
+  try { body = await request.json(); } catch { return json(request, env, 400, { error: 'JSON inválido.' }); }
+  const snap = body.usage && typeof body.usage === 'object' ? body.usage : null;
+  if (!snap) return json(request, env, 400, { error: 'Falta usage.' });
+  const day = typeof snap.day === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(snap.day)
+    ? snap.day
+    : new Date().toISOString().slice(0, 10);
+  const prev = session.aiUsage && typeof session.aiUsage === 'object' ? session.aiUsage : {};
+  const sameDay = prev.day === day;
+  const delta = {
+    requests: Math.max(0, positiveNumber(snap.requests) - (sameDay ? positiveNumber(prev.requests) : 0)),
+    promptTokens: Math.max(0, positiveNumber(snap.promptTokens) - (sameDay ? positiveNumber(prev.promptTokens) : 0)),
+    completionTokens: Math.max(0, positiveNumber(snap.completionTokens) - (sameDay ? positiveNumber(prev.completionTokens) : 0)),
+    totalTokens: Math.max(0, positiveNumber(snap.totalTokens) - (sameDay ? positiveNumber(prev.totalTokens) : 0)),
+  };
+  const key = `usage:${day}`;
+  const acc = (await env.SESSIONS.get(key, 'json')) || {
+    day,
+    provider: 'groq',
+    model: '',
+    requests: 0,
+    limit: positiveNumber(snap.limit) || 14400,
+    promptTokens: 0,
+    completionTokens: 0,
+    totalTokens: 0,
+    tokenLimit: positiveNumber(snap.tokenLimit) || 500000,
+    lastCall: null,
+  };
+  acc.requests += delta.requests;
+  acc.promptTokens += delta.promptTokens;
+  acc.completionTokens += delta.completionTokens;
+  acc.totalTokens += delta.totalTokens;
+  acc.limit = positiveNumber(snap.limit) || acc.limit || 14400;
+  acc.tokenLimit = positiveNumber(snap.tokenLimit) || acc.tokenLimit || 500000;
+  acc.model = typeof snap.model === 'string' ? snap.model : acc.model || '';
+  acc.provider = snap.provider || 'groq';
+  if (snap.lastCall && typeof snap.lastCall === 'object') acc.lastCall = snap.lastCall;
+  const percentUsed = Math.min(100, Math.round((acc.requests / acc.limit) * 1000) / 10);
+  const tokenPercentUsed = Math.min(100, Math.round((acc.totalTokens / acc.tokenLimit) * 1000) / 10);
+  acc.percentUsed = Math.max(percentUsed, tokenPercentUsed);
+  acc.tokenPercentUsed = tokenPercentUsed;
+  acc.remaining = Math.max(0, acc.limit - acc.requests);
+  acc.tokensRemaining = Math.max(0, acc.tokenLimit - acc.totalTokens);
+  acc.quotaExhausted = acc.requests >= acc.limit || acc.totalTokens >= acc.tokenLimit;
+  await env.SESSIONS.put(key, JSON.stringify(acc), { expirationTtl: 40 * 24 * 3600 });
+  await writeSession(env, id, {
+    ...session,
+    aiUsage: {
+      day,
+      requests: positiveNumber(snap.requests),
+      promptTokens: positiveNumber(snap.promptTokens),
+      completionTokens: positiveNumber(snap.completionTokens),
+      totalTokens: positiveNumber(snap.totalTokens),
+    },
+  });
+  return json(request, env, 200, { ok: true });
+}
+
+async function listBoard(request, env) {
+  if (!callbackAuthorized(request, env)) return json(request, env, 401, { error: 'No autorizado.' });
+  const now = Date.now();
+  const classes = [];
+  let cursor;
+  do {
+    const page = await env.SESSIONS.list({ prefix: 's:', cursor });
+    for (const key of page.keys) {
+      const meta = key.metadata || {};
+      classes.push({
+        id: key.name.slice(2),
+        status: visibleStatus(meta, now),
+        until: meta.until || '',
+        createdAt: meta.createdAt || '',
+        minutes: meta.minutes || 0,
+        type: meta.type || '',
+        lang: meta.lang || '',
+      });
+    }
+    cursor = page.list_complete ? undefined : page.cursor;
+  } while (cursor);
+  classes.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  const day = new Date().toISOString().slice(0, 10);
+  const aiUsage = (await env.SESSIONS.get(`usage:${day}`, 'json')) || {
+    day,
+    provider: 'groq',
+    model: '',
+    requests: 0,
+    limit: 14400,
+    remaining: 14400,
+    percentUsed: 0,
+    promptTokens: 0,
+    completionTokens: 0,
+    totalTokens: 0,
+    tokenLimit: 500000,
+    tokensRemaining: 500000,
+    tokenPercentUsed: 0,
+    quotaExhausted: false,
+    lastCall: null,
+  };
+  return json(request, env, 200, { classes, aiUsage, now: new Date(now).toISOString() });
+}
+
 async function updateFromWorkflow(request, env, id, action) {
   if (!callbackAuthorized(request, env)) return json(request, env, 401, { error: 'No autorizado.' });
   const session = await readSession(env, id);
@@ -172,10 +297,12 @@ export default {
         sessionsKv: Boolean(env.SESSIONS),
       });
     }
+    if (request.method === 'GET' && url.pathname === '/admin/board') return listBoard(request, env);
     if (request.method === 'POST' && url.pathname === '/sessions') return createSession(request, env);
-    const match = url.pathname.match(/^\/sessions\/([^/]+)(?:\/(ready|end))?$/);
+    const match = url.pathname.match(/^\/sessions\/([^/]+)(?:\/(ready|end|usage))?$/);
     if (match && ID_PATTERN.test(match[1])) {
       if (request.method === 'GET' && !match[2]) return getSession(request, env, match[1]);
+      if (request.method === 'POST' && match[2] === 'usage') return reportUsage(request, env, match[1]);
       if (request.method === 'POST' && match[2]) return updateFromWorkflow(request, env, match[1], match[2]);
     }
     return json(request, env, 404, { error: 'Ruta no encontrada.' });
