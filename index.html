@@ -47,9 +47,38 @@ button:disabled{opacity:.55}
 .theory-bar{margin:16px 0 0;padding:14px;border:1px solid #efe3b8;border-radius:14px;background:#fff8e8}
 .theory-kicker{margin:0 0 4px;font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;color:#233e73;font-weight:750}
 .theory-lead{margin:0 0 12px;color:#3d4b63;font-size:.92rem}
-.theory-actions{display:flex;flex-wrap:wrap;gap:8px}
-.theory-actions button{background:#fff;color:#233e73;border:1px solid #233e73;padding:10px 12px;font-size:.9rem}
-.theory-actions button:hover{background:#e9eefb}
+.theory-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.theory-actions button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:88px;padding:14px;border:0;border-radius:14px;text-align:left}
+.theory-actions button strong{font-size:1rem;line-height:1.2}
+.theory-actions button span{font-weight:550;font-size:.78rem;line-height:1.3;opacity:.92}
+.theory-actions .guide-open{background:#0f766e;color:#fff}
+.theory-actions .guide-open:hover{background:#115e59}
+.theory-actions .ped-open{background:#b45309;color:#fff}
+.theory-actions .ped-open:hover{background:#92400e}
+.guide-steps,.ped-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.guide-step,.ped-card{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;border:1px solid transparent}
+.ped-card{display:block}
+.guide-n{flex:0 0 auto;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff}
+.guide-step h3,.ped-card h3{margin:0 0 4px;font-size:.98rem}
+.guide-step p,.ped-card p{margin:0}
+.guide-step--prep{background:#ecfdf5;border-color:#99f6e4}
+.guide-step--prep .guide-n{background:#0f766e}
+.guide-step--listen{background:#e3f6e9;border-color:#7ec9a2}
+.guide-step--listen .guide-n{background:#15803d}
+.guide-step--talk{background:#fff7e0;border-color:#e3c86a}
+.guide-step--talk .guide-n{background:#b45309}
+.guide-step--read{background:#eef2ff;border-color:#c7d2fe}
+.guide-step--read .guide-n{background:#3730a3}
+.ped-lead{margin:0 0 12px}
+.ped-card--context{background:#ecfdf5;border-color:#99f6e4}
+.ped-card--tense{background:#fff7e0;border-color:#e3c86a}
+.ped-card--intent{background:#eef2ff;border-color:#c7d2fe}
+.ped-close{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:#f4f7fd;border:1px solid #c5d0e6}
+.ped-criteria{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #e1e6ef}
+.ped-criteria p{margin:0 0 8px}
+.ped-criteria p:last-child{margin:0}
+.ped-soon{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:#f8fafc;border:1px dashed #94a3b8;color:#475569}
+@media(max-width:650px){.theory-actions{grid-template-columns:1fr}}
 .theory-actions .btn-note{color:#b7bec8;font-weight:550;font-size:.78rem}
 .actions{display:flex;gap:6px;align-items:center;margin-top:6px}
 .actions .reply-btn,.actions .mic-btn{flex:0 0 auto}
@@ -155,7 +184,7 @@ body.class-started .title-tools{display:none}
 <button id="replyBtn" class="reply-btn icon-btn" type="button" data-i18n-aria="ui.reply" aria-label="Responder" title="Responder"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>
 <button id="micBtn" class="mic-btn icon-btn" type="button" aria-pressed="false" data-i18n-aria="ui.mic" aria-label="Hablar" title="Hablar"><svg class="icon-mic" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg><svg class="icon-stop" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg></button>
 <button id="feedbackBtn" class="ghost" type="button" disabled data-i18n="ui.feedback">Feedback</button>
-<button id="learnBtn" class="learn-btn" type="button" data-open-modal="modal-aprende" aria-haspopup="dialog" data-i18n="ui.learn">Aprende más de este motor LLM</button>
+<button id="learnBtn" class="learn-btn" type="button" data-open-modal="modal-aprende" aria-haspopup="dialog" data-i18n="ui.learn">Aprende más de este motor conversacional</button>
 </div>
 <p id="status" class="muted" role="status" data-i18n="status.opening">Abriendo la entrevista…</p>
 </section>
@@ -262,15 +291,13 @@ body.class-started .title-tools{display:none}
 <dialog class="theory-modal" id="modal-aprende" aria-labelledby="titulo-aprende">
 <div class="modal-card">
 <div class="modal-top">
-<h2 id="titulo-aprende" data-i18n="modals.learn">Aprende más de este motor LLM</h2>
+<h2 id="titulo-aprende" data-i18n="modals.learn">Aprende más de este motor conversacional</h2>
 <button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
-<p class="theory-lead" data-i18n="learn.lead">Cuatro lecturas de la misma entrevista.</p>
+<p class="theory-lead" data-i18n="learn.lead">Dos entradas: cómo se usa la clase y cómo el feedback evalúa tu respuesta.</p>
 <div class="theory-actions">
-<button type="button" data-open-modal="modal-guia" aria-haspopup="dialog" data-i18n="learn.guide">Guía de uso</button>
-<button type="button" data-open-modal="modal-profesor" aria-haspopup="dialog" data-i18n="learn.dims">Contexto gramatical</button>
-<button type="button" data-open-modal="modal-intencion" aria-haspopup="dialog" data-i18n="learn.intent">Intención comunicativa</button>
-<button type="button" data-open-modal="modal-verbos" aria-haspopup="dialog" data-i18n="learn.verbs">Verbos y tiempos</button>
+<button type="button" class="guide-open" data-open-modal="modal-guia" aria-haspopup="dialog"><strong data-i18n="learn.guide">Guía de uso</strong><span data-i18n="learn.guideHint">Cómo preparar, escuchar, responder y seguir</span></button>
+<button type="button" class="ped-open" data-open-modal="modal-pedagogico" aria-haspopup="dialog"><strong data-i18n="learn.model">Modelo pedagógico</strong><span data-i18n="learn.modelHint">Cómo el feedback evalúa tu respuesta</span></button>
 </div>
 </div>
 </dialog>
@@ -282,12 +309,35 @@ body.class-started .title-tools{display:none}
 <button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
 </div>
 <div data-i18n-html="html.guia">
-<p>En la preparación eliges tu idioma nativo con ES, EN o FR. La página y el profesor quedan en ese idioma, y el interruptor no se muestra durante la entrevista. Después eliges el tipo de entrevista, el idioma a aprender (español, inglés o francés) y el nivel.</p>
-<p>El tipo de entrevista fija el puesto (ingeniería de software, call center, mesero de restaurante, retail, recepción de hotel, enfermería, asistente administrativo, reparto, docencia o ventas), el tono y los temas de las preguntas. Cambiarlo abre otra conversación con una pregunta nueva de ese puesto. Las reglas gramaticales no cambian: el tiempo verbal lo sigue pidiendo cada pregunta.</p>
-<p>En el sitio publicado, la página no llama a Groq desde tu computador. Cada pregunta sale hacia el servidor Node que enciende el workflow de GitHub, y ese servidor es quien consulta a Groq. El contador Sesión es el tiempo que queda de ese workflow. En 00:00 la sesión de esa conversación termina.</p>
-<p>El idioma a aprender es el del entrevistador y el de tu respuesta. El de explicación es el tuyo y el del profesor: el feedback sale ahí, y la sugerencia queda en el idioma que estás aprendiendo. Cada turno le manda esos dos idiomas a la IA.</p>
-<p>Cambiar el idioma a aprender abre otra conversación y pide una pregunta nueva. Cambiar solo el idioma de explicación deja la pregunta actual y aplica el idioma nuevo en el siguiente feedback.</p>
-<p>La misma IA es el entrevistador y el profesor. Cada pregunta trae el mismo contrato, en el idioma que se practica: gramática, intención, contexto y el tiempo verbal que esa pregunta pide. No hay un motor distinto por idioma. El feedback, en tu idioma de explicación, dice cómo mejorar la respuesta. Si todavía falta un aspecto, el entrevistador pide aclarar solo ese. Si la respuesta ya vale, la valida y pasa a otra pregunta. Los motores gramaticales están en pausa: el análisis lo hace la IA.</p>
+<ol class="guide-steps">
+<li class="guide-step guide-step--prep"><span class="guide-n">1</span><div><h3>Prepara la clase</h3><p>Elige tu idioma nativo con ES, EN o FR. La página y el profesor quedan en ese idioma. Luego elige el puesto, el idioma que vas a aprender, tu nivel y los minutos. En la misma red puedes abrir 3 clases por hora. Cada una tiene su propio reloj.</p></div></li>
+<li class="guide-step guide-step--listen"><span class="guide-n">2</span><div><h3>Escucha la pregunta</h3><p>El entrevistador escribe la pregunta y la dice en el idioma que estás aprendiendo. Si quieres oírla otra vez, pulsa Repetir pregunta. Mientras habla, ese botón se vuelve ondas.</p></div></li>
+<li class="guide-step guide-step--talk"><span class="guide-n">3</span><div><h3>Responde</h3><p>Escribe con el lápiz o habla con el micrófono. El cuadrado detiene la grabación. Tu voz pasa a texto y entra en la respuesta.</p></div></li>
+<li class="guide-step guide-step--read"><span class="guide-n">4</span><div><h3>Lee y escucha el feedback</h3><p>El profesor responde en tu idioma nativo. Puedes repetir ese audio. Al cerrar el feedback, el entrevistador vuelve a hablar y la clase sigue. En 00:00 esa sesión termina.</p></div></li>
+</ol>
+</div>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-pedagogico" aria-labelledby="titulo-pedagogico">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-pedagogico" data-i18n="modals.pedagogico">Modelo pedagógico</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
+</div>
+<div data-i18n-html="html.pedagogico">
+<p class="ped-lead">El feedback del profesor evalúa tu respuesta con tres miradas. Con eso decide si ya vale o si falta aclarar un solo punto.</p>
+<ul class="ped-list">
+<li class="ped-card ped-card--context"><h3>Contexto</h3><p>Mira si contestaste lo que la pregunta pidió: qué pasó, cómo, cuándo, dónde, por qué y para qué. Si te vas del tema, el feedback te devuelve a esa pregunta.</p></li>
+<li class="ped-card ped-card--tense"><h3>Tiempos verbales</h3><p>Mira si el verbo está en el tiempo que esa pregunta pide. Si hablas de algo ya hecho y el verbo queda en presente, el feedback marca ese ajuste y muestra cómo podría quedar la frase.</p></li>
+<li class="ped-card ped-card--intent"><h3>Intención comunicativa</h3><p>Mira qué haces con la frase: contar, explicar, proponer o pedir una aclaración. Si la pregunta pide que cuentes lo que hiciste y tú dices lo que harías, el feedback te pide alinear esa respuesta.</p></li>
+</ul>
+<div class="ped-criteria">
+<p><strong>Contenido:</strong> ¿contestaste lo que realmente te preguntaron?</p>
+<p><strong>Comunicación:</strong> ¿fuiste claro, coherente y profesional?</p>
+</div>
+<p class="ped-close">Si falta una de esas tres, o el contenido no responde la pregunta, el entrevistador pide aclarar solo ese punto. Si están claros, valida la respuesta y pasa a otra pregunta. La comunicación se comenta siempre: si fuiste claro, coherente y profesional.</p>
+<p class="ped-soon">próximamente... <strong>Expresión oral:</strong> muletillas, pausas, ritmo y duración de la respuesta.</p>
 </div>
 </div>
 </dialog>
@@ -456,9 +506,9 @@ let busy=false, generation=0;
 function parseCoachTurn(raw){const text=String(raw||'').trim();const candidates=[];const fenced=text.match(/```(?:json)?\s*([\s\S]*?)```/i);if(fenced)candidates.push(fenced[1].trim());const brace=text.match(/\{[\s\S]*\}/);if(brace)candidates.push(brace[0]);candidates.push(text);function field(data,name){const direct=data[name];if(typeof direct==='string'&&direct.trim())return direct.trim();for(const key of Object.keys(data)){if(key===name||key.startsWith(name+'_')){const value=data[key];if(typeof value==='string'&&value.trim())return value.trim();}}return '';}
 function asList(value){if(Array.isArray(value))return value.map(item=>String(item||'').trim()).filter(Boolean);if(typeof value==='string'&&value.trim())return [value.trim()];return [];}
 function asError(value){if(!value||typeof value!=='object')return null;const error={type:String(value.type||'').trim(),rule:String(value.rule||'').trim(),example:String(value.example||'').trim()};return error.type||error.rule||error.example?error:null;}
-for(const candidate of candidates){try{const data=JSON.parse(candidate);const correction=field(data,'correction');const expectation=field(data,'expectation');const feedback=field(data,'feedback');const suggestion=field(data,'suggestion');const interviewer=field(data,'interviewer');const satisfied=data.satisfied===true||data.satisfied==='true';const expectedGrammar=asList(data.expected_grammar||data.expectedGrammar);const communicativeIntent=field(data,'communicative_intent')||field(data,'communicativeIntent');const error=asError(data.error);if(correction||expectation||feedback||suggestion||interviewer)return {correction,expectation,feedback,suggestion,interviewer,satisfied,expectedGrammar,communicativeIntent,error};}catch{/* prueba el siguiente candidato */}}return {correction:'',expectation:'',feedback:text,suggestion:'',interviewer:'',satisfied:false,expectedGrammar:[],communicativeIntent:'',error:null};}
-const FEEDBACK_LABELS={es:['Tema del entrevistador','Tu respuesta','Cómo mejorar esta respuesta','Qué ajustar','Así podría quedar la respuesta','Pregunta del entrevistador','La respuesta vale. Llega una pregunta nueva.'],en:['Interviewer topic','Your answer','How to improve this answer','What to adjust','How the answer could read','Interviewer question','The answer stands. A new question is coming.'],fr:['Sujet de l\'intervieweur','Votre réponse','Comment améliorer cette réponse','Quoi ajuster','La réponse pourrait se lire ainsi','Question de l\'intervieweur','La réponse tient. Une nouvelle question arrive.']};
-function formatFeedback(turn,topic,answer,probe){const labels=FEEDBACK_LABELS[$('explanationLanguage').value]||FEEDBACK_LABELS.es;const parts=[];if(topic)parts.push(`${labels[0]}\n${topic}`);if(answer)parts.push(`${labels[1]}\n${answer}`);if(turn.correction)parts.push(`${labels[2]}\n${turn.correction}`);else if(turn.feedback)parts.push(turn.feedback);if(turn.expectation)parts.push(`${labels[3]}\n${turn.expectation}`);if(turn.suggestion)parts.push(`${labels[4]}\n${turn.suggestion}`);if(probe)parts.push(`${labels[5]}\n${probe}`);else if(turn.satisfied)parts.push(labels[6]);return parts.join('\n\n');}
+for(const candidate of candidates){try{const data=JSON.parse(candidate);const correction=field(data,'correction');const expectation=field(data,'expectation');const content=field(data,'content');const communication=field(data,'communication');const feedback=field(data,'feedback');const suggestion=field(data,'suggestion');const interviewer=field(data,'interviewer');const satisfied=data.satisfied===true||data.satisfied==='true';const expectedGrammar=asList(data.expected_grammar||data.expectedGrammar);const communicativeIntent=field(data,'communicative_intent')||field(data,'communicativeIntent');const error=asError(data.error);if(correction||expectation||content||communication||feedback||suggestion||interviewer)return {correction,expectation,content,communication,feedback,suggestion,interviewer,satisfied,expectedGrammar,communicativeIntent,error};}catch{/* prueba el siguiente candidato */}}return {correction:'',expectation:'',content:'',communication:'',feedback:text,suggestion:'',interviewer:'',satisfied:false,expectedGrammar:[],communicativeIntent:'',error:null};}
+const FEEDBACK_LABELS={es:['Tema del entrevistador','Tu respuesta','Contenido: ¿contestaste lo que realmente te preguntaron?','Comunicación: ¿fuiste claro, coherente y profesional?','Cómo mejorar esta respuesta','Qué ajustar','Así podría quedar la respuesta','Pregunta del entrevistador','La respuesta vale. Llega una pregunta nueva.'],en:['Interviewer topic','Your answer','Content: did you answer what you were really asked?','Communication: were you clear, coherent, and professional?','How to improve this answer','What to adjust','How the answer could read','Interviewer question','The answer stands. A new question is coming.'],fr:['Sujet de l\'intervieweur','Votre réponse','Contenu : as-tu vraiment répondu à ce qu\'on t\'a demandé ?','Communication : as-tu été clair, cohérent et professionnel ?','Comment améliorer cette réponse','Quoi ajuster','La réponse pourrait se lire ainsi','Question de l\'intervieweur','La réponse tient. Une nouvelle question arrive.']};
+function formatFeedback(turn,topic,answer,probe){const labels=FEEDBACK_LABELS[$('explanationLanguage').value]||FEEDBACK_LABELS.es;const parts=[];if(topic)parts.push(`${labels[0]}\n${topic}`);if(answer)parts.push(`${labels[1]}\n${answer}`);if(turn.content)parts.push(`${labels[2]}\n${turn.content}`);if(turn.communication)parts.push(`${labels[3]}\n${turn.communication}`);if(turn.correction)parts.push(`${labels[4]}\n${turn.correction}`);else if(turn.feedback)parts.push(turn.feedback);if(turn.expectation)parts.push(`${labels[5]}\n${turn.expectation}`);if(turn.suggestion)parts.push(`${labels[6]}\n${turn.suggestion}`);if(probe)parts.push(`${labels[7]}\n${probe}`);else if(turn.satisfied)parts.push(labels[8]);return parts.join('\n\n');}
 const STORE_KEY='sabelotodo-interview-conversations';
 let sessionId=null;
 function readConversations(){try{const raw=JSON.parse(localStorage.getItem(STORE_KEY)||'[]');return Array.isArray(raw)?raw:[];}catch{return [];}}
@@ -480,7 +530,7 @@ function rememberLesson(turn){if(Array.isArray(turn.expectedGrammar)&&turn.expec
 function skillFor(userText,question,nextAction,scenario,cue){const type=currentType();const skillInput=buildPedagogicalContext({userText,learner:learner(),lesson:{goal:type.id,scenario:scenario||type.id,communicativeIntent:lessonState.communicativeIntent,expectedGrammar:lessonState.expectedGrammar,previousErrors:lessonState.previousErrors},conversation:{lastQuestion:question,topicQuestion:topicQuestion||question,nextAction}});skillInput.variationCue=cue||'';return skillInput;}
 async function postCoach(body){if(remoteMissing())throw new Error(tr('ui.noSession','Sin sesión activa.'));const response=await fetch(apiUrl('/api/coach'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);return result;}
 async function startInterview(){const gen=++generation;busy=true;replyBtn.disabled=true;micBtn.disabled=true;stopSpeech();speakQuestionOnClose=false;resetLesson();if(remoteMissing()){setStatus('ui.noSession','Sin sesión activa.');busy=false;replyBtn.disabled=false;micBtn.disabled=false;return;}setStatus('status.preparing','El entrevistador está preparando una pregunta en {{lang}}…');const type=currentType();const cue=type.openings[Math.floor(Math.random()*type.openings.length)];try{const result=await postCoach({action:'start',skillInput:skillFor('','','open_interview',type.id,`${cue} Phrase a new question.`)});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');if(!turn.interviewer)throw new Error(tr('status.noQuestionFromAi','El entrevistador no envió una pregunta.'));beginConversation();resetLesson();rememberLesson(turn);topicQuestion=turn.interviewer;appendTurn({role:'interviewer',text:turn.interviewer,expectedGrammar:lessonState.expectedGrammar,communicativeIntent:lessonState.communicativeIntent});showFeedback('',false);$('interviewer').value=turn.interviewer;$('studentText').value='';setStatus('status.ready','Pregunta lista. Responde en {{lang}}.');speak(turn.interviewer,$('targetLanguage').value,'question');$('studentText').focus();}catch(e){if(gen===generation)setStatus('status.openError','No se pudo abrir la entrevista: {{message}}',{message:e.message});}finally{if(gen===generation){busy=false;replyBtn.disabled=false;micBtn.disabled=false;}}}
-async function sendReply(){const gen=generation;const userText=$('studentText').value.trim();const question=$('interviewer').value.trim();if(!question){setStatus('status.noQuestion','Todavía no hay pregunta del entrevistador.');return;}if(!userText){setStatus('status.write','Escribe tu respuesta en {{lang}}.');return;}if(busy)return;stopSpeech();busy=true;replyBtn.disabled=true;micBtn.disabled=true;setStatus('status.thinking','El entrevistador y el profesor están respondiendo…');try{const topic=topicQuestion||question;const result=await postCoach({action:'reply',skillInput:skillFor(userText,question,'interview',currentType().id,'Use question as a generic contract in the target language: grammar, intention, context, and the tense this question asks for. Do not apply another language\'s tense table. If one point still fails, ask about it. If tense, intention, and context are clear, set satisfied true, validate, and ask a new question.')});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');rememberLesson(turn);const next=turn.interviewer.trim();const understood=Boolean(turn.satisfied&&next&&next!==topic);const probe=!understood&&next&&next!==question?next:'';appendTurn({role:'student',text:userText,answeredQuestion:question,topic});appendTurn({role:'professor',feedback:formatFeedback(turn,topic,userText,probe),correction:turn.correction,expectation:turn.expectation,suggestion:turn.suggestion,satisfied:understood});if(next)appendTurn({role:'interviewer',text:next,clarification:!understood});showFeedback(formatFeedback(turn,topic,userText,probe),true);if(understood){topicQuestion=next;lessonState.expectedGrammar=[];lessonState.communicativeIntent='';$('interviewer').value=next;$('studentText').value='';}else if(probe)$('interviewer').value=probe;$('studentText').focus();setStatus(understood?'status.newQuestion':'status.refine',understood?'La respuesta vale. Nueva pregunta del entrevistador.':'El entrevistador pide aclarar un aspecto de tu respuesta.');}catch(e){if(gen===generation)setStatus('status.error','Error: {{message}}',{message:e.message});}finally{if(gen===generation){busy=false;replyBtn.disabled=false;micBtn.disabled=false;}}}
+async function sendReply(){const gen=generation;const userText=$('studentText').value.trim();const question=$('interviewer').value.trim();if(!question){setStatus('status.noQuestion','Todavía no hay pregunta del entrevistador.');return;}if(!userText){setStatus('status.write','Escribe tu respuesta en {{lang}}.');return;}if(busy)return;stopSpeech();busy=true;replyBtn.disabled=true;micBtn.disabled=true;setStatus('status.thinking','El entrevistador y el profesor están respondiendo…');try{const topic=topicQuestion||question;const result=await postCoach({action:'reply',skillInput:skillFor(userText,question,'interview',currentType().id,'Use question as a generic contract in the target language: grammar, intention, context, and the tense this question asks for. Also answer content (did they answer what was really asked?) and communication (were they clear, coherent, and professional?). Do not evaluate oral expression. Do not apply another language\'s tense table. If one point still fails, ask about it. If tense, intention, context, and content are clear, set satisfied true, validate, and ask a new question.')});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');rememberLesson(turn);const next=turn.interviewer.trim();const understood=Boolean(turn.satisfied&&next&&next!==topic);const probe=!understood&&next&&next!==question?next:'';appendTurn({role:'student',text:userText,answeredQuestion:question,topic});appendTurn({role:'professor',feedback:formatFeedback(turn,topic,userText,probe),correction:turn.correction,expectation:turn.expectation,suggestion:turn.suggestion,satisfied:understood});if(next)appendTurn({role:'interviewer',text:next,clarification:!understood});showFeedback(formatFeedback(turn,topic,userText,probe),true);if(understood){topicQuestion=next;lessonState.expectedGrammar=[];lessonState.communicativeIntent='';$('interviewer').value=next;$('studentText').value='';}else if(probe)$('interviewer').value=probe;$('studentText').focus();setStatus(understood?'status.newQuestion':'status.refine',understood?'La respuesta vale. Nueva pregunta del entrevistador.':'El entrevistador pide aclarar un aspecto de tu respuesta.');}catch(e){if(gen===generation)setStatus('status.error','Error: {{message}}',{message:e.message});}finally{if(gen===generation){busy=false;replyBtn.disabled=false;micBtn.disabled=false;}}}
 replyBtn.addEventListener('click',()=>{sendReply();});
 async function finishRecording(){setMicIdle();const blob=new Blob(recordChunks,{type:(recorder&&recorder.mimeType)||'audio/webm'});recorder=null;if(!blob.size){setStatus('voice.empty','No se escuchó audio.');return;}busy=true;replyBtn.disabled=true;micBtn.disabled=true;setStatus('voice.transcribing','Pasando tu voz a texto…');try{const lang=$('targetLanguage').value||'en';const response=await fetch(apiUrl(`/api/transcribe?lang=${encodeURIComponent(lang)}`),{method:'POST',headers:{'Content-Type':blob.type||'audio/webm'},body:blob});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);$('studentText').value=result.text||'';busy=false;replyBtn.disabled=false;micBtn.disabled=false;await sendReply();}catch(e){setStatus('voice.sttError','No se pudo transcribir: {{message}}',{message:e.message});busy=false;replyBtn.disabled=false;micBtn.disabled=false;}}
 micBtn.addEventListener('click',async()=>{if(recorder&&recorder.state==='recording'){recorder.stop();return;}if(busy)return;if(!$('interviewer').value.trim()){setStatus('status.noQuestion','Todavía no hay pregunta del entrevistador.');return;}stopSpeech();let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true});}catch{setStatus('voice.micDenied','El navegador no permitió el micrófono.');return;}const preferred=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(type=>window.MediaRecorder&&MediaRecorder.isTypeSupported(type));recorder=preferred?new MediaRecorder(stream,{mimeType:preferred}):new MediaRecorder(stream);recordChunks=[];recorder.ondataavailable=event=>{if(event.data&&event.data.size)recordChunks.push(event.data);};recorder.onstop=()=>{stream.getTracks().forEach(track=>track.stop());finishRecording();};recorder.start();micBtn.classList.add('is-recording');micBtn.setAttribute('aria-pressed','true');paintVoiceLabels();setStatus('voice.recording','Grabando tu respuesta… Pulsa Detener al terminar.');});

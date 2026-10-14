@@ -19,7 +19,7 @@ window.COACH_I18N_RESOURCES = {
       repeatQuestion: 'Repetir pregunta',
       repeatFeedback: 'Repetir feedback',
       feedback: 'Feedback',
-      learn: 'Aprende más de este motor LLM',
+      learn: 'Aprende más de este motor conversacional',
       type: 'Tipo de entrevista',
       target: 'Idioma a aprender',
       level: 'Nivel aproximado',
@@ -101,15 +101,19 @@ window.COACH_I18N_RESOURCES = {
       estimated: ' · estimado'
     },
     learn: {
-      lead: 'Cuatro lecturas de la misma entrevista.',
+      lead: 'Dos entradas: cómo se usa la clase y cómo el feedback evalúa tu respuesta.',
       guide: 'Guía de uso',
+      guideHint: 'Cómo preparar, escuchar, responder y seguir',
+      model: 'Modelo pedagógico',
+      modelHint: 'Cómo el feedback evalúa tu respuesta',
       dims: 'Contexto gramatical',
       intent: 'Intención comunicativa',
       verbs: 'Verbos y tiempos'
     },
     modals: {
-      learn: 'Aprende más de este motor LLM',
+      learn: 'Aprende más de este motor conversacional',
       guide: 'Guía de uso',
+      pedagogico: 'Modelo pedagógico',
       profesor: 'Contexto gramatical',
       intencion: 'Intención comunicativa',
       verbs: 'Verbos y tiempos',
@@ -155,7 +159,7 @@ window.COACH_I18N_RESOURCES = {
       repeatQuestion: 'Repeat question',
       repeatFeedback: 'Repeat feedback',
       feedback: 'Feedback',
-      learn: 'Learn more about this LLM engine',
+      learn: 'Learn more about this conversational engine',
       type: 'Interview type',
       target: 'Language to learn',
       level: 'Approximate level',
@@ -237,15 +241,19 @@ window.COACH_I18N_RESOURCES = {
       estimated: ' · estimated'
     },
     learn: {
-      lead: 'Four readings of the same interview.',
+      lead: 'Two ways in: how the class works, and how the feedback evaluates your answer.',
       guide: 'Usage guide',
+      guideHint: 'How to prepare, listen, answer, and continue',
+      model: 'Pedagogical model',
+      modelHint: 'How the feedback evaluates your answer',
       dims: 'Grammatical context',
       intent: 'Communicative intention',
       verbs: 'Verbs and tenses'
     },
     modals: {
-      learn: 'Learn more about this LLM engine',
+      learn: 'Learn more about this conversational engine',
       guide: 'Usage guide',
+      pedagogico: 'Pedagogical model',
       profesor: 'Grammatical context',
       intencion: 'Communicative intention',
       verbs: 'Verbs and tenses',
@@ -271,12 +279,8 @@ window.COACH_I18N_RESOURCES = {
       sales_executive: 'Sales executive'
     },
     html: {
-      guia: `<p>During setup you choose your native language with ES, EN, or FR. The page and the teacher stay in that language, and the switch is not shown during the interview. Then you choose the interview type, the language to learn (Spanish, English, or French), and the level.</p>
-<p>The interview type sets the role (software engineering, call center, restaurant server, retail, hotel reception, nursing, administrative assistant, delivery, teaching, or sales), the tone, and the topics of the questions. Changing it opens another conversation with a new question for that role. The grammar rules do not change: each question still asks for its own tense.</p>
-<p>On the published site, the page does not call Groq from your computer. Each question goes to the Node server that the GitHub workflow starts, and that server is the one that calls Groq. The Session counter is the time left on that workflow. At 00:00 the session of that conversation ends.</p>
-<p>The language to learn is the interviewer's language and the language of your answer. The explanation language is yours and the teacher's: feedback comes out there, and the suggestion stays in the language you are learning. Each turn sends both languages to the AI.</p>
-<p>Changing the language to learn opens another conversation and asks for a new question. Changing only the explanation language keeps the current question and applies the new language on the next feedback.</p>
-<p>The same AI is the interviewer and the teacher. Each question brings the same contract, in the language being practiced: grammar, intention, context, and the tense that question asks for. There is no separate engine per language. Feedback, in your explanation language, says how to improve the answer. If one aspect is still missing, the interviewer asks you to clarify only that. If the answer is already good enough, it validates it and moves to another question. The grammar engines are paused: the AI does the analysis.</p>`,
+      guia: `<ol class="guide-steps"><li class="guide-step guide-step--prep"><span class="guide-n">1</span><div><h3>Set up the class</h3><p>Choose your native language with ES, EN, or FR. The page and the teacher stay in that language. Then choose the role, the language you will learn, your level, and the minutes. On the same network you can open 3 classes per hour. Each one has its own clock.</p></div></li><li class="guide-step guide-step--listen"><span class="guide-n">2</span><div><h3>Listen to the question</h3><p>The interviewer writes the question and says it in the language you are learning. To hear it again, press Repeat question. While it speaks, that button turns into waves.</p></div></li><li class="guide-step guide-step--talk"><span class="guide-n">3</span><div><h3>Answer</h3><p>Write with the pencil or speak with the microphone. The square stops the recording. Your voice becomes text and goes into the answer.</p></div></li><li class="guide-step guide-step--read"><span class="guide-n">4</span><div><h3>Read and hear the feedback</h3><p>The teacher answers in your native language. You can repeat that audio. When you close the feedback, the interviewer speaks again and the class continues. At 00:00 that session ends.</p></div></li></ol>`,
+      pedagogico: `<p class="ped-lead">The teacher's feedback evaluates your answer with three looks. That is how it decides whether the answer already stands or whether one point still needs clarifying.</p><ul class="ped-list"><li class="ped-card ped-card--context"><h3>Context</h3><p>It checks whether you answered what the question asked: what happened, how, when, where, why, and what for. If you leave the topic, the feedback brings you back to that question.</p></li><li class="ped-card ped-card--tense"><h3>Verb tenses</h3><p>It checks whether the verb is in the tense that question asks for. If you talk about something already done and the verb stays in the present, the feedback marks that adjustment and shows how the sentence could read.</p></li><li class="ped-card ped-card--intent"><h3>Communicative intention</h3><p>It checks what you do with the sentence: tell, explain, propose, or ask for clarification. If the question asks you to tell what you did and you say what you would do, the feedback asks you to line that answer up.</p></li></ul><div class="ped-criteria"><p><strong>Content:</strong> Did you answer what you were really asked?</p><p><strong>Communication:</strong> Were you clear, coherent, and professional?</p></div><p class="ped-close">If one of those three is missing, or the content does not answer the question, the interviewer asks you to clarify only that point. If they are clear, it validates the answer and moves to another question. Communication is always commented on: whether you were clear, coherent, and professional.</p><p class="ped-soon">coming soon... <strong>Oral expression:</strong> fillers, pauses, rhythm, and how long the answer lasts.</p>`,
       profesor: `<p>This is a language trainer for a concrete setting: the technical software interview. It simulates the conversation with a teacher. It corrects, explains one rule, and continues the interview. The student practices the language of that situation, not a loose list of exercises.</p>
 <p>The same AI answers as interviewer and as teacher. The thread — the question, what that question expects, and the next turn — is built in that AI from the student's answer. There are three pieces, and each one is enriched in its own file:</p>
 <ul>
@@ -428,7 +432,7 @@ window.COACH_I18N_RESOURCES = {
       repeatQuestion: 'Répéter la question',
       repeatFeedback: 'Répéter le feedback',
       feedback: 'Feedback',
-      learn: 'En savoir plus sur ce moteur LLM',
+      learn: 'En savoir plus sur ce moteur conversationnel',
       type: 'Type d\'entretien',
       target: 'Langue à apprendre',
       level: 'Niveau approximatif',
@@ -510,15 +514,19 @@ window.COACH_I18N_RESOURCES = {
       estimated: ' · estimé'
     },
     learn: {
-      lead: 'Quatre lectures du même entretien.',
+      lead: 'Deux entrées : comment le cours se déroule, et comment le feedback évalue votre réponse.',
       guide: 'Guide d\'utilisation',
+      guideHint: 'Comment préparer, écouter, répondre et continuer',
+      model: 'Modèle pédagogique',
+      modelHint: 'Comment le feedback évalue votre réponse',
       dims: 'Contexte grammatical',
       intent: 'Intention communicative',
       verbs: 'Verbes et temps'
     },
     modals: {
-      learn: 'En savoir plus sur ce moteur LLM',
+      learn: 'En savoir plus sur ce moteur conversationnel',
       guide: 'Guide d\'utilisation',
+      pedagogico: 'Modèle pédagogique',
       profesor: 'Contexte grammatical',
       intencion: 'Intention communicative',
       verbs: 'Verbes et temps',
@@ -544,12 +552,8 @@ window.COACH_I18N_RESOURCES = {
       sales_executive: 'Commercial'
     },
     html: {
-      guia: `<p>À la préparation, vous choisissez votre langue maternelle avec ES, EN ou FR. La page et le professeur restent dans cette langue, et le sélecteur n'apparaît pas pendant l'entretien. Ensuite vous choisissez le type d'entretien, la langue à apprendre (espagnol, anglais ou français) et le niveau.</p>
-<p>Le type d'entretien fixe le poste (ingénierie logicielle, centre d'appels, serveur de restaurant, vente au détail, réception d'hôtel, soins infirmiers, assistant administratif, livraison, enseignement ou vente), le ton et les thèmes des questions. Le changer ouvre une autre conversation avec une nouvelle question pour ce poste. Les règles grammaticales ne changent pas : chaque question continue de demander son temps verbal.</p>
-<p>Sur le site publié, la page n'appelle pas Groq depuis votre ordinateur. Chaque question part vers le serveur Node que le workflow GitHub allume, et c'est ce serveur qui interroge Groq. Le compteur Session est le temps qui reste de ce workflow. À 00:00 la session de cette conversation se termine.</p>
-<p>La langue à apprendre est celle de l'intervieweur et de votre réponse. La langue d'explication est la vôtre et celle du professeur : le feedback en sort, et la suggestion reste dans la langue que vous apprenez. Chaque tour envoie ces deux langues à l'IA.</p>
-<p>Changer la langue à apprendre ouvre une autre conversation et demande une nouvelle question. Changer seulement la langue d'explication laisse la question actuelle et applique la nouvelle langue au feedback suivant.</p>
-<p>La même IA est l'intervieweur et le professeur. Chaque question apporte le même contrat, dans la langue pratiquée : grammaire, intention, contexte et le temps verbal que cette question demande. Il n'y a pas un moteur différent par langue. Le feedback, dans votre langue d'explication, dit comment améliorer la réponse. S'il manque encore un aspect, l'intervieweur demande de préciser seulement celui-là. Si la réponse est déjà assez bonne, il la valide et passe à une autre question. Les moteurs grammaticaux sont en pause : l'IA fait l'analyse.</p>`,
+      guia: `<ol class="guide-steps"><li class="guide-step guide-step--prep"><span class="guide-n">1</span><div><h3>Préparez le cours</h3><p>Choisissez votre langue maternelle avec ES, EN ou FR. La page et le professeur restent dans cette langue. Ensuite choisissez le poste, la langue à apprendre, votre niveau et les minutes. Sur le même réseau, vous pouvez ouvrir 3 cours par heure. Chacun a sa propre horloge.</p></div></li><li class="guide-step guide-step--listen"><span class="guide-n">2</span><div><h3>Écoutez la question</h3><p>L'intervieweur écrit la question et la dit dans la langue que vous apprenez. Pour la réentendre, appuyez sur Répéter la question. Pendant qu'il parle, ce bouton devient des ondes.</p></div></li><li class="guide-step guide-step--talk"><span class="guide-n">3</span><div><h3>Répondez</h3><p>Écrivez avec le crayon ou parlez avec le microphone. Le carré arrête l'enregistrement. Votre voix devient du texte et entre dans la réponse.</p></div></li><li class="guide-step guide-step--read"><span class="guide-n">4</span><div><h3>Lisez et écoutez le feedback</h3><p>Le professeur répond dans votre langue maternelle. Vous pouvez répéter cet audio. En fermant le feedback, l'intervieweur reparle et le cours continue. À 00:00 cette session se termine.</p></div></li></ol>`,
+      pedagogico: `<p class="ped-lead">Le feedback du professeur évalue votre réponse avec trois regards. C'est ainsi qu'il décide si la réponse tient déjà ou s'il manque à préciser un seul point.</p><ul class="ped-list"><li class="ped-card ped-card--context"><h3>Contexte</h3><p>Il regarde si vous avez répondu à ce que la question demandait : ce qui s'est passé, comment, quand, où, pourquoi et pour quoi. Si vous quittez le sujet, le feedback vous ramène à cette question.</p></li><li class="ped-card ped-card--tense"><h3>Temps verbaux</h3><p>Il regarde si le verbe est au temps que cette question demande. Si vous parlez de quelque chose déjà fait et que le verbe reste au présent, le feedback signale cet ajustement et montre comment la phrase pourrait se lire.</p></li><li class="ped-card ped-card--intent"><h3>Intention communicative</h3><p>Il regarde ce que vous faites avec la phrase : raconter, expliquer, proposer ou demander une précision. Si la question demande de raconter ce que vous avez fait et que vous dites ce que vous feriez, le feedback vous demande d'aligner cette réponse.</p></li></ul><div class="ped-criteria"><p><strong>Contenu :</strong> As-tu vraiment répondu à ce qu'on t'a demandé ?</p><p><strong>Communication :</strong> As-tu été clair, cohérent et professionnel ?</p></div><p class="ped-close">S'il manque l'un de ces trois points, ou si le contenu ne répond pas à la question, l'intervieweur demande de préciser seulement ce point. S'ils sont clairs, il valide la réponse et passe à une autre question. La communication est toujours commentée : si tu as été clair, cohérent et professionnel.</p><p class="ped-soon">prochainement... <strong>Expression orale :</strong> tics de langage, pauses, rythme et durée de la réponse.</p>`,
       profesor: `<p>C'est un formateur de langage pour un cadre concret : l'entretien technique de logiciel. Il simule la conversation avec un professeur. Il corrige, explique une règle et poursuit l'entretien. L'élève pratique le langage de cette situation, pas une liste d'exercices détachée.</p>
 <p>La même IA répond comme intervieweur et comme professeur. Le fil — la question, ce que cette question attend et le tour suivant — se construit dans cette IA à partir de la réponse de l'étudiant. Il y a trois pièces, et chacune s'enrichit dans son fichier :</p>
 <ul>
