@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Coach de entrevistas con IA</title>
 <meta name="coach-launcher" content="https://sabelotodo-ai-interview-coach.jaalza.workers.dev">
+<script>
+(function(){
+  if(location.protocol==='file:')return;
+  var path=location.pathname.replace(/\/index\.html$/i,'/');
+  if(!path.endsWith('/'))path+='/';
+  var last=(path.split('/').filter(Boolean).pop()||'').toLowerCase();
+  if(last==='en'||last==='es'||last==='fr')return;
+  var lang=String(navigator.language||'es').toLowerCase();
+  var code=lang.indexOf('en')===0?'en':lang.indexOf('fr')===0?'fr':'es';
+  location.replace(path+code+'/'+location.search+location.hash);
+})();
+</script>
 <style>
 :root{font-family:system-ui,Segoe UI,sans-serif;color:#172033;background:#f4f6fa;--interviewer-bg:#f3fbf6;--interviewer-border:#cfe8da;--student-bg:#fff9ee;--student-border:#f3e6c4;--professor-bg:#f3f6fb;--professor-border:#d5e0f2}
 *{box-sizing:border-box}
