@@ -1,0 +1,834 @@
+<!doctype html>
+<!-- Versión anterior (tema claro, Plus Jakarta Sans). La app publicada usa index.html con el tema oscuro de Refactorii. -->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Refactorii | Practica tu profesión en otro idioma</title>
+<meta name="coach-launcher" content="https://sabelotodo-ai-interview-coach.jaalza.workers.dev">
+<script>
+(function(){
+  if(location.protocol==='file:')return;
+  var path=location.pathname.replace(/\/index\.html$/i,'/');
+  if(!path.endsWith('/'))path+='/';
+  var last=(path.split('/').filter(Boolean).pop()||'').toLowerCase();
+  if(last==='en'||last==='es'||last==='fr')return;
+  var lang=String(navigator.language||'es').toLowerCase();
+  var code=lang.indexOf('en')===0?'en':lang.indexOf('fr')===0?'fr':'es';
+  location.replace(path+code+'/'+location.search+location.hash);
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+:root{font-family:'Plus Jakarta Sans',Inter,system-ui,'Segoe UI',sans-serif;color:#647084;--ink:#647084;background:#e6ebf3;--interviewer-bg:#f3fbf6;--interviewer-border:#cfe8da;--student-bg:#fff9ee;--student-border:#f3e6c4;--professor-bg:#f3f6fb;--professor-border:#d5e0f2}
+*{box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+html{font-size:100%;touch-action:manipulation;-webkit-text-size-adjust:100%}
+body{margin:0;padding:8px}
+main{height:100%;max-width:950px;margin:auto;display:flex;flex-direction:column;gap:0;min-height:0}
+header,section{background:#f7f9fc;border:1px solid #dbe2ee;border-radius:14px;padding:10px 12px}
+header{flex:0 0 auto;border-radius:14px 14px 0 0;border-bottom:0;padding-bottom:2px}
+.stage{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;border-radius:0 0 14px 14px;border-top:0;padding-top:6px}
+.title-row{display:flex;align-items:center;gap:14px}
+.brand-logo{height:52px;width:auto;flex:0 0 auto;object-fit:contain}
+.title-tools{display:flex;align-items:center;gap:6px;margin-left:auto;flex:0 0 auto}
+h1{margin:0;font-size:1.2rem;line-height:1.2;color:var(--ink)}
+.subtitle{margin:0;font-size:1.02rem;font-weight:750;line-height:1.35;color:#000;-webkit-text-fill-color:#000}
+.title-text{flex:1 1 auto;min-width:0}
+.header-session{margin-left:auto;flex:0 1 auto;max-width:58%}
+#classCard{flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:6px}
+#classCard .class-card__data{flex:0 0 auto}
+.class-card__rule{width:100%;height:0;margin:2px 0 4px;border:0;border-top:2px solid #f97316;border-radius:2px}
+h1 .chip-learn,h1 .chip-native,.subtitle .chip-learn,.subtitle .chip-native{border-radius:6px;padding:0 5px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+h1 .chip-learn,.subtitle .chip-learn{background:var(--interviewer-bg)}
+h1 .chip-native,.subtitle .chip-native{background:var(--student-bg)}
+.session{margin:0;padding:7px 14px;border-radius:999px;background:#e9eefb;color:var(--ink);font-size:.78rem;font-weight:750;font-variant-numeric:tabular-nums;white-space:nowrap}
+.session.is-server{background:#f97316;color:#fff;-webkit-text-fill-color:#fff}
+.qa-lang-switch{display:inline-flex;border:1px solid #c5d0e6;border-radius:999px;overflow:hidden;background:#eef2f8}
+.qa-lang-switch__btn{min-width:2rem;padding:4px 7px;border:0;border-radius:0;background:transparent;color:var(--ink);font-size:.72rem;font-weight:750}
+.qa-lang-switch__btn--active{background:#233e73;color:#fff}
+h2,h3,label,p,li,td,th{color:var(--ink)}
+h2{font-size:1.05rem}
+.muted{color:var(--ink);font-size:.78rem}
+label{font-weight:650;font-size:.82rem}
+input,select,textarea{width:100%;border:1px solid #cbd3e1;border-radius:8px;padding:8px;font:inherit;font-size:.95rem;background:#fff;color:var(--ink);-webkit-text-fill-color:var(--ink)}
+#interviewType,#level{background:var(--student-bg);border-color:#c5c9d1}
+#targetLanguage{background:var(--interviewer-bg);border-color:#c5c9d1}
+#explanationLanguage{background:var(--professor-bg);border-color:#c5c9d1}
+#titulo-start{font-size:.98rem;line-height:1.35}
+.field{min-height:0;display:flex;flex-direction:column}
+.field.grow{flex:1}
+.field.field-interviewer{flex:0 0 auto}
+.field-interviewer .actor-interviewer{flex:0 0 auto;overflow:hidden;scrollbar-width:none}
+.actor-interviewer::-webkit-scrollbar{display:none}
+.field.field-student{flex:3 1 0}
+.label-row{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:4px 0}
+.label-row label{margin:0;font-weight:700;color:#1f2937}
+.q{width:22px;height:22px;padding:0;border-radius:50%;background:#e9eefb;color:var(--ink);border:1px solid #c5d0e6;font-size:.85rem;line-height:1;flex:0 0 auto}
+.actor{flex:1;min-height:0;height:auto;resize:none;line-height:1.35}
+.actor-interviewer{background:var(--interviewer-bg);border-color:var(--interviewer-border)}
+.actor-student{background:var(--student-bg);border-color:var(--student-border)}
+.actor-feedback{background:var(--professor-bg);border-color:var(--professor-border);min-height:220px}
+.actor-feedback:disabled{opacity:1;color:var(--ink);-webkit-text-fill-color:var(--ink);cursor:default;background:var(--professor-bg)}
+.actor-interviewer:focus,.actor-student:focus{outline:2px solid #233e73;outline-offset:1px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row-3{grid-template-columns:1fr 1fr 1fr}
+button{border:0;border-radius:10px;padding:8px 10px;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;background:#233e73;color:white}
+button:disabled{opacity:.55}
+.pill{display:inline-block;border-radius:999px;background:#e9eefb;padding:4px 9px;font-size:.8rem}
+#modal-profesor .modal-card{background:#fff8e8}
+.theory-bar{margin:16px 0 0;padding:14px;border:1px solid #efe3b8;border-radius:14px;background:#fff8e8}
+.theory-kicker{margin:0 0 4px;font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);font-weight:750}
+.theory-lead{margin:0 0 12px;color:var(--ink);font-size:.92rem}
+.theory-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.theory-actions button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:88px;padding:14px;border:0;border-radius:14px;text-align:left}
+.theory-actions button strong{font-size:1rem;line-height:1.2}
+.theory-actions button span{font-weight:550;font-size:.78rem;line-height:1.3;opacity:.92}
+.theory-actions .guide-open{background:#0f766e;color:#fff}
+.theory-actions .guide-open:hover{background:#115e59}
+.theory-actions .ped-open{background:#b45309;color:#fff}
+.theory-actions .ped-open:hover{background:#92400e}
+.guide-steps,.ped-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.guide-step,.ped-card{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;border:1px solid transparent}
+.ped-card{display:block}
+.guide-n{flex:0 0 auto;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff}
+.guide-step h3,.ped-card h3{margin:0 0 4px;font-size:.98rem}
+.guide-step p,.ped-card p{margin:0}
+.guide-step--prep{background:#ecfdf5;border-color:#99f6e4}
+.guide-step--prep .guide-n{background:#0f766e}
+.guide-step--listen{background:#e3f6e9;border-color:#7ec9a2}
+.guide-step--listen .guide-n{background:#15803d}
+.guide-step--talk{background:#fff7e0;border-color:#e3c86a}
+.guide-step--talk .guide-n{background:#b45309}
+.guide-step--read{background:#eef2ff;border-color:#c7d2fe}
+.guide-step--read .guide-n{background:#3730a3}
+.ped-lead{margin:0 0 12px}
+.ped-card--context{background:#ecfdf5;border-color:#99f6e4}
+.ped-card--tense{background:#fff7e0;border-color:#e3c86a}
+.ped-card--intent{background:#eef2ff;border-color:#c7d2fe}
+.ped-close{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:#f4f7fd;border:1px solid #c5d0e6}
+.ped-criteria{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #e1e6ef}
+.ped-criteria p{margin:0 0 8px}
+.ped-criteria p:last-child{margin:0}
+.ped-soon{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:#f8fafc;border:1px dashed #94a3b8;color:#475569}
+@media(max-width:650px){.theory-actions{grid-template-columns:1fr}}
+.theory-actions .btn-note{color:#b7bec8;font-weight:550;font-size:.78rem}
+.field{position:relative}
+.field-float .actor{padding-bottom:54px}
+.float-tools{position:absolute;right:10px;bottom:10px;display:flex;align-items:center;gap:6px;z-index:2}
+.field-float>.repeat-btn{position:absolute;right:10px;bottom:10px;z-index:2;width:42px;height:42px;padding:0;justify-content:center;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,39,.16)}
+.float-tools .icon-btn,.float-tools .feedback-float{box-shadow:0 2px 8px rgba(16,24,39,.16)}
+.feedback-float{height:42px;padding:0 12px;background:#eef2f8;color:var(--ink);border:1px solid #c5d0e6;border-radius:10px}
+.q-learn{width:26px;height:26px;background:#233e73;color:#fff;-webkit-text-fill-color:#fff;border-color:#233e73;font-weight:800}
+.field-float>.label-row{position:absolute;left:10px;bottom:12px;z-index:2;margin:0;justify-content:flex-start;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 1px 4px rgba(16,24,39,.12)}
+.field-student .suggest-zone.is-speak-only .suggest-tools{padding-bottom:58px}
+.field-float+.field-float{margin-top:8px}
+.sub-short{display:none}
+.change-row{display:flex;align-items:center;gap:4px}
+.actor-interviewer,.actor-student,.actor-feedback{color:var(--ink);-webkit-text-fill-color:var(--ink)}
+.icon-btn{width:42px;height:42px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.icon-btn svg{display:block}
+.mic-btn{background:#f97316}
+.mic-btn .icon-stop{display:none}
+.mic-btn.is-recording .icon-mic{display:none}
+.mic-btn.is-recording .icon-stop{display:block}
+.mic-btn.is-recording{background:#ea580c;animation:mic-pulse 1s ease-in-out infinite}
+.icon-btn.is-unavailable,.icon-btn.is-unavailable:disabled{opacity:1;background:rgba(148,163,184,.55);color:#f8fafc;cursor:not-allowed;box-shadow:none}
+.send-btn[hidden]{display:none!important}
+.send-btn{background:#cbd5e1;color:#fff}
+.send-btn:disabled{opacity:.72;background:#cbd5e1;color:#f8fafc}
+.send-btn.is-ready{background:#16a34a;color:#fff;opacity:1}
+.student-sheet{flex:1;min-height:0;display:flex;flex-direction:column;overflow:auto;border:1px solid var(--student-border);border-radius:8px;background:var(--student-bg);scrollbar-width:none}
+.student-sheet::-webkit-scrollbar{display:none}
+.student-sheet.has-feedback{background:var(--professor-bg);border-color:var(--professor-border)}
+.student-immersed{display:none;position:relative;flex:0 0 auto;margin:0;padding:8px 10px 2px;border:0;border-radius:0;background:transparent;overflow:visible;max-height:none}
+.student-immersed.is-open{display:block}
+.student-immersed p{margin:0 0 8px;font-size:.9rem;line-height:1.4}
+.student-immersed strong{display:block;margin:0 0 2px;font-weight:800;color:#334155}
+.student-immersed .fb-intro{margin:0 0 6px;font-size:.8rem;color:#475569}
+.student-immersed .fb-intro strong{display:inline;margin:0;font-weight:800;color:#334155}
+.suggest-zone{flex:1 0 auto;display:flex;flex-direction:column;margin:0;background:var(--student-bg)}
+.suggest-lead{display:none;margin:0;padding:8px 10px 0;font-size:.9rem;font-weight:800;line-height:1.35;color:#334155}
+.suggest-lead.is-open{display:block}
+.student-sheet{position:relative}
+.suggest-view{margin:0;padding:8px;font-size:.95rem;line-height:1.35;color:var(--ink);background:var(--student-bg)}
+.suggest-view[hidden],.suggest-tools[hidden]{display:none!important}
+.suggest-tools{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;padding:4px 10px 10px}
+.memorize-note{margin:0;flex:1 1 180px;font-size:.8rem;font-weight:600;color:#475569;line-height:1.35}
+.suggest-zone.is-speak-only .actor-student{display:none}
+.student-sheet .actor-student{flex:1 0 auto;min-height:88px;border:0;border-radius:0;background:transparent;overflow:hidden;box-shadow:none}
+.student-sheet .actor-student:focus{outline:none}
+.fb-learn{background:var(--student-bg);border-radius:4px;padding:0 3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.question-view{position:absolute;margin:0;box-sizing:border-box;border:1px solid transparent;overflow:hidden;white-space:pre-wrap;overflow-wrap:break-word;color:var(--ink);pointer-events:none;z-index:1}
+.question-view[hidden]{display:none!important}
+.field-interviewer.is-reading .actor-interviewer{color:transparent;-webkit-text-fill-color:transparent}
+.fb-word.is-spoken{background:rgba(35,62,115,.14);border-radius:3px}
+.fb-ball{position:absolute;width:9px;height:9px;margin:0;border-radius:50%;background:#233e73;pointer-events:none;z-index:4;animation:fb-hop .32s ease-in-out infinite}
+.fb-ball[hidden]{display:none!important}
+@keyframes fb-hop{0%,100%{transform:translate(-50%,-11px)}50%{transform:translate(-50%,-18px)}}
+@keyframes mic-pulse{50%{opacity:.65}}
+.label-tools,.modal-tools{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto}
+.repeat-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--ink);border:1px solid #c5d0e6;padding:6px 10px;font-size:.78rem}
+.repeat-btn svg{display:block;flex:0 0 auto}
+.repeat-btn.repeat-orange{width:42px;height:42px;padding:0;justify-content:center;background:#f97316;color:#fff;border:0;box-shadow:0 2px 8px rgba(16,24,39,.16)}
+.repeat-btn.repeat-orange svg{width:22px;height:22px}
+.repeat-btn.repeat-orange.is-speaking{width:auto;padding:0 12px;gap:8px}
+.repeat-btn.repeat-orange.is-speaking svg{display:block}
+.repeat-btn .wave{display:none;align-items:center;gap:3px;height:18px}
+.repeat-btn.is-speaking .wave{display:inline-flex}
+.repeat-btn.is-speaking svg,.repeat-btn.is-speaking [data-i18n]{display:none}
+.wave span{width:3px;border-radius:99px;background:currentColor;transform-origin:center;animation:freq .85s ease-in-out infinite}
+.wave span:nth-child(1){height:7px;animation-delay:0s}
+.wave span:nth-child(2){height:16px;animation-delay:.12s}
+.wave span:nth-child(3){height:11px;animation-delay:.22s}
+.wave span:nth-child(4){height:18px;animation-delay:.08s}
+.wave span:nth-child(5){height:9px;animation-delay:.18s}
+@keyframes freq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+.actions .ghost{background:#eef2f8;color:var(--ink)}
+#status.status-pill{flex:0 0 auto;margin:6px 0 8px;padding:10px 14px;border-radius:10px;background:#f97316;color:#fff;-webkit-text-fill-color:#fff;font-size:.86rem;font-weight:750;line-height:1.35;text-align:center;box-shadow:0 0 0 rgba(249,115,22,0)}
+#status.status-pill.is-changed{animation:status-pop .9s ease-out}
+@keyframes status-pop{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(249,115,22,.65)}25%{transform:scale(1.04);box-shadow:0 0 18px 6px rgba(249,115,22,.55)}55%{transform:scale(.98)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(249,115,22,0)}}
+@media(prefers-reduced-motion:reduce){#status.status-pill.is-changed{animation:none}}
+.feedback-store{display:none}
+.feedback-view{width:100%;min-height:180px;overflow:auto;line-height:1.45;background:var(--professor-bg);display:flex;flex-direction:column;gap:8px;padding:8px}
+.feedback-block{margin:0;border-radius:10px;padding:10px 12px;border:1px solid transparent}
+.feedback-block--native{background:var(--professor-bg);border-color:var(--professor-border)}
+.feedback-block--learn{background:var(--student-bg);border-color:var(--student-border)}
+.feedback-block--ask{background:var(--interviewer-bg);border-color:var(--interviewer-border)}
+.feedback-label{margin:0 0 4px;font-size:.75rem;font-weight:750;color:#647084}
+.feedback-text,.feedback-empty{margin:0;white-space:pre-wrap}
+.feedback-empty{color:#647084}
+.feedback-voices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 8px}
+.feedback-voices .voice-field label{font-size:.75rem;font-weight:750;color:#647084}
+.feedback-voices input[data-voice-role]{width:100%;cursor:default;color:var(--ink);-webkit-text-fill-color:var(--ink)}
+@media(max-width:640px){.feedback-voices{grid-template-columns:1fr}}
+#modal-feedback{width:min(980px,calc(100vw - 12px));max-width:none;height:calc(100vh - 12px);max-height:calc(100vh - 12px)}
+#modal-feedback .modal-card{height:100%;max-height:none;display:flex;flex-direction:column;overflow:hidden}
+#modal-feedback .feedback-view{flex:1;min-height:0;height:auto;resize:none;font-size:1.05rem;line-height:1.5}
+dialog.theory-modal{border:0;padding:0;border-radius:16px;max-width:760px;width:calc(100% - 28px);color:var(--ink);box-shadow:0 24px 60px rgba(16,24,39,.28)}
+dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
+.modal-card{max-height:min(82vh,860px);overflow:auto;padding:22px 22px 18px}
+.modal-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:8px}
+.modal-top h2{margin:0;font-size:1.25rem;line-height:1.3}
+.modal-card h3{margin:18px 0 6px;font-size:1rem}
+.modal-card p,.modal-card li{line-height:1.45}
+.modal-card ul,.modal-card ol{margin:8px 0;padding-left:1.2rem}
+.close-btn{background:#eef2f8;color:var(--ink);padding:8px 12px;flex:0 0 auto}
+.formula{margin:10px 0;padding:12px 14px;background:#f4f7fb;border-left:4px solid #233e73;border-radius:8px;font-family:ui-monospace,Consolas,monospace;line-height:1.55}
+.modal-card table{width:100%;border-collapse:collapse;font-size:.92rem;margin:10px 0 4px}
+.modal-card th,.modal-card td{text-align:left;padding:8px 8px;border-bottom:1px solid #e1e6ef;vertical-align:top}
+.modal-card th{font-size:.8rem;color:var(--ink)}
+.note{font-size:.88rem;color:var(--ink)}
+.start-grid{display:grid;gap:10px;margin:10px 0 14px}
+.start-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.start-actions .ghost{background:#eef2f8;color:var(--ink)}
+.launch-status{min-height:1.4em;margin:10px 0 0}
+.launch-status.is-error{color:#b91c1c}
+#modal-launch:not(.is-auto) .auto-only,#modal-launch.is-auto .manual-only{display:none}
+#modal-launch.is-auto{background:#f1f3f6;border:0;outline:0}
+#modal-launch.is-auto .modal-card{background:#f1f3f6}
+.launch-story{position:relative;margin:0 0 12px;padding:0;border:0;background:transparent;font-size:1rem;line-height:1.6;color:var(--ink)}
+.launch-story p{margin:0}
+.launch-story .launch-lead{margin:0 0 12px;padding:10px 12px;border-radius:10px;background:#fff7ed;border:1px solid #fdba74;color:#9a3412;font-size:1.08rem;font-weight:800;line-height:1.45}
+.auto-config{display:grid;gap:4px;margin:0 0 6px}
+.auto-config label{font-size:.88rem;font-weight:750;color:var(--ink)}
+.auto-config select:disabled{opacity:1;background:#e8eaef;color:var(--ink);-webkit-text-fill-color:var(--ink);border-color:#c5c9d1;appearance:none;cursor:default}
+#modal-launch.is-auto .launch-status{margin:0 0 12px;padding:8px 12px;border-radius:10px;background:#f0fdf4;border:1px solid #bbf7d0;font-size:.98rem;font-weight:500;line-height:1.45;color:#166534}
+#modal-launch.is-auto .launch-status:empty{display:none}
+#modal-launch.is-auto .launch-status.is-error{background:#fef2f2;border-color:#fecaca;color:#b91c1c}
+#sessionClock.is-clickable{cursor:pointer;text-decoration:underline dotted}
+#sessionClock.is-live{background:transparent;color:var(--ink);-webkit-text-fill-color:var(--ink)}
+.time-server,.time-session{display:inline-block;border-radius:6px;padding:0 6px;font-weight:800;font-variant-numeric:tabular-nums;color:#fff;-webkit-text-fill-color:#fff}
+.time-server{background:#dc2626}
+.time-session{background:#16a34a}
+.quota-line{flex:1 1 100%;margin:0;font-size:.74rem;font-weight:700;color:#475569;text-align:right;font-variant-numeric:tabular-nums}
+.quota-box{margin:0 0 10px;padding:10px 12px;border-radius:10px;background:#fff7ed;border:1px solid #fdba74}
+.quota-box p{margin:0;font-size:.88rem;line-height:1.4;color:var(--ink);font-variant-numeric:tabular-nums}
+.quota-box .quota-ended{margin-bottom:4px;font-weight:800;color:#c2410c}
+.quota-box .quota-left{font-weight:700}
+.start-grid--2{grid-template-columns:1fr 1fr}
+.start-grid--2 .start-wide{grid-column:1/-1}
+.start-grid .label-row{margin:0 0 4px}
+.native-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid #c5c9d1;border-radius:10px;background:var(--student-bg)}
+.native-label-wrap{display:flex;align-items:center;gap:6px;min-width:0}
+.native-label{font-weight:650;font-size:.82rem;min-width:0}
+.voices-kicker{margin:14px 0 6px;font-size:.82rem;font-weight:650;color:var(--ink)}
+.native-row .qa-lang-switch{flex:0 0 auto}
+.native-row .qa-lang-switch__btn{min-width:2.4rem;padding:6px 9px;font-size:.8rem}
+body.class-started .title-tools{display:none}
+.class-card{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:4px 0;border:0;border-radius:0;background:transparent;margin-bottom:4px}
+.class-card__data{flex:1;min-width:0;margin:0;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:6px}
+.class-card__data div{min-width:0;display:flex;flex-direction:column;gap:5px}
+.class-card__data div:nth-child(1) dd,.class-card__data div:nth-child(3) dd{background:var(--student-bg)}
+.class-card__data div:nth-child(2) dd{background:var(--interviewer-bg)}
+.class-card__data div:nth-child(4) dd{background:var(--professor-bg)}
+.class-card__data dt{padding:0 2px;font-size:.68rem;font-weight:700;color:#1f2937;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.class-card__data dd{margin:0;border-radius:10px;padding:8px 12px;border:1.5px solid #1f2937;font-size:.84rem;font-weight:400;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.class-card__side{flex:0 0 auto;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px}
+.class-card__side .ghost{background:#fff;color:var(--ink);border:1px solid #c5d0e6;padding:4px 10px;font-size:.75rem}
+.voice-row{flex:0 0 auto;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 4px}
+.voice-field{min-width:0}
+.voice-field label{display:block;margin:0 0 2px}
+.voice-line{display:flex;gap:6px;align-items:center}
+.voice-line input[data-voice-role]{min-width:0;flex:1;cursor:default;color:var(--ink);-webkit-text-fill-color:var(--ink)}
+input[data-voice-role="interviewer"]{background:var(--interviewer-bg);border-color:var(--interviewer-border)}
+input[data-voice-role="professor"]{background:var(--professor-bg);border-color:var(--professor-border)}
+.voice-preview{flex:0 0 auto;background:#fff;color:var(--ink);border:1px solid #c5d0e6;padding:6px 8px;font-size:.75rem}
+@media(max-width:650px){.voice-row{grid-template-columns:1fr}}
+@media(max-width:650px){.title-row{flex-wrap:wrap;gap:8px 12px}.header-session{max-width:none;margin-left:0}.class-card{flex-wrap:wrap;gap:6px}.class-card__data{flex:1 1 100%;grid-template-columns:1fr 1fr}.class-card__side{flex:1 1 100%;justify-content:space-between;flex-wrap:wrap}.quota-line{text-align:left}.class-card__side .change-row{margin-left:auto}}
+@media(max-width:650px){body{padding:6px}.brand-logo{height:44px}h1{font-size:1.05rem}.subtitle{font-size:clamp(.66rem,3.3vw,.84rem);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sub-full{display:none}.sub-short{display:inline}.theory-actions{display:grid}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="title-row">
+<img class="brand-logo" src="logo-p2l.png" alt="P2L">
+<div class="title-text">
+<p class="subtitle" id="subtitle"><span class="sub-full">Practica speaking de Tiempos verbales en inglés</span><span class="sub-short">Practica speaking en inglés</span></p>
+</div>
+<div class="class-card__side header-session">
+<p class="session" id="sessionClock" aria-live="polite">Sesión 00:00</p>
+<div class="change-row">
+<button type="button" class="ghost" id="changeClass" data-i18n="ui.change">Cambia tu sesión</button>
+<button type="button" class="q" id="hintChange" data-i18n-aria="hints.changeTitle" aria-label="Cambiar">?</button>
+<button type="button" class="q q-learn" id="learnBtn" data-open-modal="modal-aprende" aria-haspopup="dialog" data-i18n-aria="ui.learn" aria-label="Aprende más de este motor conversacional" title="Aprende más de este motor conversacional">?</button>
+</div>
+<p class="quota-line" id="quotaLine" hidden></p>
+</div>
+</div>
+</header>
+<section class="stage">
+<div class="class-card" id="classCard">
+<hr class="class-card__rule">
+<dl class="class-card__data">
+<div><dt data-i18n="ui.type">Tópico a practicar</dt><dd id="cardType"></dd></div>
+<div><dt data-i18n="ui.target">Idioma a aprender</dt><dd id="cardTarget"></dd></div>
+<div><dt data-i18n="ui.level">Nivel aproximado</dt><dd id="cardLevel"></dd></div>
+<div><dt data-i18n="ui.explain">Idioma de explicación</dt><dd id="cardExplain"></dd></div>
+</dl>
+</div>
+<p id="status" class="status-pill" role="status" data-i18n="status.opening">Abriendo la entrevista…</p>
+<div class="field grow field-interviewer field-float">
+<div class="label-row"><label for="interviewer" data-i18n="ui.interviewer">Entrevistador</label><button type="button" class="q" id="hintInterviewer" data-i18n-aria="hints.interviewerTitle" aria-label="Entrevistador">?</button></div>
+<textarea id="interviewer" class="actor actor-interviewer" readonly placeholder="El entrevistador está preparando la primera pregunta…"></textarea>
+<div id="questionView" class="question-view" aria-hidden="true" hidden></div>
+<button type="button" class="repeat-btn icon-btn repeat-orange" id="repeatQuestionBtn" data-i18n-aria="ui.repeatQuestion" aria-label="Repetir pregunta" title="Repetir pregunta"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5V2L8 6l4 4V7a5 5 0 1 1-4.9 6H5a7 7 0 1 0 7-8z"/></svg><span class="wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span></button>
+</div>
+<div class="field grow field-student field-float" id="studentField">
+<div class="label-row"><label for="studentText" data-i18n="ui.student">Tu respuesta</label><button type="button" class="q" id="hintStudent" data-i18n-aria="hints.studentTitle" aria-label="Tu respuesta">?</button></div>
+<div class="student-sheet" id="studentSheet">
+<div id="studentImmersed" class="student-immersed" hidden></div>
+<div class="suggest-zone">
+<p id="suggestLead" class="suggest-lead" hidden></p>
+<p id="suggestView" class="suggest-view" hidden></p>
+<div id="suggestTools" class="suggest-tools" hidden>
+<button id="repeatSuggestBtn" class="repeat-btn icon-btn repeat-orange" type="button" aria-label="Repetir frase" title="Repetir frase"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5V2L8 6l4 4V7a5 5 0 1 1-4.9 6H5a7 7 0 1 0 7-8z"/></svg></button>
+<p id="memorizeNote" class="memorize-note"></p>
+</div>
+<textarea id="studentText" class="actor actor-student" placeholder="Tu respuesta"></textarea>
+</div>
+</div>
+<div class="float-tools">
+<button id="replyBtn" class="reply-btn icon-btn" type="button" data-i18n-aria="ui.write" aria-label="Escribir" title="Escribir"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>
+<button id="micBtn" class="mic-btn icon-btn" type="button" aria-pressed="false" data-i18n-aria="ui.mic" aria-label="Hablar" title="Hablar"><svg class="icon-mic" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg><svg class="icon-stop" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg></button>
+<button id="sendBtn" class="send-btn icon-btn" type="button" hidden disabled data-i18n-aria="ui.send" aria-label="Enviar" title="Enviar"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+</div>
+</div>
+</section>
+</main>
+
+<dialog class="theory-modal hint-modal" id="modal-hint" aria-labelledby="hintTitle">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="hintTitle" data-i18n="modals.help">Ayuda</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
+</div>
+<p id="hintBody"></p>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-feedback" aria-labelledby="titulo-feedback">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-feedback" data-i18n="modals.feedback">Feedback</h2>
+<div class="modal-tools">
+<button type="button" class="repeat-btn" id="repeatFeedbackBtn" data-i18n-aria="ui.repeatFeedback" aria-label="Repetir feedback" title="Repetir feedback"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5V2L8 6l4 4V7a5 5 0 1 1-4.9 6H5a7 7 0 1 0 7-8z"/></svg><span class="wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span><span data-i18n="ui.repeatFeedback">Repetir feedback</span></button>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
+</div>
+</div>
+<textarea id="feedback" class="feedback-store" hidden aria-hidden="true"></textarea>
+<div id="feedbackView" class="feedback-view" role="region" aria-labelledby="titulo-feedback"></div>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-start" aria-labelledby="titulo-start">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-start" data-i18n="start.title">Configura tu práctica</h2>
+</div>
+<div class="quota-box" id="startQuota" hidden><p class="quota-ended" id="startQuotaEnded" hidden></p><p class="quota-left" id="startQuotaLeft"></p></div>
+<p class="note" data-i18n="start.lead">Elige tu profesión, el idioma que quieres practicar y tu nivel. Tu entrevistador hablará en ese idioma y tu profesor te explicará en el tuyo.</p>
+<div class="start-grid start-grid--2">
+<div class="start-wide native-row">
+<div class="native-label-wrap">
+<span class="native-label" id="nativeLabel" data-i18n="start.native">Mi idioma</span>
+<button type="button" class="q" id="hintNative" data-i18n-aria="hints.nativeTitle" aria-label="Mi idioma">?</button>
+</div>
+<div class="qa-lang-switch" role="group" aria-labelledby="nativeLabel">
+<button type="button" class="qa-lang-switch__btn qa-lang-switch__btn--active" data-set-locale="es" aria-pressed="true">ES</button>
+<button type="button" class="qa-lang-switch__btn" data-set-locale="en" aria-pressed="false">EN</button>
+<button type="button" class="qa-lang-switch__btn" data-set-locale="fr" aria-pressed="false">FR</button>
+</div>
+</div>
+<div class="start-wide">
+<div class="label-row"><label for="interviewType" data-i18n="ui.type">Tópico a practicar</label><button type="button" class="q" id="hintType" data-i18n-aria="hints.typeTitle" aria-label="Tópico a practicar">?</button></div>
+<select id="interviewType"></select>
+</div>
+<div>
+<div class="label-row"><label for="targetLanguage" data-i18n="ui.target">Idioma que quiero practicar</label><button type="button" class="q" id="hintTarget" data-i18n-aria="hints.targetTitle" aria-label="Idioma que quiero practicar">?</button></div>
+<select id="targetLanguage">
+<option value="es" data-i18n="langOptions.es">Español</option>
+<option value="en" data-i18n="langOptions.en" selected>Inglés</option>
+<option value="fr" data-i18n="langOptions.fr">Francés</option>
+</select>
+</div>
+<div>
+<div class="label-row"><label for="level" data-i18n="ui.level">Mi nivel</label><button type="button" class="q" id="hintLevel" data-i18n-aria="hints.levelTitle" aria-label="Mi nivel">?</button></div>
+<select id="level">
+<option value="beginner" data-i18n="levels.beginner">Principiante</option>
+<option value="intermediate" data-i18n="levels.intermediate" selected>Intermedio</option>
+<option value="advanced" data-i18n="levels.advanced">Avanzado</option>
+</select>
+</div>
+<div class="start-wide" hidden>
+<div class="label-row"><label for="explanationLanguage" data-i18n="ui.explain">Idioma de explicación</label><button type="button" class="q" id="hintExplain" data-i18n-aria="hints.explainTitle" aria-label="Idioma de explicación">?</button></div>
+<select id="explanationLanguage">
+<option value="es" data-i18n="langOptions.es" selected>Español</option>
+<option value="en" data-i18n="langOptions.en">Inglés</option>
+<option value="fr" data-i18n="langOptions.fr">Francés</option>
+</select>
+</div>
+</div>
+<p class="voices-kicker" data-i18n="ui.voicesOptional">Voces (opcional)</p>
+<div class="voice-row">
+<div class="voice-field" data-voice-field="interviewer">
+<label data-i18n="ui.interviewerVoice">Voz del entrevistador</label>
+<div class="voice-line"><input type="text" data-voice-role="interviewer" readonly data-i18n-aria="ui.interviewerVoice" aria-label="Voz del entrevistador" value="Google US English (en-US)"><button type="button" class="voice-preview" data-voice-preview="interviewer" data-i18n="ui.voicePreview">Escuchar</button></div>
+</div>
+<div class="voice-field" data-voice-field="professor">
+<label data-i18n="ui.professorVoice">Voz del profesor</label>
+<div class="voice-line"><input type="text" data-voice-role="professor" readonly data-i18n-aria="ui.professorVoice" aria-label="Voz del profesor" value="Google español (es-ES)"><button type="button" class="voice-preview" data-voice-preview="professor" data-i18n="ui.voicePreview">Escuchar</button></div>
+</div>
+</div>
+<div class="start-actions">
+<button type="button" id="startBegin" data-i18n="start.begin">Empezar a practicar</button>
+</div>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-launch" aria-labelledby="titulo-launch">
+<div class="modal-card">
+<div class="modal-top manual-only">
+<h2 id="titulo-launch" data-i18n="start.launchTitle">Iniciar la clase</h2>
+</div>
+<div class="launch-story auto-only" id="launchStory"></div>
+<div class="auto-config auto-only">
+<label for="autoConfig" data-i18n="start.autoMinutes">Tu sesión durará 5 minutos</label>
+<select id="autoConfig" disabled><option id="autoConfigOption"></option></select>
+</div>
+<p class="note manual-only" id="launchSummary"></p>
+<p class="note manual-only" data-i18n="start.network">En esta misma red hay cupo para 3 clases por hora. Cada clase enciende su propio servidor y su reloj de sesión corre solo para esa clase. Si ya abriste 3 y quieres otra antes de que pase la hora, cambia de red: por ejemplo, pasa del wifi a los datos del celular.</p>
+<div class="start-grid manual-only">
+<div>
+<label for="startMinutes" data-i18n="start.minutes">Duración de la clase (minutos)</label>
+<input id="startMinutes" type="number" min="5" max="180" step="5" value="60" inputmode="numeric">
+<p class="muted" data-i18n="start.minutesHint">Entre 5 y 180 minutos. El servidor se apaga solo al terminar.</p>
+</div>
+</div>
+<div class="start-actions manual-only">
+<button type="button" class="ghost" id="launchBack" data-i18n="start.back">Volver</button>
+<button type="button" id="launchBtn" data-i18n="start.launch">Iniciar la clase</button>
+</div>
+<p class="muted launch-status" id="launchStatus" role="status"></p>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-aprende" aria-labelledby="titulo-aprende">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-aprende" data-i18n="modals.learn">Aprende más de este motor conversacional</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
+</div>
+<p class="theory-lead" data-i18n="learn.lead">Dos entradas: cómo se usa la clase y cómo el feedback evalúa tu respuesta.</p>
+<div class="theory-actions">
+<button type="button" class="guide-open" data-open-modal="modal-guia" aria-haspopup="dialog"><strong data-i18n="learn.guide">Guía de uso</strong><span data-i18n="learn.guideHint">Cómo preparar, escuchar, responder y seguir</span></button>
+<button type="button" class="ped-open" data-open-modal="modal-pedagogico" aria-haspopup="dialog"><strong data-i18n="learn.model">Modelo pedagógico</strong><span data-i18n="learn.modelHint">Cómo el feedback evalúa tu respuesta</span></button>
+</div>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-guia" aria-labelledby="titulo-guia">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-guia" data-i18n="modals.guide">Guía de uso</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
+</div>
+<div data-i18n-html="html.guia">
+<ol class="guide-steps">
+<li class="guide-step guide-step--prep"><span class="guide-n">1</span><div><h3>Prepara la clase</h3><p>Elige tu idioma nativo con ES, EN o FR. La página y el profesor quedan en ese idioma. Luego elige el puesto, el idioma que vas a aprender, tu nivel y los minutos. En la misma red puedes abrir 3 clases por hora. Cada una tiene su propio reloj.</p></div></li>
+<li class="guide-step guide-step--listen"><span class="guide-n">2</span><div><h3>Escucha la pregunta</h3><p>El entrevistador escribe la pregunta y la dice en el idioma que estás aprendiendo. Si quieres oírla otra vez, pulsa Repetir pregunta. Mientras habla, ese botón se vuelve ondas.</p></div></li>
+<li class="guide-step guide-step--talk"><span class="guide-n">3</span><div><h3>Responde</h3><p>El micrófono naranja graba. A su derecha aparece Enviar, en gris, y se pone verde al pulsar Detener o si dejas de hablar 3 segundos. El lápiz es para escribir: el micrófono queda en gris y Enviar se pone verde 3 segundos después de que paras.</p></div></li>
+<li class="guide-step guide-step--read"><span class="guide-n">4</span><div><h3>Lee el feedback en tu respuesta</h3><p>El profesor escribe dentro de tu respuesta el contenido, la comunicación, cómo mejorar y qué ajustar. La frase corregida queda en el cuadro: léela, pulsa el micrófono y dila. En 00:00 esa sesión termina.</p></div></li>
+</ol>
+</div>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-pedagogico" aria-labelledby="titulo-pedagogico">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-pedagogico" data-i18n="modals.pedagogico">Modelo pedagógico</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
+</div>
+<div data-i18n-html="html.pedagogico">
+<p class="ped-lead">El feedback del profesor evalúa tu respuesta con tres miradas. Con eso decide si ya vale o si falta aclarar un solo punto.</p>
+<ul class="ped-list">
+<li class="ped-card ped-card--context"><h3>Contexto</h3><p>Mira si contestaste lo que la pregunta pidió: qué pasó, cómo, cuándo, dónde, por qué y para qué. Si te vas del tema, el feedback te devuelve a esa pregunta.</p></li>
+<li class="ped-card ped-card--tense"><h3>Tiempos verbales</h3><p>Mira si el verbo está en el tiempo que esa pregunta pide. Si hablas de algo ya hecho y el verbo queda en presente, el feedback marca ese ajuste y muestra cómo podría quedar la frase.</p></li>
+<li class="ped-card ped-card--intent"><h3>Intención comunicativa</h3><p>Mira qué haces con la frase: contar, explicar, proponer o pedir una aclaración. Si la pregunta pide que cuentes lo que hiciste y tú dices lo que harías, el feedback te pide alinear esa respuesta.</p></li>
+</ul>
+<div class="ped-criteria">
+<p><strong>Contenido:</strong> ¿contestaste lo que realmente te preguntaron?</p>
+<p><strong>Comunicación:</strong> ¿fuiste claro, coherente, profesional y asertivo?</p>
+</div>
+<p class="ped-close">Si falta una de esas tres, o el contenido no responde la pregunta, el entrevistador pide aclarar solo ese punto. Si están claros, valida la respuesta y pasa a otra pregunta. La comunicación se comenta siempre: si fuiste claro, coherente, profesional y asertivo.</p>
+<p class="ped-soon">próximamente... <strong>Expresión oral:</strong> muletillas, pausas, ritmo y duración de la respuesta.</p>
+</div>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-profesor" aria-labelledby="titulo-profesor">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-profesor" data-i18n="modals.profesor">Contexto gramatical</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
+</div>
+<div data-i18n-html="html.profesor">
+<p>Esto es un entrenador de lenguaje para un ámbito concreto: la entrevista técnica de software. Simula la conversación con un profesor. Corrige, explica una regla y sigue la entrevista. El alumno practica el lenguaje de esa situación, no una lista suelta de ejercicios.</p>
+<p>La misma IA responde como entrevistador y como profesor. El hilo —la pregunta, lo que esa pregunta espera y el turno siguiente— se arma en esa IA a partir de la respuesta del estudiante. Hay tres piezas, y cada una se enriquece en su archivo:</p>
+<ul>
+<li><strong>Motorg</strong> (<code>motorg.js</code>, <code>motorg-es.js</code>, <code>motorg-fr.js</code>). En pausa, igual que la lógica difusa. Los archivos siguen en el repo y no deciden el turno.</li>
+<li><strong>Skill</strong> (<code>skill.js</code>). Pide a la IA que sea experta del puesto y profesora de gramática: explica cómo mejorar la respuesta, pide aclarar un aspecto o, si ya vale, valida y sigue.</li>
+<li><strong>Modc</strong> (<code>modc.js</code>). Lleva esa instrucción a la IA y devuelve el feedback y la pregunta siguiente.</li>
+</ul>
+<h3>Qué significa «intención» aquí</h3>
+<p>La intención que el motor lee es pública: qué jugada hace la frase dentro de la pregunta que está abierta. Una misma cadena de palabras cambia de valor cuando cambia la pregunta. Por eso el análisis recibe la pregunta junto con la respuesta.</p>
+<h3>Las seis dimensiones</h3>
+<p>El profesor usa estas seis para explicar cómo mejorar la oración. El tiempo verbal tiene que ser coherente con la pregunta, en el idioma que se practica.</p>
+<table>
+<thead><tr><th>Dimensión</th><th>Qué se observa</th><th>Ejemplo en la entrevista</th></tr></thead>
+<tbody>
+<tr><td>1. Temporal</td><td>Cuándo sitúa la acción: marcadores como yesterday, right now, last week, in 2024.</td><td>«Yesterday» sitúa el incidente en un pasado cerrado.</td></tr>
+<tr><td>2. Aspectual</td><td>Si la acción está terminada, sigue en curso o es un hábito.</td><td>fixed (cerrada), am fixing (en curso), I fix bugs every sprint (hábito).</td></tr>
+<tr><td>3. Modal</td><td>Si enuncia un hecho, una hipótesis o una obligación.</td><td>If the deployment fails, I will roll back. La condición es hipotética; el plan va con will.</td></tr>
+<tr><td>4. Ilocutiva</td><td>Qué acto cumple la frase: narrar, explicar una causa, proponer un paso, pedir aclaración.</td><td>«I restarted the service» narra lo que se hizo. «I will restart it» propone lo que se haría.</td></tr>
+<tr><td>5. Pragmática</td><td>Si ese acto responde a la pregunta vigente y conserva el tema técnico.</td><td>Ante «what did you do to fix the bug?», hablar del incidente responde. Cambiar a un hobby no responde.</td></tr>
+<tr><td>6. Estructural</td><td>Si la forma del verbo es la que esa intención exige en este juego.</td><td>Pasado simple, presente continuo, presente perfecto o condicional real (presente en if, will en la principal).</td></tr>
+</tbody>
+</table>
+<h3>Lectura de una frase</h3>
+<p>«Yesterday I fix a bug in production», con la pregunta «Tell me about a challenging bug you fixed»:</p>
+<ul>
+<li>Temporal alta hacia el pasado, por yesterday y por previous project en la pregunta.</li>
+<li>Aspectual: la pregunta pide una acción terminada.</li>
+<li>Modal: es un hecho, no una hipótesis.</li>
+<li>Ilocutiva: el alumno narra un incidente. El acto es el correcto.</li>
+<li>Pragmática alta: habla del bug, no de otro tema.</li>
+<li>Estructural baja: fix está en forma base. La estructura que toca es el pasado simple, fixed.</li>
+</ul>
+<p>El contenido de la entrevista se sostiene. Falla una dimensión. El profesor corrige esa forma y pregunta el siguiente paso del incidente. Si las seis señales no alcanzan para decidir, el resultado válido es evidencia insuficiente: se pregunta, y no se declara la frase incorrecta.</p>
+<p class="note">Al enriquecer el motor, cada regla nueva debe decir qué dimensión observa, qué forma sugiere y con qué grado de pertenencia. El skill decide cómo decirlo. El modelo conversacional no añade reglas por su cuenta.</p>
+</div>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-intencion" aria-labelledby="titulo-intencion">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-intencion" data-i18n="modals.intencion">Intención comunicativa</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
+</div>
+<div data-i18n-html="html.intencion">
+<p>La intención comunicativa es el contexto de la entrevista en el área que elegiste. Ingeniería, call center, restaurante, tienda, hotel, enfermería, oficina, reparto, docencia o ventas cambian los temas. Las preguntas con las que el entrevistador entiende una respuesta siguen siendo las mismas.</p>
+<ul>
+<li><strong>Qué</strong> pasó o qué se hizo.</li>
+<li><strong>Cómo</strong> se hizo.</li>
+<li><strong>Cuándo</strong> ocurrió, con el tiempo verbal que esa pregunta pide.</li>
+<li><strong>Dónde</strong>, o en qué parte del trabajo.</li>
+<li><strong>Por qué</strong>, la causa.</li>
+<li><strong>Para qué</strong>, el efecto que se buscaba.</li>
+</ul>
+<p>Una oración puede tener el tiempo bien y aun así no decir qué se hizo, dónde ni por qué. El entrevistador pide aclarar solo ese punto. Si el contexto ya se entiende y el tiempo es coherente con la pregunta, valida la respuesta y pasa a otra.</p>
+</div>
+</div>
+</dialog>
+
+<dialog class="theory-modal" id="modal-verbos" aria-labelledby="titulo-verbos">
+<div class="modal-card">
+<div class="modal-top">
+<h2 id="titulo-verbos" data-i18n="modals.verbs">Verbos y tiempos</h2>
+<button type="button" class="close-btn" data-close-modal data-i18n="ui.close">Cerrar</button>
+</div>
+<div data-i18n-html="html.verbos">
+<p>En esta entrevista el verbo carga el sentido profesional. El candidato puede usar el vocabulario técnico correcto y aun así fallar la jugada si el tiempo no es el que la pregunta acaba de pedir. El motor empieza por ahí: marcador de tiempo, forma del verbo y estructura esperada.</p>
+<h3>La pregunta elige el tiempo</h3>
+<table>
+<thead><tr><th>Pregunta de entrevista</th><th>Tiempo que pide</th><th>Respuesta que encaja</th></tr></thead>
+<tbody>
+<tr><td>What do you do in your current role?</td><td>Presente simple. Hábito o responsabilidad actual.</td><td>I design APIs and review pull requests.</td></tr>
+<tr><td>What did you do to fix the bug?</td><td>Pasado simple. Acción terminada.</td><td>I traced the logs and deployed a patch.</td></tr>
+<tr><td>What are you working on right now?</td><td>Presente continuo. Acción en curso.</td><td>I am migrating the auth service.</td></tr>
+<tr><td>What will you do if the deployment fails?</td><td>Condicional real: presente simple en if, will en la oración principal.</td><td>If it fails, I will roll back the release.</td></tr>
+<tr><td>What have you learned from that experience?</td><td>Presente perfecto. La experiencia sigue vigente en el presente profesional.</td><td>I have learned to ship a canary release first.</td></tr>
+</tbody>
+</table>
+<h3>El caso que el prototipo ya reconoce</h3>
+<p>Entrada del alumno: <em>Yesterday I fix a bug in production.</em></p>
+<p>Salida que el profesor debe poder explicar: <em>Yesterday I fixed a bug in production.</em> El marcador yesterday sitúa la acción en el pasado y fix está en forma base. La forma de pasado de ese verbo es fixed. La explicación cabe en una línea: con yesterday se usa el pasado simple, fix → fixed. La siguiente pregunta sigue dentro del incidente: qué hiciste para resolverlo.</p>
+<p>Otro caso ya cubierto por la regla del condicional: <em>If the deployment will fail, I will restart the service.</em> En la condición real de futuro, will no va en la cláusula con if. La forma de esa cláusula es el presente: <em>If the deployment fails, I will restart the service.</em></p>
+<h3>Verbos que el léxico inicial ya conjuga en pasado</h3>
+<p>fix → fixed, deploy → deployed, implement → implemented, debug → debugged, test → tested, create → created, build → built, write → wrote, find → found, make → made, do → did, go → went, have → had, see → saw.</p>
+<p>Los irregulares importan porque el pasado no es siempre «añadir -ed». built, wrote, went y found pertenecen al pasado por el uso del verbo, no por un sufijo común.</p>
+<h3>Un límite que el profesor debe respetar</h3>
+<p><em>Yesterday, I did fix the bug</em> es enfático y gramatical: did ya marca el pasado y fix permanece en forma base. Motorg comprueba si hay un auxiliar (did, was, had, will, would) antes de proponer el pasado. Las reglas actuales son heurísticas: no analizan todas las subordinadas ni todos los verbos del lenguaje. Una frase que ninguna regla reconoce permanece como frase no clasificada. No pasa a ser un error por silencio del motor.</p>
+<p class="note">Cuando se amplíe el ámbito (otra profesión, otro curso), se amplía el léxico y el mapa pregunta → tiempo. La pieza central sigue siendo el verbo dentro de la situación, no una lista memorizada fuera de la entrevista.</p>
+</div>
+</div>
+</dialog>
+
+<script src="https://unpkg.com/i18next@23.4.6/i18next.min.js"></script>
+<script src="scripts/locales-embed.js?v=20261016b"></script>
+<script src="scripts/i18n.js?v=20261016b"></script>
+<script type="module">
+/* import {analyzeGrammar} from './motorg.js'; Motores y lógica difusa en pausa. */
+import {buildPedagogicalContext,INTERVIEW_TYPES,DEFAULT_INTERVIEW_TYPE,interviewTypeOf} from './skill.js?v=20261016b';
+const $=id=>document.getElementById(id);
+for(const [id,type] of Object.entries(INTERVIEW_TYPES)){const option=document.createElement('option');option.value=id;option.textContent=type.label;if(id===DEFAULT_INTERVIEW_TYPE)option.selected=true;$('interviewType').append(option);}
+function currentType(){return interviewTypeOf($('interviewType').value);}
+function tr(key, fallback, vars){const api=window.coachI18n;if(api&&api.ready){const value=api.t(key, vars);if(typeof value==='string'&&value&&value!==key)return value;}let text=fallback==null?key:String(fallback);if(vars)text=text.replace(/\{\{(\w+)\}\}/g,(_,name)=>vars[name]==null?'':String(vars[name]));return text;}
+function uiLangName(code){return tr('langs.'+code,{es:'español',en:'inglés',fr:'francés'}[code]||code);}
+function refreshTypeLabels(){for(const option of $('interviewType').options){const type=INTERVIEW_TYPES[option.value];if(type)option.textContent=tr('types.'+option.value, type.label);}}
+let apiBase='', sessionUntil=0, sessionLive=false;
+let statusState={key:'status.opening', fallback:'Abriendo la entrevista…', extra:null};
+function setStatus(key, fallback, extra){statusState={key, fallback, extra:extra||null};paintStatus();}
+function paintStatus(){const vars={...(statusState.extra||{})};if(statusState.key==='status.preparing'||statusState.key==='status.ready'||statusState.key==='status.write')vars.lang=targetName();const el=$('status');const text=tr(statusState.key, statusState.fallback, vars);if(el.textContent===text)return;el.textContent=text;el.classList.remove('is-changed');void el.offsetWidth;el.classList.add('is-changed');}
+const SERVER_SOURCES=['https://api.github.com/repos/wbsckt3/sabelotodo-ai-interview-coach/contents/server.json?ref=main','https://raw.githubusercontent.com/wbsckt3/sabelotodo-ai-interview-coach/main/server.json',new URL('server.json',document.baseURI).href];
+function pad(n){return String(n).padStart(2,'0');}
+function formatRemain(ms){const total=Math.max(0,Math.ceil(ms/1000));const h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;return h?`${h}:${pad(m)}:${pad(s)}`:`${pad(m)}:${pad(s)}`;}
+function renderSession(){const el=$('sessionClock');if(!el)return;el.classList.toggle('is-clickable',useLauncher&&!sessionLive);if(sessionLive&&sessionUntil&&sessionUntil<=Date.now()){sessionLive=false;apiBase='';el.classList.toggle('is-clickable',useLauncher);if(useLauncher)sessionEnded();}el.classList.toggle('is-server',!sessionLive&&!location.hostname.endsWith('github.io'));el.classList.toggle('is-live',sessionLive);if(sessionLive&&sessionUntil>Date.now()){paintMarked(el,tr('ui.sessionCurrent','Sesión actual {{time}}',{time:'@@TIME@@'}),{'@@TIME@@':{cls:'time-session',text:formatRemain(sessionUntil-Date.now())}});return;}if(sessionLive){el.textContent=tr('ui.sessionActive','Sesión activa');return;}el.textContent=location.hostname.endsWith('github.io')?tr('ui.sessionZero','Sesión 00:00'):tr('ui.sessionLocal','Session server');}
+async function readServer(source){const response=await fetch(`${source}${source.includes('?')?'&':'?'}t=${Date.now()}`,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});if(!response.ok)return null;const data=await response.json();if(data&&typeof data.content==='string'){try{return JSON.parse(atob(data.content.replace(/\s/g,'')));}catch{return null;}}return data&&typeof data==='object'?data:null;}
+function applyServer(data){const api=data&&typeof data.api==='string'&&/^https:\/\//.test(data.api.trim())?data.api.trim().replace(/\/$/,''):'';const until=Date.parse(data&&data.until||'');const open=Boolean(api)&&( !Number.isFinite(until)||until>Date.now());if(!open)return false;apiBase=api;sessionLive=true;sessionUntil=Number.isFinite(until)?until:0;renderSession();return true;}
+async function loadServer(){for(const source of SERVER_SOURCES){try{const data=await readServer(source);if(data&&applyServer(data))return;}catch{/* prueba la siguiente fuente */}}if(!sessionLive)renderSession();}
+function remoteMissing(){return location.hostname.endsWith('github.io')&&!apiBase;}
+const LAUNCHER=((document.querySelector('meta[name="coach-launcher"]')||{}).content||'').trim().replace(/\/$/,'');
+const useLauncher=Boolean(LAUNCHER)&&location.hostname.endsWith('github.io');
+const LAUNCH_KEY='coach-launcher-session';
+let launchTimer=null, launchStartedAt=0, launchPollId=0;
+var launchStatusEl=null;
+function statusEl(){return launchStatusEl||(launchStatusEl=$('launchStatus'));}
+function launchStatus(text,isError){const el=statusEl();el.textContent=text||'';el.classList.toggle('is-error',Boolean(isError));}
+const CHOICE_IDS=['interviewType','targetLanguage','level','explanationLanguage'];
+let choiceSnapshot=null, choiceConfirmed=false;
+function readChoice(){return Object.fromEntries(CHOICE_IDS.map(id=>[id,$(id).value]));}
+function selectedText(id){const option=$(id).selectedOptions[0];return option?option.textContent:'';}
+function renderCard(){$('cardType').textContent=selectedText('interviewType');$('cardTarget').textContent=selectedText('targetLanguage');$('cardLevel').textContent=selectedText('level');$('cardExplain').textContent=selectedText('explanationLanguage');}
+function launchSummary(){$('launchSummary').textContent=tr('start.summary','Entrevista: {{type}} · Idioma: {{lang}}',{type:selectedText('interviewType'),lang:targetName()});}
+function openStartModal(){const pending=useLauncher&&!sessionLive&&sessionStorage.getItem(LAUNCH_KEY);if(pending){launchSummary();if(!$('modal-launch').open)$('modal-launch').showModal();return;}choiceSnapshot={values:readChoice(),restart:false};choiceConfirmed=false;if(!$('modal-start').open)$('modal-start').showModal();}
+function stopLaunchTimer(){if(launchTimer){clearInterval(launchTimer);launchTimer=null;}}
+function paintLaunching(){const time=formatRemain(Date.now()-launchStartedAt);launchStatus(autoLaunch?tr('start.waitSetup','Espera un momento mientras configuramos todo… {{time}}',{time}):tr('start.starting','Encendiendo el servidor del coach… {{time}}. Suele tardar 1 o 2 minutos.',{time}));}
+function launchFailed(message){if(autoLaunch)setAutoLaunch(false);stopLaunchTimer();launchPollId++;sessionStorage.removeItem(LAUNCH_KEY);$('launchBtn').disabled=false;$('launchBack').disabled=false;launchStatus(tr('start.failed','No se pudo iniciar la clase: {{message}}',{message}),true);if(!$('modal-launch').open)$('modal-launch').showModal();}
+async function pollLaunch(id){const poll=++launchPollId;$('launchBtn').disabled=true;$('launchBack').disabled=true;stopLaunchTimer();paintLaunching();launchTimer=setInterval(paintLaunching,1000);while(poll===launchPollId){let data=null;try{const response=await fetch(`${LAUNCHER}/sessions/${encodeURIComponent(id)}`,{cache:'no-store'});if(response.status===404){launchFailed(tr('start.expired','la sesión ya no existe.'));return;}data=await response.json();}catch{/* reintenta en el siguiente ciclo */}if(poll!==launchPollId)return;if(data&&data.status==='ready'&&applyServer(data)){stopLaunchTimer();$('launchBtn').disabled=false;$('launchBack').disabled=false;launchStatus('');if($('modal-launch').open)$('modal-launch').close();setAutoLaunch(false);restartInterview();return;}if(data&&(data.status==='failed'||data.status==='ended')){launchFailed(tr('start.serverDown','el servidor no arrancó.'));return;}await new Promise(resolve=>setTimeout(resolve,5000));}}
+async function launchClass(minutesOverride){const minutes=Math.min(180,Math.max(5,Number(minutesOverride)||Number.parseInt($('startMinutes').value,10)||60));$('startMinutes').value=String(minutes);$('launchBtn').disabled=true;$('launchBack').disabled=true;if(autoLaunch){launchStartedAt=Date.now();paintLaunching();}else launchStatus(tr('start.requesting','Pidiendo un servidor para tu clase…'));try{const response=await fetch(`${LAUNCHER}/sessions`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({minutes,type:$('interviewType').value,lang:$('targetLanguage').value})});const data=await response.json().catch(()=>({}));applyQuota(data.quota);if(response.ok)endedSessionNo=0;if(!response.ok){const known={429:'start.tooMany',503:'start.full'}[response.status];launchFailed(known?tr(known,data.error||''):(data.error||`HTTP ${response.status}`));return;}sessionStorage.setItem(LAUNCH_KEY,data.id);launchStartedAt=Date.now();pollLaunch(data.id);}catch(e){launchFailed(e.message);}}
+const AUTO_KEY='coach-launcher-auto', DEMO_KEY='coach-demo-at', DEMO_MINUTES=5, TOPIC_KEY='coach-demo-topic';
+const URL_TOPIC=(()=>{const id=new URLSearchParams(location.search).get('topic')||'';return Object.prototype.hasOwnProperty.call(INTERVIEW_TYPES,id)?id:'';})();
+function demoTopic(){let saved='';try{saved=sessionStorage.getItem(TOPIC_KEY)||'';}catch{/* sin storage */}return URL_TOPIC||(INTERVIEW_TYPES[saved]?saved:'verb_tenses');}
+function dropUrlTopic(){if(!URL_TOPIC)return;const url=new URL(location.href);url.searchParams.delete('topic');history.replaceState(history.state,'',url.pathname+url.search+url.hash);}
+let autoLaunch=false, demoWanted=false, demoStarted=false;
+function setAutoLaunch(on){if(!on&&ballHostId!=='studentSheet'){stopSpeech();ballHostId='studentSheet';}if(!on)$('modal-launch').querySelector('.modal-card').append(statusEl());autoLaunch=on;$('modal-launch').classList.toggle('is-auto',on);if(on)sessionStorage.setItem(AUTO_KEY,'1');else sessionStorage.removeItem(AUTO_KEY);}
+const OWN_LANG_NAME={en:'English',fr:'Français',es:'Español'};
+function storyText(){return tr('start.story','¡Hola! Practica speaking en inglés, francés o español con un asistente de inteligencia artificial. Ahora mismo estamos creando tu sesión de práctica de speaking de 5 minutos sobre {{topic}} en "{{lang}}" para nivel principiante. Un servidor se está encendiendo solo para ti y suele tardar uno o dos minutos. Cuando esté listo, el entrevistador te hará una pregunta corta sobre ese tópico, y tú respondes con el micrófono naranja. Tu profesor te dará feedback en tu idioma y te propondrá la frase corregida para que la escuches y la repitas. Desde tu red puedes iniciar hasta 3 sesiones en aproximadamente 60 minutos. Si quieres otra profesión, otro idioma u otra duración, usa el botón cambia tu sesión. Espera un momento mientras configuramos todo.',{lang:OWN_LANG_NAME[$('targetLanguage').value]||'English',topic:professionShort()});}
+function leadText(){return tr('start.creating','Estamos creando un servidor en {{native}} para que practiques speaking en {{learn}} sobre {{topic}}.',{native:uiLangName($('explanationLanguage').value),learn:uiLangName($('targetLanguage').value),topic:professionShort()});}
+function renderStory(){const box=$('launchStory');const status=statusEl();box.replaceChildren();const state={cursor:0};const lead=document.createElement('p');lead.className='launch-lead';appendFeedbackBody(lead,leadText(),state);const p=document.createElement('p');appendFeedbackBody(p,storyText(),state);box.append(lead,status,p);box.scrollTop=0;}
+function readStory(){renderStory();ballHostId='launchStory';ensureBall();speakSequence(feedbackVoiceParts([leadText(),storyText()]));}
+function paintAutoConfig(){$('autoConfigOption').textContent=[selectedText('interviewType'),selectedText('targetLanguage'),selectedText('level'),selectedText('explanationLanguage')].join(' · ');}
+function demoEligible(){if(navigator.webdriver||/bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(navigator.userAgent||''))return false;if(URL_TOPIC)return true;try{return Date.now()-(Number(localStorage.getItem(DEMO_KEY))||0)>3600000;}catch{return true;}}
+function demoNative(){const api=window.coachI18n;const locale=api&&api.ready&&api.getLocale?api.getLocale():String(navigator.language||'es').slice(0,2).toLowerCase();return ['es','en','fr'].includes(locale)?locale:'es';}
+function applyDemoChoice(){const native=demoNative();$('explanationLanguage').value=native;$('targetLanguage').value=native==='en'?'fr':'en';$('level').value='beginner';$('interviewType').value=demoTopic();$('startMinutes').value=String(DEMO_MINUTES);document.body.classList.add('class-started');updateLanguageHints();renderCard();paintAutoConfig();return native;}
+function startDemo(){if(demoStarted||!demoWanted)return;demoStarted=true;try{localStorage.setItem(DEMO_KEY,String(Date.now()));sessionStorage.setItem(TOPIC_KEY,demoTopic());}catch{/* sin storage */}applyDemoChoice();dropUrlTopic();setAutoLaunch(true);if(!$('modal-launch').open)$('modal-launch').showModal();readStory();launchClass(DEMO_MINUTES);}
+$('modal-launch').addEventListener('cancel',event=>{if(autoLaunch)event.preventDefault();});
+let quota=null, endedSessionNo=0, quotaFetching=false;
+function applyQuota(data){if(!data||!Number.isFinite(Number(data.limit)))return;const limit=Number(data.limit)||3;const used=Math.max(0,Number(data.used)||0);quota={used,limit,remaining:Math.max(0,limit-used),resetAt:Date.parse(data.resetAt)||0};paintQuota();}
+async function loadQuota(){if(!useLauncher||quotaFetching)return;quotaFetching=true;try{const response=await fetch(`${LAUNCHER}/quota`,{cache:'no-store'});if(response.ok)applyQuota(await response.json());}catch{/* sin datos del servidor */}finally{quotaFetching=false;}}
+function paintQuota(){const line=$('quotaLine'), box=$('startQuota');if(!quota){line.hidden=true;box.hidden=true;return;}if(quota.resetAt&&quota.resetAt<=Date.now()){quota={used:0,limit:quota.limit,remaining:quota.limit,resetAt:quota.resetAt+3600000};endedSessionNo=0;loadQuota();}const vars={left:quota.remaining,limit:quota.limit,time:'@@TIME@@',n:endedSessionNo};const timeChip={'@@TIME@@':{cls:'time-server',text:formatRemain(quota.resetAt-Date.now())}};line.hidden=false;paintMarked(line,tr('ui.quotaLine','Te quedan {{left}} de {{limit}} sesiones en este servidor · Servidor {{time}}',vars),timeChip);box.hidden=false;paintMarked($('startQuotaLeft'),quota.remaining?tr('start.quotaLeft','Te quedan {{left}} de {{limit}} sesiones en este servidor. El servidor se renueva en {{time}}.',vars):tr('start.quotaNone','No te quedan sesiones en este servidor. Espera {{time}} para tener un servidor nuevo con {{limit}} sesiones.',vars),timeChip);const ended=$('startQuotaEnded');ended.hidden=!endedSessionNo;if(endedSessionNo)paintMarked(ended,tr('start.quotaEnded','Tu sesión {{n}} en este servidor ha finalizado. Crea otra o espera {{time}} para tener un servidor nuevo con {{limit}} sesiones.',vars),timeChip);else ended.textContent='';}
+setInterval(paintQuota,1000);
+function sessionEnded(){endedSessionNo=quota?quota.used:0;loadQuota();sessionStorage.removeItem(LAUNCH_KEY);setStatus('start.ended','La clase terminó. Inicia otra cuando quieras.');openStartModal();}
+$('modal-start').addEventListener('close',()=>{if(!choiceSnapshot)return;const snapshot=choiceSnapshot;choiceSnapshot=null;if(choiceConfirmed){if(useLauncher&&!sessionLive){launchStatus('');launchSummary();$('modal-launch').showModal();return;}if(snapshot.restart)restartInterview();return;}if(CHOICE_IDS.every(id=>snapshot.values[id]===$(id).value))return;for(const [id,value] of Object.entries(snapshot.values))$(id).value=value;updateLanguageHints();});
+$('startBegin').addEventListener('click',()=>{const before=(choiceSnapshot&&choiceSnapshot.values)||{};choiceSnapshot={values:before,restart:['interviewType','targetLanguage'].some(id=>before[id]!==$(id).value)||!$('interviewer').value.trim()};choiceConfirmed=true;document.body.classList.add('class-started');$('modal-start').close();updateLanguageHints();renderCard();});
+$('launchBack').addEventListener('click',()=>{$('modal-launch').close();openStartModal();});
+$('launchBtn').addEventListener('click',()=>launchClass());
+$('changeClass').addEventListener('click',openStartModal);
+document.querySelectorAll('#modal-start [data-set-locale]').forEach(btn=>btn.addEventListener('click',()=>{$('explanationLanguage').value=btn.dataset.setLocale;updateLanguageHints();}));
+$('sessionClock').addEventListener('click',()=>{if(useLauncher&&!sessionLive)openStartModal();});
+function apiUrl(path){return `${apiBase}${path}`;}
+const replyBtn=$('replyBtn');
+const micBtn=$('micBtn');
+const sendBtn=$('sendBtn');
+const VOICE_SAMPLE={es:'Buenos días. Cuéntame sobre tu experiencia profesional.',en:'Good morning. Tell me about your professional experience.',fr:'Bonjour. Parlez-moi de votre expérience professionnelle.'};
+const VOICE_FEEDBACK={es:'Para esa pregunta, cuenta en pasado qué hiciste, dónde y qué resultado obtuviste. Sé claro y concreto.',en:'For that question, say in the past tense what you did, where, and what result you got. Be clear and specific.',fr:'Pour cette question, racontez au passé ce que vous avez fait, où, et le résultat. Soyez clair et concret.'};
+const FIXED_VOICE={en:{name:'Google US English',lang:'en-US',label:'Google US English (en-US)'},es:{name:'Google español',lang:'es-ES',label:'Google español (es-ES)'},fr:{name:'Google français',lang:'fr-FR',label:'Google français (fr-FR)'}};
+let speakQuestionOnClose=false, recorder=null, recordChunks=[];
+let speechToken=0, activeUtter=null, lastFeedbackSpeech=[], pendingSpeech=null;
+function replayPendingSpeech(){if(!pendingSpeech)return;const held=pendingSpeech;pendingSpeech=null;speakSequence(held.parts,held.baseOffset);}
+document.addEventListener('pointerdown',replayPendingSpeech,true);
+document.addEventListener('keydown',replayPendingSpeech,true);
+function setSpeaking(who){$('repeatQuestionBtn').classList.toggle('is-speaking',who==='question');$('repeatFeedbackBtn').classList.toggle('is-speaking',who==='feedback');}
+function stopSpeech(){speechToken++;activeUtter=null;setSpeaking(null);hideBall();if(window.speechSynthesis)speechSynthesis.cancel();}
+function fixedVoice(lang){return FIXED_VOICE[lang]||FIXED_VOICE.en;}
+function chosenVoice(lang){const fixed=fixedVoice(lang);if(!window.speechSynthesis)return null;const name=fixed.name.toLowerCase();const code=fixed.lang.toLowerCase();const voices=speechSynthesis.getVoices();const named=voice=>String(voice.name||'').toLowerCase()===name;const sameLang=voice=>String(voice.lang||'').toLowerCase()===code;return voices.find(voice=>named(voice)&&sameLang(voice))||voices.find(named)||voices.find(voice=>String(voice.name||'').toLowerCase().includes(name)&&String(voice.lang||'').toLowerCase().startsWith(code.slice(0,2)))||null;}
+function speechChunks(text){const bits=String(text||'').split(/\n+|(?<=[.!?…])\s+/).map(bit=>bit.trim()).filter(Boolean);const chunks=[];let buf='';for(const bit of bits){const next=buf?`${buf} ${bit}`:bit;if(buf&&next.length>220){chunks.push(buf);buf=bit;}else buf=next;}if(buf)chunks.push(buf);return chunks;}
+function voicesReady(){return new Promise(resolve=>{if(!window.speechSynthesis||speechSynthesis.getVoices().length){resolve();return;}let settled=false;const done=()=>{if(settled)return;settled=true;speechSynthesis.removeEventListener('voiceschanged',done);resolve();};speechSynthesis.addEventListener('voiceschanged',done);speechSynthesis.getVoices();setTimeout(done,500);});}
+function paintVoiceSelects(){const target=$('targetLanguage').value||'en';const explain=$('explanationLanguage').value||'es';document.querySelectorAll('[data-voice-field="professor"],[data-voice-field="feedback-learn"]').forEach(field=>{field.hidden=target===explain;});document.querySelectorAll('input[data-voice-role="interviewer"]').forEach(input=>{input.value=fixedVoice(target).label;});document.querySelectorAll('input[data-voice-role="professor"]').forEach(input=>{input.value=fixedVoice(explain).label;});}
+function wordCount(text){return String(text||'').split(/\s+/).filter(Boolean).length;}
+let hopTimer=0, boundaryDrove=false;
+function stopHop(){if(hopTimer){clearInterval(hopTimer);hopTimer=0;}}
+let ballHostId='studentSheet';
+let hopHost='';
+function hostId(){return hopHost||ballHostId;}
+function sheetWords(){return document.querySelectorAll(`#${hostId()} .fb-word`);}
+function showQuestionView(){const area=$('interviewer'),view=$('questionView');if(!area||!view||!area.value.trim())return false;const cs=getComputedStyle(area);Object.assign(view.style,{left:area.offsetLeft+'px',top:area.offsetTop+'px',width:area.offsetWidth+'px',height:area.offsetHeight+'px',padding:cs.padding,font:cs.font,lineHeight:cs.lineHeight,letterSpacing:cs.letterSpacing,borderWidth:cs.borderWidth});view.replaceChildren();appendSpokenWords(view,area.value,{cursor:0});view.hidden=false;area.parentNode.classList.add('is-reading');return true;}
+function hideQuestionView(){const view=$('questionView');if(view){view.hidden=true;view.replaceChildren();}const area=$('interviewer');if(area)area.parentNode.classList.remove('is-reading');hopHost='';}
+function ensureBall(){const sheet=$(hostId());if(!sheet)return null;let ball=$('fbBall');if(!ball){ball=document.createElement('span');ball.id='fbBall';ball.className='fb-ball';ball.hidden=true;ball.setAttribute('aria-hidden','true');}if(ball.parentNode!==sheet)sheet.append(ball);return ball;}
+function hideBall(){stopHop();const ball=$('fbBall');if(ball)ball.hidden=true;hideQuestionView();document.querySelectorAll('.fb-word.is-spoken').forEach(el=>el.classList.remove('is-spoken'));}
+function showHop(span){if(!span)return;document.querySelectorAll('.fb-word.is-spoken').forEach(el=>el.classList.remove('is-spoken'));span.classList.add('is-spoken');const ball=ensureBall();const sheet=$(hostId());if(!ball||!sheet)return;let sheetBox=sheet.getBoundingClientRect();let box=span.getBoundingClientRect();if(box.top<sheetBox.top+8)sheet.scrollTop-=sheetBox.top+8-box.top;else if(box.bottom>sheetBox.bottom-56)sheet.scrollTop+=box.bottom-(sheetBox.bottom-56);sheetBox=sheet.getBoundingClientRect();box=span.getBoundingClientRect();ball.hidden=false;ball.style.left=(box.left-sheetBox.left+sheet.scrollLeft+box.width/2)+'px';ball.style.top=(box.top-sheetBox.top+sheet.scrollTop)+'px';}
+function startHop(wordOffset,count){stopHop();const words=[...sheetWords()].slice(wordOffset,wordOffset+count);if(!words.length)return;let index=0;showHop(words[0]);hopTimer=setInterval(()=>{if(boundaryDrove){stopHop();return;}index+=1;if(index>=words.length){stopHop();return;}showHop(words[index]);},260);}
+function speakSequence(parts,baseOffset){pendingSpeech=null;if(!window.speechSynthesis){setSpeaking(null);hideBall();return;}const queue=[];let wordOffset=Number(baseOffset)||0;for(const item of (Array.isArray(parts)?parts:[])){for(const text of speechChunks(item&&item.text)){queue.push({text,lang:item&&item.lang,who:item&&item.who,wordOffset});wordOffset+=wordCount(text);}}if(!queue.length){setSpeaking(null);hideBall();return;}const token=++speechToken;speechSynthesis.cancel();hideBall();if(queue.every(item=>item.who==='question')&&parts.map(item=>String(item&&item.text||'').trim()).join(' ')===$('interviewer').value.trim()&&showQuestionView())hopHost='questionView';const step=index=>{if(token!==speechToken)return;if(index>=queue.length){activeUtter=null;setSpeaking(null);hideBall();return;}const item=queue[index];const utter=new SpeechSynthesisUtterance(item.text);const voice=chosenVoice(item.lang);const fixed=fixedVoice(item.lang);if(voice)utter.voice=voice;utter.lang=(voice&&voice.lang)||fixed.lang;utter.rate=0.95;utter.pitch=1;let moved=false;const next=()=>{if(moved||token!==speechToken)return;moved=true;stopHop();step(index+1);};const hops=item.who==='feedback'||(item.who==='question'&&hopHost==='questionView');utter.onstart=()=>{if(!hops)return;boundaryDrove=false;startHop(item.wordOffset,wordCount(item.text));};utter.onboundary=event=>{if(!hops||!event||event.name!=='word')return;boundaryDrove=true;stopHop();const local=String(item.text||'').slice(0,event.charIndex||0).split(/\s+/).filter(Boolean).length;showHop(sheetWords()[item.wordOffset+local]);};utter.onend=next;utter.onerror=event=>{if(event&&event.error==='interrupted')return;if(event&&event.error==='not-allowed'&&token===speechToken){moved=true;pendingSpeech={parts,baseOffset};activeUtter=null;setSpeaking(null);hideBall();return;}next();};activeUtter=utter;setSpeaking(item.who||null);speechSynthesis.speak(utter);};voicesReady().then(()=>{if(token!==speechToken)return;setTimeout(()=>{if(token===speechToken)step(0);},80);});}
+function speak(text,lang,who){speakSequence([{text,lang,who}]);}
+let inputMode=null, audioBlob=null, audioSendReady=false, textSendReady=false, textIdleTimer=null, silenceWatch=0, audioContext=null, audioStopAction='ready';
+function paintInputTools(){const textMode=inputMode==='text';const audioMode=inputMode==='audio';const recording=micBtn.classList.contains('is-recording');const speakOnly=Boolean($('suggestLead')&&!$('suggestLead').hidden);replyBtn.disabled=busy||audioMode||speakOnly;replyBtn.classList.toggle('is-unavailable',busy||audioMode||speakOnly);micBtn.disabled=busy||textMode;micBtn.classList.toggle('is-unavailable',busy||textMode);const showSend=textMode||audioMode;sendBtn.hidden=!showSend;const ready=textMode?textSendReady:audioSendReady;sendBtn.disabled=!showSend||!ready||busy;sendBtn.classList.toggle('is-ready',showSend&&ready&&!busy);$('studentText').readOnly=speakOnly||(audioMode&&recording);paintVoiceLabels();}
+function resetInputMode(){inputMode=null;audioBlob=null;audioSendReady=false;textSendReady=false;clearTimeout(textIdleTimer);textIdleTimer=null;stopSilenceWatch();if(recorder&&recorder.state==='recording'){audioStopAction='discard';recorder.stop();}else setMicIdle();$('studentText').readOnly=false;paintInputTools();}
+function armTextIdle(){clearTimeout(textIdleTimer);textSendReady=false;paintInputTools();textIdleTimer=setTimeout(()=>{if(inputMode!=='text')return;textSendReady=Boolean($('studentText').value.trim());paintInputTools();if(textSendReady)setStatus('voice.readyToSendText','Ya puedes enviar el texto.');},3000);}
+function stopSilenceWatch(){if(silenceWatch){clearInterval(silenceWatch);silenceWatch=0;}if(audioContext){audioContext.close().catch(()=>{});audioContext=null;}}
+function startSilenceWatch(stream){stopSilenceWatch();const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return;audioContext=new Ctx();if(audioContext.resume)audioContext.resume().catch(()=>{});const source=audioContext.createMediaStreamSource(stream);const analyser=audioContext.createAnalyser();analyser.fftSize=1024;source.connect(analyser);const data=new Uint8Array(analyser.fftSize);let silentMs=0;silenceWatch=setInterval(()=>{if(!recorder||recorder.state!=='recording')return;analyser.getByteTimeDomainData(data);let sum=0;for(let i=0;i<data.length;i++){const v=(data[i]-128)/128;sum+=v*v;}const rms=Math.sqrt(sum/data.length);if(rms<0.018)silentMs+=200;else silentMs=0;const ready=silentMs>=3000;if(ready===audioSendReady)return;audioSendReady=ready;paintInputTools();if(ready)setStatus('voice.readyToSend','Dejaste de hablar. Ya puedes enviar el audio.');else setStatus('voice.recording','Grabando tu respuesta… Enviar se habilita al detener o tras 3 segundos en silencio.');},200);}
+function paintVoiceLabels(){const reply=tr('ui.write','Escribir');replyBtn.setAttribute('aria-label',reply);replyBtn.title=reply;const recording=micBtn.classList.contains('is-recording');const micLabel=recording?tr('ui.micStop','Detener'):tr('ui.mic','Hablar');micBtn.setAttribute('aria-label',micLabel);micBtn.title=micLabel;const sendLabel=inputMode==='audio'?tr('ui.sendAudio','Enviar audio'):tr('ui.sendText','Enviar texto');sendBtn.setAttribute('aria-label',sendLabel);sendBtn.title=sendLabel;const questionLabel=tr('ui.repeatQuestion','Repetir pregunta');const feedbackLabel=tr('ui.repeatFeedback','Repetir feedback');$('repeatQuestionBtn').title=questionLabel;if($('repeatFeedbackBtn'))$('repeatFeedbackBtn').title=feedbackLabel;}
+function setMicIdle(){micBtn.classList.remove('is-recording');micBtn.setAttribute('aria-pressed','false');paintVoiceLabels();}
+if(window.speechSynthesis){speechSynthesis.addEventListener('voiceschanged',paintVoiceSelects);paintVoiceSelects();}
+document.addEventListener('click',event=>{const btn=event.target.closest&&event.target.closest('[data-voice-preview]');if(!btn)return;const professor=btn.dataset.voicePreview==='professor';const lang=professor?$('explanationLanguage').value:$('targetLanguage').value;const sample=professor?(VOICE_FEEDBACK[lang]||VOICE_FEEDBACK.es):(VOICE_SAMPLE[lang]||VOICE_SAMPLE.en);speak(sample,lang,professor?'feedback':'question');});
+let busy=false, generation=0;
+function parseCoachTurn(raw){const text=String(raw||'').trim();const candidates=[];const fenced=text.match(/```(?:json)?\s*([\s\S]*?)```/i);if(fenced)candidates.push(fenced[1].trim());const brace=text.match(/\{[\s\S]*\}/);if(brace)candidates.push(brace[0]);candidates.push(text);function flat(value){if(typeof value==='string')return value.trim();if(Array.isArray(value))return value.map(flat).filter(Boolean).join(' ');if(value&&typeof value==='object')return Object.values(value).map(flat).filter(Boolean).join(' ');return '';}function field(data,name){const direct=flat(data[name]);if(direct)return direct;for(const key of Object.keys(data)){if(key===name||key.startsWith(name+'_')){const value=flat(data[key]);if(value)return value;}}return '';}
+function asList(value){if(Array.isArray(value))return value.map(item=>String(item||'').trim()).filter(Boolean);if(typeof value==='string'&&value.trim())return [value.trim()];return [];}
+function asError(value){if(!value||typeof value!=='object')return null;const error={type:String(value.type||'').trim(),rule:String(value.rule||'').trim(),example:String(value.example||'').trim()};return error.type||error.rule||error.example?error:null;}
+for(const candidate of candidates){try{const data=JSON.parse(candidate);const summary=field(data,'summary');const correction=field(data,'correction');const expectation=field(data,'expectation');const content=field(data,'content');const communication=field(data,'communication');const feedback=field(data,'feedback');const suggestion=field(data,'suggestion');const interviewer=field(data,'interviewer');const satisfied=data.satisfied===true||data.satisfied==='true';const expectedGrammar=asList(data.expected_grammar||data.expectedGrammar);const communicativeIntent=field(data,'communicative_intent')||field(data,'communicativeIntent');const error=asError(data.error);if(summary||correction||expectation||content||communication||feedback||suggestion||interviewer)return {summary,correction,expectation,content,communication,feedback,suggestion,interviewer,satisfied,expectedGrammar,communicativeIntent,error};}catch{/* prueba el siguiente candidato */}}const cut=text.match(/"interviewer"\s*:\s*"((?:[^"\\]|\\.)*)/);let loose='';if(cut){try{loose=JSON.parse('"'+cut[1].replace(/\\$/,'')+'"').trim();}catch{loose=cut[1].trim();}if(!/[?.!？]$/.test(loose))loose='';}return {summary:'',correction:'',expectation:'',content:'',communication:'',feedback:loose?'':text,suggestion:'',interviewer:loose,satisfied:false,expectedGrammar:[],communicativeIntent:'',error:null};}
+const FEEDBACK_LABELS={es:['Tema del entrevistador','Tu respuesta','Contenido: ¿contestaste lo que realmente te preguntaron?','Comunicación: ¿fuiste claro, coherente, profesional y asertivo?','Cómo mejorar esta respuesta','Qué ajustar','Así podría quedar la respuesta','Pregunta del entrevistador','La respuesta vale. Llega una pregunta nueva.'],en:['Interviewer topic','Your answer','Content: did you answer what you were really asked?','Communication: were you clear, coherent, professional, and assertive?','How to improve this answer','What to adjust','How the answer could read','Interviewer question','The answer stands. A new question is coming.'],fr:['Sujet de l\'intervieweur','Votre réponse','Contenu : as-tu vraiment répondu à ce qu\'on t\'a demandé ?','Communication : as-tu été clair, cohérent, professionnel et assertif ?','Comment améliorer cette réponse','Quoi ajuster','La réponse pourrait se lire ainsi','Question de l\'intervieweur','La réponse tient. Une nouvelle question arrive.']};
+function feedbackBlocks(turn,topic,answer,probe){const labels=FEEDBACK_LABELS[$('explanationLanguage').value]||FEEDBACK_LABELS.es;const blocks=[];const add=(label,text,tone)=>{const value=String(text||'').trim();if(value)blocks.push({label:label||'',text:value,tone});};add(labels[0],topic,'ask');add(labels[1],answer,'learn');add(labels[2],turn.content,'native');add(labels[3],turn.communication,'native');if(turn.correction)add(labels[4],turn.correction,'native');else add('',turn.feedback,'native');add(labels[5],turn.expectation,'native');add(labels[6],turn.suggestion,'learn');if(probe)add(labels[7],probe,'ask');else if(turn.satisfied)add('',labels[8],'native');return blocks;}
+function formatFeedback(turn,topic,answer,probe){return feedbackBlocks(turn,topic,answer,probe).map(block=>block.label?block.label+'\n'+block.text:block.text).join('\n\n');}
+function renderFeedback(blocks){const view=$('feedbackView');if(!view)return;view.replaceChildren();if(!blocks||!blocks.length){const empty=document.createElement('p');empty.className='feedback-empty';empty.textContent=$('feedback').placeholder||'';view.append(empty);return;}for(const block of blocks){const card=document.createElement('article');card.className='feedback-block feedback-block--'+(block.tone==='learn'?'learn':block.tone==='ask'?'ask':'native');if(block.label){const label=document.createElement('p');label.className='feedback-label';label.textContent=block.label;card.append(label);}const body=document.createElement('p');body.className='feedback-text';body.textContent=block.text;card.append(body);view.append(card);}}
+function feedbackSpeechFromTurn(turn,probe){const labels=FEEDBACK_LABELS[$('explanationLanguage').value]||FEEDBACK_LABELS.es;const bodies=[turn.content,turn.communication,turn.correction||turn.feedback,turn.expectation].map(item=>String(item||'').trim()).filter(Boolean);if(turn.satisfied&&!probe)bodies.push(labels[8]);return feedbackVoiceParts(bodies);}
+function speakFeedback(){if(lastFeedbackSpeech.length){speakSequence(lastFeedbackSpeech);return;}const text=$('feedback').value.trim();if(text)speak(text,$('explanationLanguage').value,'feedback');}
+const STORE_KEY='sabelotodo-interview-conversations';
+let sessionId=null;
+function readConversations(){try{const raw=JSON.parse(localStorage.getItem(STORE_KEY)||'[]');return Array.isArray(raw)?raw:[];}catch{return [];}}
+function writeConversations(list){try{localStorage.setItem(STORE_KEY,JSON.stringify(list.slice(-40)));}catch{/* el navegador puede rechazar el guardado */}}
+function beginConversation(){sessionId=(crypto.randomUUID&&crypto.randomUUID())||String(Date.now());const list=readConversations();list.push({id:sessionId,startedAt:new Date().toISOString(),interviewType:$('interviewType').value,targetLanguage:$('targetLanguage').value,explanationLanguage:$('explanationLanguage').value,level:$('level').value,turns:[]});writeConversations(list);return sessionId;}
+function appendTurn(entry){if(!sessionId)beginConversation();const list=readConversations();const session=list.find(item=>item.id===sessionId);if(!session)return;session.turns.push({at:new Date().toISOString(),...entry});writeConversations(list);}
+function targetName(){return uiLangName($('targetLanguage').value||'en');}
+function explanationName(){return uiLangName($('explanationLanguage').value||'es');}
+function setHint(id,text){const el=$(id);if(el)el.dataset.hint=text;}
+function fitQuestion(){const el=$('interviewer');if(!el)return;el.style.height='auto';el.style.height=Math.max(72,el.scrollHeight+2)+'px';}
+function fitAnswer(){const el=$('studentText');if(!el)return;el.style.height='auto';el.style.height=Math.max(88,el.scrollHeight)+'px';}
+function clearCoachNote(){hideBall();const box=$('studentImmersed');if(box){box.hidden=true;box.classList.remove('is-open');box.replaceChildren();}const sheet=$('studentSheet');if(sheet)sheet.classList.remove('has-feedback');hideSuggestion();$('feedback').value='';lastFeedbackSpeech=[];fitAnswer();}
+let currentSuggestion='';
+function suggestLeadText(){return tr('ui.suggestLead','Escucha las veces que sea necesario y repite tu respuesta a la pregunta cuando te sientas seguro.');}
+function paintSuggestCopy(){const lead=$('suggestLead');if(lead&&!lead.hidden){lead.replaceChildren();appendSpokenWords(lead,suggestLeadText(),{cursor:0});}const label=tr('ui.repeatSuggest','Repetir frase');$('repeatSuggestBtn').title=label;$('repeatSuggestBtn').setAttribute('aria-label',label);$('memorizeNote').textContent=tr('ui.memorize','Escucha y memoriza la frase con las correcciones y, cuando te sientas seguro, vuelve a enviar la respuesta.');}
+function hideSuggestion(){currentSuggestion='';const lead=$('suggestLead');if(lead){lead.hidden=true;lead.classList.remove('is-open');lead.replaceChildren();}const view=$('suggestView');if(view){view.hidden=true;view.replaceChildren();}const tools=$('suggestTools');if(tools)tools.hidden=true;const zone=document.querySelector('.suggest-zone');if(zone)zone.classList.remove('is-speak-only');}
+function showSuggestion(text){currentSuggestion=text;const lead=$('suggestLead');lead.hidden=false;lead.classList.add('is-open');const view=$('suggestView');view.replaceChildren();appendSpokenWords(view,text,{cursor:0});view.hidden=false;$('suggestTools').hidden=false;document.querySelector('.suggest-zone').classList.add('is-speak-only');paintSuggestCopy();$('studentText').value=text;}
+function speakSuggestion(){if(!currentSuggestion)return;const first=$('suggestView').querySelector('.fb-word');const base=first?[...sheetWords()].indexOf(first):0;speakSequence([{text:currentSuggestion,lang:$('targetLanguage').value,who:'feedback'}],Math.max(0,base));}
+function appendSpokenWords(parent,text,state){for(const part of String(text||'').split(/(\s+)/)){if(!part)continue;if(/^\s+$/.test(part)){parent.append(document.createTextNode(part));state.cursor+=part.length;continue;}const span=document.createElement('span');span.className='fb-word';span.dataset.start=String(state.cursor);span.textContent=part;parent.append(span);state.cursor+=part.length;}}
+function learnQuoteRe(){return /"([^"]+)"|“([^”]+)”|«([^»]+)»/g;}
+function appendFeedbackBody(parent,text,state){const source=String(text||'');const re=learnQuoteRe();let last=0,match;const write=(chunk,learn)=>{if(!chunk)return;const host=learn?document.createElement('span'):parent;if(learn){host.className='fb-learn';parent.append(host);}appendSpokenWords(host,chunk,state);};while((match=re.exec(source))){write(source.slice(last,match.index),false);write(match[1]||match[2]||match[3],true);last=match.index+match[0].length;}write(source.slice(last),false);}
+function feedbackVoiceParts(bodies){const explain=$('explanationLanguage').value;const target=$('targetLanguage').value;const same=explain===target;const parts=[];const push=(text,learn)=>{const value=String(text||'').replace(/\s+/g,' ').trim();if(value)parts.push({text:value,lang:learn&&!same?target:explain,who:'feedback'});};for(const body of bodies){const re=learnQuoteRe();let last=0,match;while((match=re.exec(body))){push(body.slice(last,match.index),false);push(match[1]||match[2]||match[3],true);last=match.index+match[0].length;}push(body.slice(last),false);}return parts;}
+const COACH_INTRO={es:{title:'Feedback de tu entrenador personal',lead:'Este feedback resume **contenido**, **comunicación**, **asertividad**, **cómo mejorar** y **qué ajustar**.'},en:{title:'Feedback from your personal coach',lead:'This feedback covers **content**, **communication**, **assertiveness**, **how to improve**, and **what to adjust**.'},fr:{title:'Feedback de ton coach personnel',lead:'Ce feedback résume le **contenu**, la **communication**, l\'**assertivité**, **comment améliorer** et **quoi ajuster**.'}};
+function coachSummary(turn){const summary=String(turn.summary||'').trim();if(summary)return summary;return [turn.content,turn.communication,turn.correction||turn.feedback,turn.expectation].map(item=>String(item||'').trim()).filter(Boolean).join(' ');}
+function renderImmersed(turn){const intro=COACH_INTRO[$('explanationLanguage').value]||COACH_INTRO.es;const text=coachSummary(turn);const box=$('studentImmersed');box.replaceChildren();ensureBall();const any=Boolean(text);if(any){const title=document.createElement('strong');title.textContent=intro.title;box.append(title);const lead=document.createElement('p');lead.className='fb-intro';intro.lead.split(/\*\*/).forEach((bit,index)=>{if(!bit)return;if(index%2){const b=document.createElement('strong');b.textContent=bit;lead.append(b);}else lead.append(document.createTextNode(bit));});box.append(lead);const p=document.createElement('p');appendFeedbackBody(p,text,{cursor:0});box.append(p);}box.hidden=!any;box.classList.toggle('is-open',any);const sheet=$('studentSheet');if(sheet)sheet.classList.toggle('has-feedback',any);}
+function showRetryCoach(turn){renderImmersed(turn);const suggestion=String(turn.suggestion||'').trim();if(suggestion)showSuggestion(suggestion);else hideSuggestion();fitAnswer();const summary=coachSummary(turn);lastFeedbackSpeech=summary?feedbackVoiceParts([summary]):[];if(suggestion){lastFeedbackSpeech.push({text:suggestLeadText(),lang:$('explanationLanguage').value,who:'feedback'});lastFeedbackSpeech.push({text:suggestion,lang:$('targetLanguage').value,who:'feedback'});}paintInputTools();if(lastFeedbackSpeech.length)speakSequence(lastFeedbackSpeech);}
+function paintMarked(el,marked,chips){el.replaceChildren();for(const bit of marked.split(/(@@LEARN@@|@@NATIVE@@|@@PROF@@|@@TIME@@)/)){const chip=chips[bit];if(chip){if(!chip.cls){el.appendChild(document.createTextNode(chip.text));continue;}const span=document.createElement('span');span.className=chip.cls;span.textContent=chip.text;el.appendChild(span);}else if(bit)el.appendChild(document.createTextNode(bit));}}
+function professionShort(){const text=selectedText('interviewType');const cut=text.split(' · ')[0].trim();return cut||text;}
+function paintSessionHeading(){const learn=uiLangName($('targetLanguage').value||'en');const native=uiLangName($('explanationLanguage').value||'es');const started=document.body.classList.contains('class-started');const profession=started?professionShort():'';const title=$('sessionTitle');if(title){const marked=profession?tr('ui.titleProfession','{{profession}}, en {{learn}}',{profession:'@@PROF@@',learn:'@@LEARN@@'}):tr('ui.title','Tu profesión en {{learn}}',{learn:'@@LEARN@@'});paintMarked(title,marked,{'@@LEARN@@':{cls:'chip-learn',text:learn},'@@PROF@@':{cls:'',text:profession}});}const sub=$('subtitle');if(!sub)return;const chips={'@@LEARN@@':{cls:'chip-learn',text:learn},'@@PROF@@':{cls:'',text:professionShort()}};const full=document.createElement('span'),short=document.createElement('span');full.className='sub-full';short.className='sub-short';paintMarked(full,tr('ui.subtitle','Practica speaking de {{topic}} en {{learn}}',{learn:'@@LEARN@@',topic:'@@PROF@@'}),chips);paintMarked(short,tr('ui.subtitleShort','Practica speaking en {{learn}}',{learn:'@@LEARN@@'}),chips);sub.replaceChildren(full,short);
+}
+function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintNative',tr('hints.native','La página y tu profesor usarán este idioma.'));setHint('hintType',tr('hints.type','Elige tu profesión o área. El entrevistador hará preguntas de ese campo. Cambiarla abre otra conversación.'));setHint('hintTarget',tr('hints.target','Idioma que quieres practicar: {{lang}}. Tu entrevistador hablará en ese idioma.',{lang:learn}));setHint('hintLevel',tr('hints.level','Tu nivel en ese idioma. Ajusta lo que el profesor te pide.'));setHint('hintExplain',tr('hints.explain','Idioma de explicación: {{lang}}. Es tu idioma y el del profesor en el feedback.',{lang:explain}));setHint('hintInterviewer',tr('hints.interviewer','Pregunta en {{lang}}. Si tu respuesta todavía necesita trabajo, el entrevistador pide aclarar un aspecto. Si ya vale, la valida y pasa a otra. Cambiar el idioma a aprender abre otra conversación.',{lang:learn}));setHint('hintStudent',tr('hints.student','El micrófono naranja graba y el lápiz escribe. El que no uses queda en gris. Enviar aparece a la derecha y se pone verde cuando paras.',{lang:learn}));setHint('hintChange',tr('hints.change','Vuelve a la preparación de la clase. Ahí puedes cambiar tu idioma nativo, el puesto, el idioma que aprendes y el nivel. La voz queda fija en Google, según esos idiomas. Si cambias el puesto o el idioma a aprender, la conversación empieza de nuevo. El reloj de la sesión no se reinicia.'));$('studentText').placeholder=tr('hints.studentPh','Tu respuesta en {{lang}}',{lang:learn});$('interviewer').placeholder=tr('ui.interviewerPh','El entrevistador está preparando la primera pregunta…');$('feedback').placeholder=tr('ui.feedbackPh','Tema del entrevistador\n\nTu respuesta\n\nCómo mejorar esta respuesta\n\nQué ajustar\n\nAsí podría quedar la respuesta\n\nPregunta del entrevistador');if(!$('feedback').value.trim())renderFeedback([]);paintSuggestCopy();document.title=tr('ui.docTitle','Refactorii | Practica tu profesión en otro idioma');refreshTypeLabels();paintSessionHeading();const titles={hintNative:'hints.nativeTitle',hintType:'hints.typeTitle',hintTarget:'hints.targetTitle',hintLevel:'hints.levelTitle',hintExplain:'hints.explainTitle',hintInterviewer:'hints.interviewerTitle',hintStudent:'hints.studentTitle',hintChange:'hints.changeTitle'};for(const [id,key] of Object.entries(titles)){const el=$(id);if(el)el.dataset.hintTitle=tr(key, el.getAttribute('aria-label')||'');}paintVoiceSelects();}
+function learner(){return {level:$('level').value,explanationLanguage:$('explanationLanguage').value,targetLanguage:$('targetLanguage').value};}
+let topicQuestion='';
+let lessonState={communicativeIntent:'',expectedGrammar:[],previousErrors:[]};
+function resetLesson(){lessonState={communicativeIntent:'',expectedGrammar:[],previousErrors:[]};}
+function answerApproved(turn){return Boolean(turn&&turn.satisfied&&!turn.error);}
+function rememberLesson(turn,holdQuestion){if(!holdQuestion){if(Array.isArray(turn.expectedGrammar)&&turn.expectedGrammar.length)lessonState.expectedGrammar=turn.expectedGrammar.slice(0,3);if(turn.communicativeIntent)lessonState.communicativeIntent=turn.communicativeIntent;}if(turn.error&&turn.error.example&&!lessonState.previousErrors.some(item=>item.example===turn.error.example))lessonState.previousErrors=lessonState.previousErrors.concat(turn.error).slice(-5);}
+function skillFor(userText,question,nextAction,scenario,cue){const type=currentType();const skillInput=buildPedagogicalContext({userText,learner:learner(),lesson:{goal:type.id,scenario:scenario||type.id,communicativeIntent:lessonState.communicativeIntent,expectedGrammar:lessonState.expectedGrammar,previousErrors:lessonState.previousErrors},conversation:{lastQuestion:question,topicQuestion:topicQuestion||question,nextAction}});skillInput.variationCue=cue||'';return skillInput;}
+async function postCoach(body){if(remoteMissing())throw new Error(tr('ui.noSession','Sin sesión activa.'));const response=await fetch(apiUrl('/api/coach'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);return result;}
+async function startInterview(){const gen=++generation;busy=true;paintInputTools();stopSpeech();speakQuestionOnClose=false;resetLesson();if(remoteMissing()){setStatus('ui.noSession','Sin sesión activa.');busy=false;resetInputMode();return;}setStatus('status.preparing','El entrevistador está preparando una pregunta en {{lang}}…');const type=currentType();const cue=type.openings[Math.floor(Math.random()*type.openings.length)];try{let turn={interviewer:''};for(let attempt=0;attempt<3&&!turn.interviewer;attempt++){try{const result=await postCoach({action:'start',skillInput:skillFor('','','open_interview',type.id,`${cue} Phrase a new question.`)});turn=parseCoachTurn(result.reply||'');}catch(e){if(attempt===2)throw e;}if(gen!==generation)return;}if(!turn.interviewer)throw new Error(tr('status.noQuestionFromAi','El entrevistador no envió una pregunta.'));beginConversation();resetLesson();rememberLesson(turn);topicQuestion=turn.interviewer;appendTurn({role:'interviewer',text:turn.interviewer,expectedGrammar:lessonState.expectedGrammar,communicativeIntent:lessonState.communicativeIntent});clearCoachNote();$('interviewer').value=turn.interviewer;fitQuestion();$('studentText').value='';fitAnswer();setStatus('status.ready','Pregunta lista. Responde en {{lang}}.');speak(turn.interviewer,$('targetLanguage').value,'question');}catch(e){if(gen===generation)setStatus('status.openError','No se pudo abrir la entrevista: {{message}}',{message:e.message});}finally{if(gen===generation){busy=false;resetInputMode();}}}
+async function sendReply(){const gen=generation;const userText=$('studentText').value.trim();const question=$('interviewer').value.trim();if(!question){setStatus('status.noQuestion','Todavía no hay pregunta del entrevistador.');return;}if(!userText){setStatus('status.write','Escribe tu respuesta en {{lang}}.');return;}if(busy)return;stopSpeech();busy=true;paintInputTools();setStatus('status.thinking','El entrevistador y el profesor están respondiendo…');try{const topic=topicQuestion||question;const result=await postCoach({action:'reply',skillInput:skillFor(userText,question,'interview',currentType().id,'Use question as a generic contract in the target language: grammar, intention, context, and the tense this question asks for. Also answer content (did they answer what was really asked?) and communication (were they clear, coherent, professional, and assertive?). Do not evaluate oral expression. Do not apply another language\'s tense table. If one point still fails, set satisfied false, keep interviewer as an exact copy of the same question, and put the fix only in the professor feedback. The student may retry that same question as many times as needed. Set satisfied true and write a new interviewer question only when the answer satisfies this question and the professor is validating it. Professor text is second person to the student: Respondiste, Tu respuesta, Asegúrate. Never write el candidato, the candidate, or le candidat. Wrap every fragment in the language being learned in straight double quotes.')});if(gen!==generation)return;const turn=parseCoachTurn(result.reply||'');const next=turn.interviewer.trim();const understood=answerApproved(turn)&&Boolean(next)&&next!==question;rememberLesson(turn,!understood);appendTurn({role:'student',text:userText,answeredQuestion:question,topic});appendTurn({role:'professor',feedback:formatFeedback(turn,topic,userText,''),correction:turn.correction,expectation:turn.expectation,suggestion:turn.suggestion,satisfied:understood});if(understood){clearCoachNote();topicQuestion=next;lessonState.expectedGrammar=[];lessonState.communicativeIntent='';$('interviewer').value=next;fitQuestion();$('studentText').value='';fitAnswer();appendTurn({role:'interviewer',text:next});speak(next,$('targetLanguage').value,'question');}else{$('interviewer').value=question;fitQuestion();showRetryCoach(turn);}setStatus(understood?'status.newQuestion':'status.refine',understood?'La respuesta vale. Nueva pregunta del entrevistador.':'Lee la frase, pulsa el micrófono y envíala otra vez.');}catch(e){if(gen===generation)setStatus('status.error','Error: {{message}}',{message:e.message});}finally{if(gen===generation){busy=false;resetInputMode();}}}
+async function transcribeAndSend(blob){if(!blob||!blob.size){setStatus('voice.empty','No se escuchó audio.');audioSendReady=false;paintInputTools();return;}busy=true;paintInputTools();setStatus('voice.transcribing','Pasando tu voz a texto…');try{const lang=$('targetLanguage').value||'en';const response=await fetch(apiUrl(`/api/transcribe?lang=${encodeURIComponent(lang)}`),{method:'POST',headers:{'Content-Type':blob.type||'audio/webm'},body:blob});const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||`HTTP ${response.status}`);const text=String(result.text||'').trim();if(!text){setStatus('voice.empty','No se escuchó audio.');busy=false;audioSendReady=true;paintInputTools();return;}hideSuggestion();$('studentText').readOnly=false;$('studentText').value=text;audioBlob=null;busy=false;await sendReply();}catch(e){setStatus('voice.sttError','No se pudo transcribir: {{message}}',{message:e.message});busy=false;audioSendReady=true;paintInputTools();}}
+function bindRecorder(stream){const preferred=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(type=>window.MediaRecorder&&MediaRecorder.isTypeSupported(type));recorder=preferred?new MediaRecorder(stream,{mimeType:preferred}):new MediaRecorder(stream);recordChunks=[];recorder.ondataavailable=event=>{if(event.data&&event.data.size)recordChunks.push(event.data);};recorder.onstop=()=>{stream.getTracks().forEach(track=>track.stop());stopSilenceWatch();const blob=new Blob(recordChunks,{type:(recorder&&recorder.mimeType)||'audio/webm'});const action=audioStopAction;recorder=null;setMicIdle();if(action==='discard'||!blob.size){audioBlob=null;if(action!=='discard'){audioSendReady=false;setStatus('voice.empty','No se escuchó audio.');}paintInputTools();return;}audioBlob=blob;audioSendReady=true;paintInputTools();if(action==='send')transcribeAndSend(blob);else setStatus('voice.readyToSend','Dejaste de hablar. Ya puedes enviar el audio.');};}
+replyBtn.addEventListener('click',()=>{if(replyBtn.disabled||busy)return;if(recorder&&recorder.state==='recording'){audioStopAction='discard';recorder.stop();}inputMode='text';audioBlob=null;audioSendReady=false;armTextIdle();});
+sendBtn.addEventListener('click',()=>{if(sendBtn.disabled||busy)return;if(inputMode==='text'){sendReply();return;}if(recorder&&recorder.state==='recording'){audioStopAction='send';recorder.stop();return;}transcribeAndSend(audioBlob);});
+$('studentText').addEventListener('input',()=>{fitAnswer();if(busy||inputMode==='audio')return;if(inputMode!=='text')inputMode='text';armTextIdle();});
+micBtn.addEventListener('click',async()=>{if(micBtn.disabled||busy)return;if(recorder&&recorder.state==='recording'){audioStopAction='ready';recorder.stop();return;}if(!$('interviewer').value.trim()){setStatus('status.noQuestion','Todavía no hay pregunta del entrevistador.');return;}stopSpeech();clearTimeout(textIdleTimer);textSendReady=false;let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true});}catch{setStatus('voice.micDenied','El navegador no permitió el micrófono.');return;}inputMode='audio';audioBlob=null;audioSendReady=false;audioStopAction='ready';bindRecorder(stream);recorder.start();micBtn.classList.add('is-recording');micBtn.setAttribute('aria-pressed','true');paintInputTools();startSilenceWatch(stream);setStatus('voice.recording','Grabando tu respuesta… Enviar se habilita al detener o tras 3 segundos en silencio.');});
+$('repeatQuestionBtn').addEventListener('click',()=>{const question=$('interviewer').value.trim();if(!question){setStatus('status.noQuestion','Todavía no hay pregunta del entrevistador.');return;}speak(question,$('targetLanguage').value,'question');});
+$('repeatFeedbackBtn').addEventListener('click',()=>{if(!$('feedback').value.trim()&&!lastFeedbackSpeech.length)return;speakFeedback();});$('repeatSuggestBtn').addEventListener('click',speakSuggestion);
+$('modal-feedback').addEventListener('close',()=>{if(!speakQuestionOnClose)return;speakQuestionOnClose=false;const question=$('interviewer').value.trim();if(question)speak(question,$('targetLanguage').value,'question');});
+function restartInterview(){stopSpeech();speakQuestionOnClose=false;topicQuestion='';resetLesson();updateLanguageHints();$('interviewer').value='';fitQuestion();clearCoachNote();$('studentText').value='';startInterview();}
+for(const id of CHOICE_IDS)$(id).addEventListener('change',updateLanguageHints);
+updateLanguageHints();
+renderCard();
+renderSession();
+setInterval(renderSession,1000);
+setStatus('start.pick','Elige el tipo de entrevista y el idioma para iniciar la clase.');
+if(useLauncher)loadQuota();
+if(useLauncher){const pending=sessionStorage.getItem(LAUNCH_KEY);if(pending){if(sessionStorage.getItem(AUTO_KEY)==='1'){setAutoLaunch(true);applyDemoChoice();readStory();}launchStartedAt=Date.now();launchSummary();$('modal-launch').showModal();pollLaunch(pending);}else if(demoEligible()){demoWanted=true;if(window.coachI18n&&window.coachI18n.ready)startDemo();else setTimeout(startDemo,2500);}else openStartModal();}
+else{setInterval(loadServer,30000);loadServer();openStartModal();}
+function refreshOpenHint(){const dialog=$('modal-hint');const btn=window.__coachOpenHint&&$(window.__coachOpenHint);if(!dialog||!dialog.open||!btn)return;$('hintTitle').textContent=btn.dataset.hintTitle||btn.getAttribute('aria-label')||'';$('hintBody').textContent=btn.dataset.hint||'';}
+function refreshChrome(){updateLanguageHints();fitQuestion();paintQuota();renderSession();paintStatus();refreshOpenHint();renderCard();paintAutoConfig();paintInputTools();paintVoiceSelects();if(useLauncher){launchSummary();if(launchTimer)paintLaunching();}}
+window.onCoachLocaleChange=refreshChrome;
+window.addEventListener('resize',fitQuestion);
+function syncNativeLanguage(){const locale=window.coachI18n&&window.coachI18n.getLocale&&window.coachI18n.getLocale();if(locale&&!document.body.classList.contains('class-started'))$('explanationLanguage').value=locale;if(autoLaunch&&!sessionLive){applyDemoChoice();if(!activeUtter)readStory();}refreshChrome();startDemo();}
+window.onCoachI18nReady=syncNativeLanguage;
+if(window.coachI18n&&window.coachI18n.ready)syncNativeLanguage();
+</script>
+<script>
+document.querySelectorAll('.q').forEach((btn)=>{
+  btn.addEventListener('click',()=>{
+    const title=document.getElementById('hintTitle');
+    const body=document.getElementById('hintBody');
+    const dialog=document.getElementById('modal-hint');
+    if(!title||!body||!dialog)return;
+    window.__coachOpenHint=btn.id;
+    title.textContent=btn.dataset.hintTitle||btn.getAttribute('aria-label')||'Ayuda';
+    body.textContent=btn.dataset.hint||'';
+    if(typeof dialog.showModal==='function') dialog.showModal();
+  });
+});
+document.querySelectorAll('[data-open-modal]').forEach((opener)=>{
+  opener.addEventListener('click',()=>{
+    const dialog=document.getElementById(opener.getAttribute('data-open-modal'));
+    if(dialog&&typeof dialog.showModal==='function') dialog.showModal();
+  });
+});
+document.querySelectorAll('dialog.theory-modal').forEach((dialog)=>{
+  dialog.addEventListener('click',(event)=>{ if(event.target===dialog&&!dialog.classList.contains('is-auto')) dialog.close(); });
+  const closeBtn=dialog.querySelector('[data-close-modal]');
+  if(closeBtn) closeBtn.addEventListener('click',()=>dialog.close());
+});
+</script>
+</body>
+</html>
