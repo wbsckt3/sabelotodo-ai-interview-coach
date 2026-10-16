@@ -381,6 +381,20 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 .fix-view b{color:var(--amber);font-weight:600}
 @media(prefers-reduced-motion:reduce){.typing i{animation:none;opacity:.7}}
 @media(min-width:700px){.field-interviewer,.field-student{width:88%}}
+/* Feedback debajo de la respuesta */
+.student-sheet .answer-echo{display:none;margin:0;padding:4px 16px 58px;color:var(--text);font-size:1rem;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.student-sheet.is-speak-only .answer-echo{display:block}
+.student-sheet.is-speak-only .actor-student{display:none}
+.coach-note{display:none;position:relative;flex:2 1 0;min-height:96px;overflow:auto;scrollbar-width:none;margin:10px 0 0 6%;padding:4px 10px 8px 15px;box-shadow:inset 3px 0 0 var(--amber)}
+.coach-note::-webkit-scrollbar{display:none}
+.coach-note:has(>.fix-view:not([hidden]),>.student-immersed:not([hidden]),>.suggest-lead:not([hidden])){display:block}
+.stage:has(.coach-note>.fix-view:not([hidden]),.coach-note>.student-immersed:not([hidden]),.coach-note>.suggest-lead:not([hidden])) .field-student{flex:0 0 auto}
+.coach-note .fix-view{margin:0 0 10px;padding:0;border:0;font-size:1rem;line-height:1.5;color:var(--muted)}
+.coach-note .student-immersed.is-open{margin:0 0 8px;padding:0;border:0}
+.coach-note .suggest-lead{padding:4px 0 0}
+.coach-note .suggest-view{padding:4px 0}
+.coach-note .suggest-tools{padding:4px 0 2px}
+@media(min-width:700px){.coach-note{margin-left:12%}}
 /* Encabezado */
 .title-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px 12px}
 .title-row>.q-learn{width:30px;height:30px}
@@ -437,23 +451,24 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 <div class="field grow field-student field-float" id="studentField">
 <div class="label-row"><label for="studentText" data-i18n="ui.student">Tu respuesta</label><button type="button" class="q" id="hintStudent" data-i18n-aria="hints.studentTitle" aria-label="Tu respuesta">?</button></div>
 <div class="student-sheet" id="studentSheet">
-<div id="studentImmersed" class="student-immersed" hidden></div>
-<div class="suggest-zone">
-<p id="fixView" class="fix-view" hidden></p>
-<p id="suggestLead" class="suggest-lead" hidden></p>
-<p id="suggestView" class="suggest-view" hidden></p>
-<div id="suggestTools" class="suggest-tools" hidden>
-<button id="repeatSuggestBtn" class="repeat-btn icon-btn repeat-orange" type="button" aria-label="Repetir frase" title="Repetir frase"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5V2L8 6l4 4V7a5 5 0 1 1-4.9 6H5a7 7 0 1 0 7-8z"/></svg></button>
-<p id="memorizeNote" class="memorize-note"></p>
-</div>
+<p id="answerEcho" class="answer-echo"></p>
 <textarea id="studentText" class="actor actor-student" placeholder="Tu respuesta"></textarea>
-</div>
 </div>
 <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="float-tools">
 <button id="replyBtn" class="reply-btn icon-btn" type="button" data-i18n-aria="ui.write" aria-label="Escribir" title="Escribir"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>
 <button id="micBtn" class="mic-btn icon-btn" type="button" aria-pressed="false" data-i18n-aria="ui.mic" aria-label="Hablar" title="Hablar"><svg class="icon-mic" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg><svg class="icon-stop" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg></button>
 <button id="sendBtn" class="send-btn icon-btn" type="button" hidden disabled data-i18n-aria="ui.send" aria-label="Enviar" title="Enviar"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+</div>
+</div>
+<div id="coachNote" class="coach-note">
+<p id="fixView" class="fix-view" hidden></p>
+<div id="studentImmersed" class="student-immersed" hidden></div>
+<p id="suggestLead" class="suggest-lead" hidden></p>
+<p id="suggestView" class="suggest-view" hidden></p>
+<div id="suggestTools" class="suggest-tools" hidden>
+<button id="repeatSuggestBtn" class="repeat-btn icon-btn repeat-orange" type="button" aria-label="Repetir frase" title="Repetir frase"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 5V2L8 6l4 4V7a5 5 0 1 1-4.9 6H5a7 7 0 1 0 7-8z"/></svg></button>
+<p id="memorizeNote" class="memorize-note"></p>
 </div>
 </div>
 </section>
@@ -776,7 +791,7 @@ const URL_TOPIC=(()=>{const id=new URLSearchParams(location.search).get('topic')
 function demoTopic(){let saved='';try{saved=sessionStorage.getItem(TOPIC_KEY)||'';}catch{/* sin storage */}return URL_TOPIC||(INTERVIEW_TYPES[saved]?saved:'verb_tenses');}
 function dropUrlTopic(){if(!URL_TOPIC)return;const url=new URL(location.href);url.searchParams.delete('topic');history.replaceState(history.state,'',url.pathname+url.search+url.hash);}
 let autoLaunch=false, demoWanted=false, demoStarted=false;
-function setAutoLaunch(on){if(!on&&ballHostId!=='studentSheet'){stopSpeech();ballHostId='studentSheet';}if(!on)$('modal-launch').querySelector('.modal-card').append(statusEl());autoLaunch=on;$('modal-launch').classList.toggle('is-auto',on);if(on)sessionStorage.setItem(AUTO_KEY,'1');else sessionStorage.removeItem(AUTO_KEY);}
+function setAutoLaunch(on){if(!on&&ballHostId!=='coachNote'){stopSpeech();ballHostId='coachNote';}if(!on)$('modal-launch').querySelector('.modal-card').append(statusEl());autoLaunch=on;$('modal-launch').classList.toggle('is-auto',on);if(on)sessionStorage.setItem(AUTO_KEY,'1');else sessionStorage.removeItem(AUTO_KEY);}
 const OWN_LANG_NAME={en:'English',fr:'Français',es:'Español'};
 function storyText(){return tr('start.story','¡Hola! Practica speaking en inglés, francés o español con un asistente de inteligencia artificial. Ahora mismo estamos creando tu sesión de práctica de speaking de 5 minutos sobre {{topic}} en "{{lang}}" para nivel principiante. Un servidor se está encendiendo solo para ti y suele tardar uno o dos minutos. Cuando esté listo, el entrevistador te hará una pregunta corta sobre ese tópico, y tú respondes con el micrófono naranja. Tu profesor te dará feedback en tu idioma y te propondrá la frase corregida para que la escuches y la repitas. Desde tu red puedes iniciar hasta 3 sesiones en aproximadamente 60 minutos. Si quieres otra profesión, otro idioma u otra duración, usa el botón cambia tu sesión. Espera un momento mientras configuramos todo.',{lang:OWN_LANG_NAME[$('targetLanguage').value]||'English',topic:professionShort()});}
 function leadText(){return tr('start.creating','Estamos creando un servidor en {{native}} para que practiques speaking en {{learn}} sobre {{topic}}.',{native:uiLangName($('explanationLanguage').value),learn:uiLangName($('targetLanguage').value),topic:professionShort()});}
@@ -824,7 +839,7 @@ function paintVoiceSelects(){const target=$('targetLanguage').value||'en';const 
 function wordCount(text){return String(text||'').split(/\s+/).filter(Boolean).length;}
 let hopTimer=0, boundaryDrove=false;
 function stopHop(){if(hopTimer){clearInterval(hopTimer);hopTimer=0;}}
-let ballHostId='studentSheet';
+let ballHostId='coachNote';
 let hopHost='';
 function hostId(){return hopHost||ballHostId;}
 function sheetWords(){return document.querySelectorAll(`#${hostId()} .fb-word`);}
@@ -872,8 +887,8 @@ function clearCoachNote(){hideBall();const box=$('studentImmersed');if(box){box.
 let currentSuggestion='';
 function suggestLeadText(){return tr('ui.suggestLead','Escucha las veces que sea necesario y repite tu respuesta a la pregunta cuando te sientas seguro.');}
 function paintSuggestCopy(){const lead=$('suggestLead');if(lead&&!lead.hidden){lead.replaceChildren();appendSpokenWords(lead,suggestLeadText(),{cursor:0});}const label=tr('ui.repeatSuggest','Repetir frase');$('repeatSuggestBtn').title=label;$('repeatSuggestBtn').setAttribute('aria-label',label);$('memorizeNote').textContent=tr('ui.memorize','Escucha y memoriza la frase con las correcciones y, cuando te sientas seguro, vuelve a enviar la respuesta.');}
-function hideSuggestion(){currentSuggestion='';const fix=$('fixView');if(fix){fix.hidden=true;fix.replaceChildren();}const lead=$('suggestLead');if(lead){lead.hidden=true;lead.classList.remove('is-open');lead.replaceChildren();}const view=$('suggestView');if(view){view.hidden=true;view.replaceChildren();}const tools=$('suggestTools');if(tools)tools.hidden=true;const zone=document.querySelector('.suggest-zone');if(zone)zone.classList.remove('is-speak-only');}
-function showSuggestion(text){currentSuggestion=text;const lead=$('suggestLead');lead.hidden=false;lead.classList.add('is-open');const view=$('suggestView');view.replaceChildren();appendSpokenWords(view,text,{cursor:0});view.hidden=false;$('suggestTools').hidden=false;document.querySelector('.suggest-zone').classList.add('is-speak-only');paintSuggestCopy();$('studentText').value=text;}
+function hideSuggestion(){currentSuggestion='';const fix=$('fixView');if(fix){fix.hidden=true;fix.replaceChildren();}const lead=$('suggestLead');if(lead){lead.hidden=true;lead.classList.remove('is-open');lead.replaceChildren();}const view=$('suggestView');if(view){view.hidden=true;view.replaceChildren();}const tools=$('suggestTools');if(tools)tools.hidden=true;const sheet=$('studentSheet');if(sheet)sheet.classList.remove('is-speak-only');}
+function showSuggestion(text){currentSuggestion=text;const lead=$('suggestLead');lead.hidden=false;lead.classList.add('is-open');const view=$('suggestView');view.replaceChildren();appendSpokenWords(view,text,{cursor:0});view.hidden=false;$('suggestTools').hidden=false;$('studentSheet').classList.add('is-speak-only');paintSuggestCopy();$('studentText').value=text;}
 function speakSuggestion(){if(!currentSuggestion)return;const first=$('suggestView').querySelector('.fb-word');const base=first?[...sheetWords()].indexOf(first):0;speakSequence([{text:currentSuggestion,lang:$('targetLanguage').value,who:'feedback'}],Math.max(0,base));}
 function appendSpokenWords(parent,text,state){for(const part of String(text||'').split(/(\s+)/)){if(!part)continue;if(/^\s+$/.test(part)){parent.append(document.createTextNode(part));state.cursor+=part.length;continue;}const span=document.createElement('span');span.className='fb-word';span.dataset.start=String(state.cursor);span.textContent=part;parent.append(span);state.cursor+=part.length;}}
 function learnQuoteRe(){return /"([^"]+)"|“([^”]+)”|«([^»]+)»/g;}
@@ -883,9 +898,9 @@ const COACH_INTRO={es:{title:'Feedback de tu entrenador personal',lead:'Este fee
 function coachSummary(turn){const summary=String(turn.summary||'').trim();if(summary)return summary;return [turn.content,turn.communication,turn.correction||turn.feedback,turn.expectation].map(item=>String(item||'').trim()).filter(Boolean).join(' ');}
 function renderImmersed(turn){const intro=COACH_INTRO[$('explanationLanguage').value]||COACH_INTRO.es;const text=coachSummary(turn);const box=$('studentImmersed');box.replaceChildren();ensureBall();const any=Boolean(text);if(any){const title=document.createElement('strong');title.textContent=intro.title;box.append(title);const lead=document.createElement('p');lead.className='fb-intro';intro.lead.split(/\*\*/).forEach((bit,index)=>{if(!bit)return;if(index%2){const b=document.createElement('strong');b.textContent=bit;lead.append(b);}else lead.append(document.createTextNode(bit));});box.append(lead);const p=document.createElement('p');appendFeedbackBody(p,text,{cursor:0});box.append(p);}box.hidden=!any;box.classList.toggle('is-open',any);const sheet=$('studentSheet');if(sheet)sheet.classList.toggle('has-feedback',any);}
 function typing(field,on){const el=field==='interviewer'?$('interviewer').parentNode:$('studentField');if(el)el.classList.toggle('is-typing',Boolean(on));}
-function wordDiff(a,b){const A=a.split(/\s+/).filter(Boolean),B=b.split(/\s+/).filter(Boolean);const key=w=>w.toLowerCase().replace(/[^\p{L}\p{N}']/gu,'');const n=A.length,m=B.length;const L=Array.from({length:n+1},()=>new Array(m+1).fill(0));for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i][j]=key(A[i])===key(B[j])?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);const ops=[];let i=0,j=0;while(i<n&&j<m){if(key(A[i])===key(B[j])){ops.push(['=',B[j]]);i++;j++;}else if(L[i+1][j]>=L[i][j+1])ops.push(['-',A[i++]]);else ops.push(['+',B[j++]]);}while(i<n)ops.push(['-',A[i++]]);while(j<m)ops.push(['+',B[j++]]);return {ops,ratio:Math.max(n,m)?L[0][0]/Math.max(n,m):1};}
-function paintFix(answer,suggestion){const view=$('fixView');if(!view)return;view.replaceChildren();view.hidden=true;const a=String(answer||'').trim(),b=String(suggestion||'').trim();if(!a||!b)return;const {ops,ratio}=wordDiff(a,b);if(ops.every(op=>op[0]==='='))return;const add=(tag,text)=>{const el=document.createElement(tag);el.textContent=text;view.append(el);};const hunk=(removed,added)=>{if(removed.length)add('s',removed.join(' '));if(removed.length&&added.length)view.append(' → ');if(added.length)add('b',added.join(' '));};if(ratio<0.35){hunk([a],[b]);view.hidden=false;return;}let removed=[],added=[];const flush=()=>{if(!removed.length&&!added.length)return;if(view.childNodes.length)view.append(' ');hunk(removed,added);removed=[];added=[];};for(const [op,word] of ops){if(op==='-')removed.push(word);else if(op==='+')added.push(word);else{flush();view.append((view.childNodes.length?' ':'')+word);}}flush();view.hidden=false;}
-function showRetryCoach(turn,answer){renderImmersed(turn);const suggestion=String(turn.suggestion||'').trim();if(suggestion)showSuggestion(suggestion);else hideSuggestion();paintFix(answer,suggestion);fitAnswer();const summary=coachSummary(turn);lastFeedbackSpeech=summary?feedbackVoiceParts([summary]):[];if(suggestion){lastFeedbackSpeech.push({text:suggestLeadText(),lang:$('explanationLanguage').value,who:'feedback'});lastFeedbackSpeech.push({text:suggestion,lang:$('targetLanguage').value,who:'feedback'});}paintInputTools();if(lastFeedbackSpeech.length)speakSequence(lastFeedbackSpeech);}
+function wordDiff(a,b){const A=a.split(/\s+/).filter(Boolean),B=b.split(/\s+/).filter(Boolean);const key=w=>w.toLowerCase().replace(/[^\p{L}\p{N}']/gu,'');const n=A.length,m=B.length;const L=Array.from({length:n+1},()=>new Array(m+1).fill(0));for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i][j]=key(A[i])===key(B[j])?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);const ops=[];let i=0,j=0;while(i<n&&j<m){if(key(A[i])===key(B[j])){ops.push(['=',B[j],A[i]]);i++;j++;}else if(L[i+1][j]>=L[i][j+1])ops.push(['-',A[i++]]);else ops.push(['+',B[j++]]);}while(i<n)ops.push(['-',A[i++]]);while(j<m)ops.push(['+',B[j++]]);return {ops,ratio:Math.max(n,m)?L[0][0]/Math.max(n,m):1};}
+function paintFix(answer,suggestion){const view=$('fixView');if(!view)return;view.replaceChildren();view.hidden=true;const a=String(answer||'').trim(),b=String(suggestion||'').trim();if(!a||!b)return;const {ops,ratio}=wordDiff(a,b);if(ops.every(op=>op[0]==='='))return;const add=(tag,text)=>{const el=document.createElement(tag);el.textContent=text;view.append(el);};const hunk=(removed,added)=>{if(removed.length)add('s',removed.join(' '));if(removed.length&&added.length)view.append(' → ');if(added.length)add('b',added.join(' '));};if(ratio<0.35){hunk([a],[b]);view.hidden=false;return;}const groups=[];ops.forEach((op,index)=>{if(op[0]==='=')return;const last=groups[groups.length-1];if(last&&index-last[1]<=2)last[1]=index;else groups.push([index,index]);});groups.forEach(([from,to],n)=>{if(from>0&&ops[from-1][0]==='=')from-=1;if(to<ops.length-1&&ops[to+1][0]==='=')to+=1;const removed=[],added=[];for(const op of ops.slice(from,to+1)){if(op[0]!=='+')removed.push(op[0]==='='?op[2]:op[1]);if(op[0]!=='-')added.push(op[1]);}if(n)view.append('  ·  ');hunk(removed,added);});view.hidden=false;}
+function showRetryCoach(turn,answer){$('answerEcho').textContent=String(answer||'').trim();$('coachNote').scrollTop=0;renderImmersed(turn);const suggestion=String(turn.suggestion||'').trim();if(suggestion)showSuggestion(suggestion);else hideSuggestion();paintFix(answer,suggestion);fitAnswer();const summary=coachSummary(turn);lastFeedbackSpeech=summary?feedbackVoiceParts([summary]):[];if(suggestion){lastFeedbackSpeech.push({text:suggestLeadText(),lang:$('explanationLanguage').value,who:'feedback'});lastFeedbackSpeech.push({text:suggestion,lang:$('targetLanguage').value,who:'feedback'});}paintInputTools();if(lastFeedbackSpeech.length)speakSequence(lastFeedbackSpeech);}
 function paintMarked(el,marked,chips){el.replaceChildren();for(const bit of marked.split(/(@@LEARN@@|@@NATIVE@@|@@PROF@@|@@TIME@@)/)){const chip=chips[bit];if(chip){if(!chip.cls){el.appendChild(document.createTextNode(chip.text));continue;}const span=document.createElement('span');span.className=chip.cls;span.textContent=chip.text;el.appendChild(span);}else if(bit)el.appendChild(document.createTextNode(bit));}}
 function professionShort(){const text=selectedText('interviewType');const cut=text.split(' · ')[0].trim();return cut||text;}
 function paintSessionHeading(){const learn=uiLangName($('targetLanguage').value||'en');const native=uiLangName($('explanationLanguage').value||'es');const started=document.body.classList.contains('class-started');const profession=started?professionShort():'';const title=$('sessionTitle');if(title){const marked=profession?tr('ui.titleProfession','{{profession}}, en {{learn}}',{profession:'@@PROF@@',learn:'@@LEARN@@'}):tr('ui.title','Tu profesión en {{learn}}',{learn:'@@LEARN@@'});paintMarked(title,marked,{'@@LEARN@@':{cls:'chip-learn',text:learn},'@@PROF@@':{cls:'',text:profession}});}const sub=$('subtitle');if(!sub)return;const chips={'@@LEARN@@':{cls:'chip-learn',text:learn},'@@PROF@@':{cls:'',text:professionShort()}};const full=document.createElement('span'),short=document.createElement('span');full.className='sub-full';short.className='sub-short';paintMarked(full,tr('ui.subtitle','Practica speaking de {{topic}} en {{learn}}',{learn:'@@LEARN@@',topic:'@@PROF@@'}),chips);paintMarked(short,tr('ui.subtitleShort','Practica speaking en {{learn}}',{learn:'@@LEARN@@'}),chips);sub.replaceChildren(full,short);
