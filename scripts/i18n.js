@@ -25,7 +25,7 @@
 
   function getSavedLocale() {
     try {
-      return normalizeLocale(localStorage.getItem(STORAGE_KEY) || DEFAULT_LANG)
+      return normalizeLocale(localStorage.getItem(STORAGE_KEY) || navigator.language || DEFAULT_LANG)
     } catch (_) {
       return DEFAULT_LANG
     }
