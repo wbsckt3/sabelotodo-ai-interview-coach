@@ -21,13 +21,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <style>
-:root{font-family:'Plus Jakarta Sans',Inter,system-ui,'Segoe UI',sans-serif;color:#647084;--ink:#647084;background:#f4f6fa;--interviewer-bg:#f3fbf6;--interviewer-border:#cfe8da;--student-bg:#fff9ee;--student-border:#f3e6c4;--professor-bg:#f3f6fb;--professor-border:#d5e0f2}
+:root{font-family:'Plus Jakarta Sans',Inter,system-ui,'Segoe UI',sans-serif;color:#647084;--ink:#647084;background:#e6ebf3;--interviewer-bg:#f3fbf6;--interviewer-border:#cfe8da;--student-bg:#fff9ee;--student-border:#f3e6c4;--professor-bg:#f3f6fb;--professor-border:#d5e0f2}
 *{box-sizing:border-box}
 html,body{height:100%;overflow:hidden}
 html{font-size:100%;touch-action:manipulation;-webkit-text-size-adjust:100%}
 body{margin:0;padding:8px}
 main{height:100%;max-width:950px;margin:auto;display:flex;flex-direction:column;gap:0;min-height:0}
-header,section{background:#fff;border:1px solid #e1e6ef;border-radius:14px;padding:10px 12px}
+header,section{background:#f7f9fc;border:1px solid #dbe2ee;border-radius:14px;padding:10px 12px}
 header{flex:0 0 auto;border-radius:14px 14px 0 0;border-bottom:0;padding-bottom:2px}
 .stage{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;border-radius:0 0 14px 14px;border-top:0;padding-top:6px}
 .title-row{display:flex;align-items:center;gap:14px}
@@ -120,7 +120,11 @@ button:disabled{opacity:.55}
 .field-float>.repeat-btn{position:absolute;right:10px;bottom:10px;z-index:2;width:42px;height:42px;padding:0;justify-content:center;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,39,.16)}
 .float-tools .icon-btn,.float-tools .feedback-float{box-shadow:0 2px 8px rgba(16,24,39,.16)}
 .feedback-float{height:42px;padding:0 12px;background:#eef2f8;color:var(--ink);border:1px solid #c5d0e6;border-radius:10px}
-.learn-btn{width:100%;margin-top:6px;background:#fff;color:var(--ink);border:1px solid #c5d0e6;font-size:.78rem}
+.q-learn{width:26px;height:26px;background:#233e73;color:#fff;-webkit-text-fill-color:#fff;border-color:#233e73;font-weight:800}
+.field-float>.label-row{position:absolute;left:10px;bottom:12px;z-index:2;margin:0;justify-content:flex-start;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 1px 4px rgba(16,24,39,.12)}
+.field-student .suggest-zone.is-speak-only .suggest-tools{padding-bottom:58px}
+.field-float+.field-float{margin-top:8px}
+.sub-short{display:none}
 .change-row{display:flex;align-items:center;gap:4px}
 .actor-interviewer,.actor-student,.actor-feedback{color:var(--ink);-webkit-text-fill-color:var(--ink)}
 .icon-btn{width:42px;height:42px;padding:0;display:inline-flex;align-items:center;justify-content:center}
@@ -233,7 +237,7 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 #modal-launch.is-auto .launch-status{margin-top:14px;font-size:1.25rem;font-weight:800;line-height:1.4;color:#16a34a}
 #modal-launch.is-auto .launch-status.is-error{color:#b91c1c}
 #sessionClock.is-clickable{cursor:pointer;text-decoration:underline dotted}
-#sessionClock.is-live{background:#fff;color:var(--ink);-webkit-text-fill-color:var(--ink)}
+#sessionClock.is-live{background:transparent;color:var(--ink);-webkit-text-fill-color:var(--ink)}
 .time-server,.time-session{display:inline-block;border-radius:6px;padding:0 6px;font-weight:800;font-variant-numeric:tabular-nums;color:#fff;-webkit-text-fill-color:#fff}
 .time-server{background:#dc2626}
 .time-session{background:#16a34a}
@@ -252,7 +256,7 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 .native-row .qa-lang-switch{flex:0 0 auto}
 .native-row .qa-lang-switch__btn{min-width:2.4rem;padding:6px 9px;font-size:.8rem}
 body.class-started .title-tools{display:none}
-.class-card{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:4px 0;border:0;border-radius:0;background:#fff;margin-bottom:4px}
+.class-card{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:4px 0;border:0;border-radius:0;background:transparent;margin-bottom:4px}
 .class-card__data{flex:1;min-width:0;margin:0;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:6px}
 .class-card__data div{min-width:0;display:flex;flex-direction:column;gap:5px}
 .class-card__data div:nth-child(1) dd,.class-card__data div:nth-child(3) dd{background:var(--student-bg)}
@@ -272,7 +276,7 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 .voice-preview{flex:0 0 auto;background:#fff;color:var(--ink);border:1px solid #c5d0e6;padding:6px 8px;font-size:.75rem}
 @media(max-width:650px){.voice-row{grid-template-columns:1fr}}
 @media(max-width:650px){.title-row{flex-wrap:wrap;gap:8px 12px}.header-session{max-width:none;margin-left:0}.class-card{flex-wrap:wrap;gap:6px}.class-card__data{flex:1 1 100%;grid-template-columns:1fr 1fr}.class-card__side{flex:1 1 100%;justify-content:space-between;flex-wrap:wrap}.quota-line{text-align:left}.class-card__side .change-row{margin-left:auto}}
-@media(max-width:650px){body{padding:6px}.brand-logo{height:44px}h1{font-size:1.05rem}.subtitle{font-size:clamp(.66rem,3.3vw,.84rem);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.learn-btn{font-size:.7rem}.theory-actions{display:grid}}
+@media(max-width:650px){body{padding:6px}.brand-logo{height:44px}h1{font-size:1.05rem}.subtitle{font-size:clamp(.66rem,3.3vw,.84rem);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sub-full{display:none}.sub-short{display:inline}.theory-actions{display:grid}}
 </style>
 </head>
 <body>
@@ -281,13 +285,14 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 <div class="title-row">
 <img class="brand-logo" src="logo-p2l.png" alt="P2L">
 <div class="title-text">
-<p class="subtitle" id="subtitle">Practica speaking de Tiempos verbales en inglés</p>
+<p class="subtitle" id="subtitle"><span class="sub-full">Practica speaking de Tiempos verbales en inglés</span><span class="sub-short">Practica speaking en inglés</span></p>
 </div>
 <div class="class-card__side header-session">
 <p class="session" id="sessionClock" aria-live="polite">Sesión 00:00</p>
 <div class="change-row">
 <button type="button" class="ghost" id="changeClass" data-i18n="ui.change">Cambia tu sesión</button>
 <button type="button" class="q" id="hintChange" data-i18n-aria="hints.changeTitle" aria-label="Cambiar">?</button>
+<button type="button" class="q q-learn" id="learnBtn" data-open-modal="modal-aprende" aria-haspopup="dialog" data-i18n-aria="ui.learn" aria-label="Aprende más de este motor conversacional" title="Aprende más de este motor conversacional">?</button>
 </div>
 <p class="quota-line" id="quotaLine" hidden></p>
 </div>
@@ -330,7 +335,6 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 <button id="sendBtn" class="send-btn icon-btn" type="button" hidden disabled data-i18n-aria="ui.send" aria-label="Enviar" title="Enviar"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
 </div>
 </div>
-<button id="learnBtn" class="learn-btn" type="button" data-open-modal="modal-aprende" aria-haspopup="dialog" data-i18n="ui.learn">Aprende más de este motor conversacional</button>
 </section>
 </main>
 
@@ -604,11 +608,11 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 </dialog>
 
 <script src="https://unpkg.com/i18next@23.4.6/i18next.min.js"></script>
-<script src="scripts/locales-embed.js"></script>
-<script src="scripts/i18n.js"></script>
+<script src="scripts/locales-embed.js?v=20261016b"></script>
+<script src="scripts/i18n.js?v=20261016b"></script>
 <script type="module">
 /* import {analyzeGrammar} from './motorg.js'; Motores y lógica difusa en pausa. */
-import {buildPedagogicalContext,INTERVIEW_TYPES,DEFAULT_INTERVIEW_TYPE,interviewTypeOf} from './skill.js';
+import {buildPedagogicalContext,INTERVIEW_TYPES,DEFAULT_INTERVIEW_TYPE,interviewTypeOf} from './skill.js?v=20261016b';
 const $=id=>document.getElementById(id);
 for(const [id,type] of Object.entries(INTERVIEW_TYPES)){const option=document.createElement('option');option.value=id;option.textContent=type.label;if(id===DEFAULT_INTERVIEW_TYPE)option.selected=true;$('interviewType').append(option);}
 function currentType(){return interviewTypeOf($('interviewType').value);}
@@ -757,7 +761,7 @@ function renderImmersed(turn){const intro=COACH_INTRO[$('explanationLanguage').v
 function showRetryCoach(turn){renderImmersed(turn);const suggestion=String(turn.suggestion||'').trim();if(suggestion)showSuggestion(suggestion);else hideSuggestion();fitAnswer();const summary=coachSummary(turn);lastFeedbackSpeech=summary?feedbackVoiceParts([summary]):[];if(suggestion){lastFeedbackSpeech.push({text:suggestLeadText(),lang:$('explanationLanguage').value,who:'feedback'});lastFeedbackSpeech.push({text:suggestion,lang:$('targetLanguage').value,who:'feedback'});}paintInputTools();if(lastFeedbackSpeech.length)speakSequence(lastFeedbackSpeech);}
 function paintMarked(el,marked,chips){el.replaceChildren();for(const bit of marked.split(/(@@LEARN@@|@@NATIVE@@|@@PROF@@|@@TIME@@)/)){const chip=chips[bit];if(chip){if(!chip.cls){el.appendChild(document.createTextNode(chip.text));continue;}const span=document.createElement('span');span.className=chip.cls;span.textContent=chip.text;el.appendChild(span);}else if(bit)el.appendChild(document.createTextNode(bit));}}
 function professionShort(){const text=selectedText('interviewType');const cut=text.split(' · ')[0].trim();return cut||text;}
-function paintSessionHeading(){const learn=uiLangName($('targetLanguage').value||'en');const native=uiLangName($('explanationLanguage').value||'es');const started=document.body.classList.contains('class-started');const profession=started?professionShort():'';const title=$('sessionTitle');if(title){const marked=profession?tr('ui.titleProfession','{{profession}}, en {{learn}}',{profession:'@@PROF@@',learn:'@@LEARN@@'}):tr('ui.title','Tu profesión en {{learn}}',{learn:'@@LEARN@@'});paintMarked(title,marked,{'@@LEARN@@':{cls:'chip-learn',text:learn},'@@PROF@@':{cls:'',text:profession}});}const sub=$('subtitle');if(!sub)return;const marked=tr('ui.subtitle','Practica speaking de {{topic}} en {{learn}}',{learn:'@@LEARN@@',topic:'@@PROF@@'});paintMarked(sub,marked,{'@@LEARN@@':{cls:'chip-learn',text:learn},'@@PROF@@':{cls:'',text:professionShort()}});
+function paintSessionHeading(){const learn=uiLangName($('targetLanguage').value||'en');const native=uiLangName($('explanationLanguage').value||'es');const started=document.body.classList.contains('class-started');const profession=started?professionShort():'';const title=$('sessionTitle');if(title){const marked=profession?tr('ui.titleProfession','{{profession}}, en {{learn}}',{profession:'@@PROF@@',learn:'@@LEARN@@'}):tr('ui.title','Tu profesión en {{learn}}',{learn:'@@LEARN@@'});paintMarked(title,marked,{'@@LEARN@@':{cls:'chip-learn',text:learn},'@@PROF@@':{cls:'',text:profession}});}const sub=$('subtitle');if(!sub)return;const chips={'@@LEARN@@':{cls:'chip-learn',text:learn},'@@PROF@@':{cls:'',text:professionShort()}};const full=document.createElement('span'),short=document.createElement('span');full.className='sub-full';short.className='sub-short';paintMarked(full,tr('ui.subtitle','Practica speaking de {{topic}} en {{learn}}',{learn:'@@LEARN@@',topic:'@@PROF@@'}),chips);paintMarked(short,tr('ui.subtitleShort','Practica speaking en {{learn}}',{learn:'@@LEARN@@'}),chips);sub.replaceChildren(full,short);
 }
 function updateLanguageHints(){const learn=targetName(), explain=explanationName();setHint('hintNative',tr('hints.native','La página y tu profesor usarán este idioma.'));setHint('hintType',tr('hints.type','Elige tu profesión o área. El entrevistador hará preguntas de ese campo. Cambiarla abre otra conversación.'));setHint('hintTarget',tr('hints.target','Idioma que quieres practicar: {{lang}}. Tu entrevistador hablará en ese idioma.',{lang:learn}));setHint('hintLevel',tr('hints.level','Tu nivel en ese idioma. Ajusta lo que el profesor te pide.'));setHint('hintExplain',tr('hints.explain','Idioma de explicación: {{lang}}. Es tu idioma y el del profesor en el feedback.',{lang:explain}));setHint('hintInterviewer',tr('hints.interviewer','Pregunta en {{lang}}. Si tu respuesta todavía necesita trabajo, el entrevistador pide aclarar un aspecto. Si ya vale, la valida y pasa a otra. Cambiar el idioma a aprender abre otra conversación.',{lang:learn}));setHint('hintStudent',tr('hints.student','El micrófono naranja graba y el lápiz escribe. El que no uses queda en gris. Enviar aparece a la derecha y se pone verde cuando paras.',{lang:learn}));setHint('hintChange',tr('hints.change','Vuelve a la preparación de la clase. Ahí puedes cambiar tu idioma nativo, el puesto, el idioma que aprendes y el nivel. La voz queda fija en Google, según esos idiomas. Si cambias el puesto o el idioma a aprender, la conversación empieza de nuevo. El reloj de la sesión no se reinicia.'));$('studentText').placeholder=tr('hints.studentPh','Tu respuesta en {{lang}}',{lang:learn});$('interviewer').placeholder=tr('ui.interviewerPh','El entrevistador está preparando la primera pregunta…');$('feedback').placeholder=tr('ui.feedbackPh','Tema del entrevistador\n\nTu respuesta\n\nCómo mejorar esta respuesta\n\nQué ajustar\n\nAsí podría quedar la respuesta\n\nPregunta del entrevistador');if(!$('feedback').value.trim())renderFeedback([]);paintSuggestCopy();document.title=tr('ui.docTitle','Refactorii | Practica tu profesión en otro idioma');refreshTypeLabels();paintSessionHeading();const titles={hintNative:'hints.nativeTitle',hintType:'hints.typeTitle',hintTarget:'hints.targetTitle',hintLevel:'hints.levelTitle',hintExplain:'hints.explainTitle',hintInterviewer:'hints.interviewerTitle',hintStudent:'hints.studentTitle',hintChange:'hints.changeTitle'};for(const [id,key] of Object.entries(titles)){const el=$(id);if(el)el.dataset.hintTitle=tr(key, el.getAttribute('aria-label')||'');}paintVoiceSelects();}
 function learner(){return {level:$('level').value,explanationLanguage:$('explanationLanguage').value,targetLanguage:$('targetLanguage').value};}
