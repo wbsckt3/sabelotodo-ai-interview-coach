@@ -234,8 +234,9 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 .auto-config{display:grid;gap:4px;margin:0 0 6px}
 .auto-config label{font-size:.88rem;font-weight:750;color:var(--ink)}
 .auto-config select:disabled{opacity:1;background:#e8eaef;color:var(--ink);-webkit-text-fill-color:var(--ink);border-color:#c5c9d1;appearance:none;cursor:default}
-#modal-launch.is-auto .launch-status{margin-top:14px;font-size:1.25rem;font-weight:800;line-height:1.4;color:#16a34a}
-#modal-launch.is-auto .launch-status.is-error{color:#b91c1c}
+#modal-launch.is-auto .launch-status{margin:0 0 12px;padding:8px 12px;border-radius:10px;background:#f0fdf4;border:1px solid #bbf7d0;font-size:.98rem;font-weight:500;line-height:1.45;color:#166534}
+#modal-launch.is-auto .launch-status:empty{display:none}
+#modal-launch.is-auto .launch-status.is-error{background:#fef2f2;border-color:#fecaca;color:#b91c1c}
 #sessionClock.is-clickable{cursor:pointer;text-decoration:underline dotted}
 #sessionClock.is-live{background:transparent;color:var(--ink);-webkit-text-fill-color:var(--ink)}
 .time-server,.time-session{display:inline-block;border-radius:6px;padding:0 6px;font-weight:800;font-variant-numeric:tabular-nums;color:#fff;-webkit-text-fill-color:#fff}
@@ -653,11 +654,11 @@ const URL_TOPIC=(()=>{const id=new URLSearchParams(location.search).get('topic')
 function demoTopic(){let saved='';try{saved=sessionStorage.getItem(TOPIC_KEY)||'';}catch{/* sin storage */}return URL_TOPIC||(INTERVIEW_TYPES[saved]?saved:'verb_tenses');}
 function dropUrlTopic(){if(!URL_TOPIC)return;const url=new URL(location.href);url.searchParams.delete('topic');history.replaceState(history.state,'',url.pathname+url.search+url.hash);}
 let autoLaunch=false, demoWanted=false, demoStarted=false;
-function setAutoLaunch(on){if(!on&&ballHostId!=='studentSheet'){stopSpeech();ballHostId='studentSheet';}autoLaunch=on;$('modal-launch').classList.toggle('is-auto',on);if(on)sessionStorage.setItem(AUTO_KEY,'1');else sessionStorage.removeItem(AUTO_KEY);}
+function setAutoLaunch(on){if(!on&&ballHostId!=='studentSheet'){stopSpeech();ballHostId='studentSheet';}if(!on)$('modal-launch').querySelector('.modal-card').append($('launchStatus'));autoLaunch=on;$('modal-launch').classList.toggle('is-auto',on);if(on)sessionStorage.setItem(AUTO_KEY,'1');else sessionStorage.removeItem(AUTO_KEY);}
 const OWN_LANG_NAME={en:'English',fr:'Français',es:'Español'};
 function storyText(){return tr('start.story','¡Hola! Practica speaking en inglés, francés o español con un asistente de inteligencia artificial. Ahora mismo estamos creando tu sesión de práctica de speaking de 5 minutos sobre {{topic}} en "{{lang}}" para nivel principiante. Un servidor se está encendiendo solo para ti y suele tardar uno o dos minutos. Cuando esté listo, el entrevistador te hará una pregunta corta sobre ese tópico, y tú respondes con el micrófono naranja. Tu profesor te dará feedback en tu idioma y te propondrá la frase corregida para que la escuches y la repitas. Desde tu red puedes iniciar hasta 3 sesiones en aproximadamente 60 minutos. Si quieres otra profesión, otro idioma u otra duración, usa el botón cambia tu sesión. Espera un momento mientras configuramos todo.',{lang:OWN_LANG_NAME[$('targetLanguage').value]||'English',topic:professionShort()});}
 function leadText(){return tr('start.creating','Estamos creando un servidor en {{native}} para que practiques speaking en {{learn}} sobre {{topic}}.',{native:uiLangName($('explanationLanguage').value),learn:uiLangName($('targetLanguage').value),topic:professionShort()});}
-function renderStory(){const box=$('launchStory');box.replaceChildren();const state={cursor:0};const lead=document.createElement('p');lead.className='launch-lead';appendFeedbackBody(lead,leadText(),state);const p=document.createElement('p');appendFeedbackBody(p,storyText(),state);box.append(lead,p);box.scrollTop=0;}
+function renderStory(){const box=$('launchStory');box.replaceChildren();const state={cursor:0};const lead=document.createElement('p');lead.className='launch-lead';appendFeedbackBody(lead,leadText(),state);const p=document.createElement('p');appendFeedbackBody(p,storyText(),state);box.append(lead,$('launchStatus'),p);box.scrollTop=0;}
 function readStory(){renderStory();ballHostId='launchStory';ensureBall();speakSequence(feedbackVoiceParts([leadText(),storyText()]));}
 function paintAutoConfig(){$('autoConfigOption').textContent=[selectedText('interviewType'),selectedText('targetLanguage'),selectedText('level'),selectedText('explanationLanguage')].join(' · ');}
 function demoEligible(){if(navigator.webdriver||/bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(navigator.userAgent||''))return false;if(URL_TOPIC)return true;try{return Date.now()-(Number(localStorage.getItem(DEMO_KEY))||0)>3600000;}catch{return true;}}
