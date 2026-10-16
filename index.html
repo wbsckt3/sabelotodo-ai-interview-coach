@@ -381,6 +381,20 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 .fix-view b{color:var(--amber);font-weight:600}
 @media(prefers-reduced-motion:reduce){.typing i{animation:none;opacity:.7}}
 @media(min-width:700px){.field-interviewer,.field-student{width:88%}}
+/* Encabezado */
+.title-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px 12px}
+.title-row>.q-learn{width:30px;height:30px}
+.title-row>.header-session{grid-column:1/-1;max-width:none;margin:0;display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px 10px;padding:8px 8px 8px 10px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.header-session .session{justify-self:start;padding:6px 12px;font-size:.8rem;text-decoration:none}
+.header-session .session.is-clickable{border:1px dashed var(--line-hi)}
+.header-session .change-row{gap:6px}
+.header-session .ghost{padding:6px 12px;border-radius:999px;font-size:.78rem}
+.header-session .quota-line{grid-column:1/-1;margin:0;padding-top:8px;border-top:1px solid var(--line);font-size:.75rem;font-weight:600;line-height:1.5;text-align:left;color:var(--muted)}
+.header-session .quota-line[hidden]{display:none}
+.time-server,.time-session{padding:1px 7px;border-radius:999px;font-weight:700}
+.time-server{background:rgba(245,185,74,.14);color:var(--amber);-webkit-text-fill-color:var(--amber)}
+.time-session{background:rgba(52,211,153,.14);color:#6ee7b7;-webkit-text-fill-color:#6ee7b7}
+@media(max-width:650px){.title-row{gap:8px 10px}.title-row>.header-session{margin:0}}
 </style>
 </head>
 <body>
@@ -391,12 +405,12 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 <div class="title-text">
 <p class="subtitle" id="subtitle"><span class="sub-full">Practica speaking de Tiempos verbales en inglés</span><span class="sub-short">Practica speaking en inglés</span></p>
 </div>
+<button type="button" class="q q-learn" id="learnBtn" data-open-modal="modal-aprende" aria-haspopup="dialog" data-i18n-aria="ui.learn" aria-label="Aprende más de este motor conversacional" title="Aprende más de este motor conversacional">?</button>
 <div class="class-card__side header-session">
 <p class="session" id="sessionClock" aria-live="polite">Sesión 00:00</p>
 <div class="change-row">
 <button type="button" class="ghost" id="changeClass" data-i18n="ui.change">Cambia tu sesión</button>
 <button type="button" class="q" id="hintChange" data-i18n-aria="hints.changeTitle" aria-label="Cambiar">?</button>
-<button type="button" class="q q-learn" id="learnBtn" data-open-modal="modal-aprende" aria-haspopup="dialog" data-i18n-aria="ui.learn" aria-label="Aprende más de este motor conversacional" title="Aprende más de este motor conversacional">?</button>
 </div>
 <p class="quota-line" id="quotaLine" hidden></p>
 </div>
