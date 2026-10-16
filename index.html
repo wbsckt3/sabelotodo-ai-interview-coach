@@ -727,7 +727,8 @@ function renderStory(){const box=$('launchStory');const status=statusEl();box.re
 function readStory(){renderStory();ballHostId='launchStory';ensureBall();speakSequence(feedbackVoiceParts([leadText(),storyText()]));}
 function paintAutoConfig(){$('autoConfigOption').textContent=[selectedText('interviewType'),selectedText('targetLanguage'),selectedText('level'),selectedText('explanationLanguage')].join(' · ');}
 function demoEligible(){if(navigator.webdriver||/bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(navigator.userAgent||''))return false;if(URL_TOPIC)return true;try{return Date.now()-(Number(localStorage.getItem(DEMO_KEY))||0)>3600000;}catch{return true;}}
-function demoNative(){const api=window.coachI18n;const locale=api&&api.ready&&api.getLocale?api.getLocale():String(navigator.language||'es').slice(0,2).toLowerCase();return ['es','en','fr'].includes(locale)?locale:'es';}
+function pathLocale(){const last=(location.pathname.split('/').filter(Boolean).pop()||'').toLowerCase();return ['es','en','fr'].includes(last)?last:'';}
+function demoNative(){const api=window.coachI18n;const locale=pathLocale()||(api&&api.ready&&api.getLocale?api.getLocale():String(navigator.language||'es').slice(0,2).toLowerCase());return ['es','en','fr'].includes(locale)?locale:'es';}
 function applyDemoChoice(){const native=demoNative();$('explanationLanguage').value=native;$('targetLanguage').value=native==='en'?'fr':'en';$('level').value='beginner';$('interviewType').value=demoTopic();$('startMinutes').value=String(DEMO_MINUTES);document.body.classList.add('class-started');updateLanguageHints();renderCard();paintAutoConfig();return native;}
 function startDemo(){if(demoStarted||!demoWanted)return;demoStarted=true;try{localStorage.setItem(DEMO_KEY,String(Date.now()));sessionStorage.setItem(TOPIC_KEY,demoTopic());}catch{/* sin storage */}applyDemoChoice();dropUrlTopic();setAutoLaunch(true);if(!$('modal-launch').open)$('modal-launch').showModal();readStory();launchClass(DEMO_MINUTES);}
 $('modal-launch').addEventListener('cancel',event=>{if(autoLaunch)event.preventDefault();});
@@ -863,7 +864,7 @@ function refreshOpenHint(){const dialog=$('modal-hint');const btn=window.__coach
 function refreshChrome(){updateLanguageHints();fitQuestion();paintQuota();renderSession();paintStatus();refreshOpenHint();renderCard();paintAutoConfig();paintInputTools();paintVoiceSelects();if(useLauncher){launchSummary();if(launchTimer)paintLaunching();}}
 window.onCoachLocaleChange=refreshChrome;
 window.addEventListener('resize',fitQuestion);
-function syncNativeLanguage(){const locale=window.coachI18n&&window.coachI18n.getLocale&&window.coachI18n.getLocale();if(locale&&!document.body.classList.contains('class-started'))$('explanationLanguage').value=locale;if(autoLaunch&&!sessionLive){applyDemoChoice();if(!activeUtter)readStory();}refreshChrome();startDemo();}
+function syncNativeLanguage(){const locale=window.coachI18n&&window.coachI18n.getLocale&&window.coachI18n.getLocale();if(locale)$('explanationLanguage').value=locale;if(autoLaunch&&!sessionLive){applyDemoChoice();if(!activeUtter)readStory();}refreshChrome();startDemo();}
 window.onCoachI18nReady=syncNativeLanguage;
 if(window.coachI18n&&window.coachI18n.ready)syncNativeLanguage();
 </script>
