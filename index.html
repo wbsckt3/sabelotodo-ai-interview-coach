@@ -31,7 +31,12 @@ header{flex:0 0 auto;border-radius:14px 14px 0 0;border-bottom:0;padding-bottom:
 .brand-logo{height:52px;width:auto;flex:0 0 auto;object-fit:contain}
 .title-tools{display:flex;align-items:center;gap:6px;margin-left:auto;flex:0 0 auto}
 h1{margin:0;font-size:1.2rem;line-height:1.2;color:var(--ink)}
-.subtitle{margin:4px 0 0;font-size:.92rem;font-weight:650;color:var(--ink)}
+.subtitle{margin:0;font-size:1.02rem;font-weight:750;line-height:1.35;color:var(--ink)}
+.title-text{flex:1 1 auto;min-width:0}
+.header-session{margin-left:auto;flex:0 1 auto;max-width:58%}
+#classCard{flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:6px}
+#classCard .class-card__data{flex:0 0 auto}
+.class-card__title{margin:0;font-size:.78rem;font-weight:800;color:#475569}
 h1 .chip-learn,h1 .chip-native,.subtitle .chip-learn,.subtitle .chip-native{border-radius:6px;padding:0 5px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 h1 .chip-learn,.subtitle .chip-learn{background:var(--interviewer-bg)}
 h1 .chip-native,.subtitle .chip-native{background:var(--student-bg)}
@@ -221,6 +226,12 @@ dialog.theory-modal::backdrop{background:rgba(16,24,39,.55)}
 #modal-launch.is-auto .launch-status{margin-top:14px;font-size:1.25rem;font-weight:800;line-height:1.4;color:#16a34a}
 #modal-launch.is-auto .launch-status.is-error{color:#b91c1c}
 #sessionClock.is-clickable{cursor:pointer;text-decoration:underline dotted}
+#sessionClock.is-live{background:#f97316;color:#fff;-webkit-text-fill-color:#fff}
+.quota-line{flex:1 1 100%;margin:0;font-size:.74rem;font-weight:700;color:#475569;text-align:right;font-variant-numeric:tabular-nums}
+.quota-box{margin:0 0 10px;padding:10px 12px;border-radius:10px;background:#fff7ed;border:1px solid #fdba74}
+.quota-box p{margin:0;font-size:.88rem;line-height:1.4;color:var(--ink);font-variant-numeric:tabular-nums}
+.quota-box .quota-ended{margin-bottom:4px;font-weight:800;color:#c2410c}
+.quota-box .quota-left{font-weight:700}
 .start-grid--2{grid-template-columns:1fr 1fr}
 .start-grid--2 .start-wide{grid-column:1/-1}
 .start-grid .label-row{margin:0 0 4px}
@@ -250,7 +261,7 @@ input[data-voice-role="interviewer"]{background:var(--interviewer-bg);border-col
 input[data-voice-role="professor"]{background:var(--professor-bg);border-color:var(--professor-border)}
 .voice-preview{flex:0 0 auto;background:#fff;color:var(--ink);border:1px solid #c5d0e6;padding:6px 8px;font-size:.75rem}
 @media(max-width:650px){.voice-row{grid-template-columns:1fr}}
-@media(max-width:650px){.class-card{flex-wrap:wrap;gap:8px}.class-card__data{flex:1 1 100%;grid-template-columns:1fr 1fr}.class-card__side{flex:1 1 100%;justify-content:space-between;flex-wrap:nowrap}.class-card__side .change-row{margin-left:auto}}
+@media(max-width:650px){.title-row{flex-wrap:wrap;gap:8px 12px}.header-session{max-width:none;margin-left:0}.class-card{flex-wrap:wrap;gap:6px}.class-card__data{flex:1 1 100%;grid-template-columns:1fr 1fr}.class-card__side{flex:1 1 100%;justify-content:space-between;flex-wrap:wrap}.quota-line{text-align:left}.class-card__side .change-row{margin-left:auto}}
 @media(max-width:650px){body{padding:6px}.brand-logo{height:44px}h1{font-size:1.05rem}.subtitle{font-size:.84rem}.learn-btn{font-size:.7rem}.theory-actions{display:grid}}
 </style>
 </head>
@@ -259,27 +270,28 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 <header>
 <div class="title-row">
 <img class="brand-logo" src="logo-p2l.png" alt="P2L">
-<div>
-<h1 id="sessionTitle">Tu profesión en inglés</h1>
+<div class="title-text">
 <p class="subtitle" id="subtitle">Practica speaking en inglés con un entrenador personalizado.</p>
+</div>
+<div class="class-card__side header-session">
+<p class="session" id="sessionClock" aria-live="polite">Sesión 00:00</p>
+<div class="change-row">
+<button type="button" class="ghost" id="changeClass" data-i18n="ui.change">Cambia tu sesión</button>
+<button type="button" class="q" id="hintChange" data-i18n-aria="hints.changeTitle" aria-label="Cambiar">?</button>
+</div>
+<p class="quota-line" id="quotaLine" hidden></p>
 </div>
 </div>
 </header>
 <section class="stage">
 <div class="class-card" id="classCard">
+<p class="class-card__title" data-i18n="ui.currentSetup">Configuración de mi práctica actual:</p>
 <dl class="class-card__data">
 <div><dt data-i18n="ui.type">Tipo de entrevista</dt><dd id="cardType"></dd></div>
 <div><dt data-i18n="ui.target">Idioma a aprender</dt><dd id="cardTarget"></dd></div>
 <div><dt data-i18n="ui.level">Nivel aproximado</dt><dd id="cardLevel"></dd></div>
 <div><dt data-i18n="ui.explain">Idioma de explicación</dt><dd id="cardExplain"></dd></div>
 </dl>
-<div class="class-card__side">
-<p class="session" id="sessionClock" aria-live="polite">Sesión 00:00</p>
-<div class="change-row">
-<button type="button" class="ghost" id="changeClass" data-i18n="ui.change">Cambia tu sesión</button>
-<button type="button" class="q" id="hintChange" data-i18n-aria="hints.changeTitle" aria-label="Cambiar">?</button>
-</div>
-</div>
 </div>
 <p id="status" class="status-pill" role="status" data-i18n="status.opening">Abriendo la entrevista…</p>
 <div class="field grow field-interviewer field-float">
@@ -340,6 +352,7 @@ input[data-voice-role="professor"]{background:var(--professor-bg);border-color:v
 <div class="modal-top">
 <h2 id="titulo-start" data-i18n="start.title">Configura tu práctica</h2>
 </div>
+<div class="quota-box" id="startQuota" hidden><p class="quota-ended" id="startQuotaEnded" hidden></p><p class="quota-left" id="startQuotaLeft"></p></div>
 <p class="note" data-i18n="start.lead">Elige tu profesión, el idioma que quieres practicar y tu nivel. Tu entrevistador hablará en ese idioma y tu profesor te explicará en el tuyo.</p>
 <div class="start-grid start-grid--2">
 <div class="start-wide native-row">
@@ -598,7 +611,7 @@ function paintStatus(){const vars={...(statusState.extra||{})};if(statusState.ke
 const SERVER_SOURCES=['https://api.github.com/repos/wbsckt3/sabelotodo-ai-interview-coach/contents/server.json?ref=main','https://raw.githubusercontent.com/wbsckt3/sabelotodo-ai-interview-coach/main/server.json',new URL('server.json',document.baseURI).href];
 function pad(n){return String(n).padStart(2,'0');}
 function formatRemain(ms){const total=Math.max(0,Math.ceil(ms/1000));const h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;return h?`${h}:${pad(m)}:${pad(s)}`:`${pad(m)}:${pad(s)}`;}
-function renderSession(){const el=$('sessionClock');if(!el)return;el.classList.toggle('is-clickable',useLauncher&&!sessionLive);if(sessionLive&&sessionUntil&&sessionUntil<=Date.now()){sessionLive=false;apiBase='';el.classList.toggle('is-clickable',useLauncher);if(useLauncher)sessionEnded();}el.classList.toggle('is-server',!sessionLive&&!location.hostname.endsWith('github.io'));if(sessionLive&&sessionUntil>Date.now()){el.textContent=tr('ui.session','Sesión {{time}}',{time:formatRemain(sessionUntil-Date.now())});return;}if(sessionLive){el.textContent=tr('ui.sessionActive','Sesión activa');return;}el.textContent=location.hostname.endsWith('github.io')?tr('ui.sessionZero','Sesión 00:00'):tr('ui.sessionLocal','Session server');}
+function renderSession(){const el=$('sessionClock');if(!el)return;el.classList.toggle('is-clickable',useLauncher&&!sessionLive);if(sessionLive&&sessionUntil&&sessionUntil<=Date.now()){sessionLive=false;apiBase='';el.classList.toggle('is-clickable',useLauncher);if(useLauncher)sessionEnded();}el.classList.toggle('is-server',!sessionLive&&!location.hostname.endsWith('github.io'));el.classList.toggle('is-live',sessionLive);if(sessionLive&&sessionUntil>Date.now()){el.textContent=tr('ui.sessionCurrent','Sesión actual {{time}}',{time:formatRemain(sessionUntil-Date.now())});return;}if(sessionLive){el.textContent=tr('ui.sessionActive','Sesión activa');return;}el.textContent=location.hostname.endsWith('github.io')?tr('ui.sessionZero','Sesión 00:00'):tr('ui.sessionLocal','Session server');}
 async function readServer(source){const response=await fetch(`${source}${source.includes('?')?'&':'?'}t=${Date.now()}`,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});if(!response.ok)return null;const data=await response.json();if(data&&typeof data.content==='string'){try{return JSON.parse(atob(data.content.replace(/\s/g,'')));}catch{return null;}}return data&&typeof data==='object'?data:null;}
 function applyServer(data){const api=data&&typeof data.api==='string'&&/^https:\/\//.test(data.api.trim())?data.api.trim().replace(/\/$/,''):'';const until=Date.parse(data&&data.until||'');const open=Boolean(api)&&( !Number.isFinite(until)||until>Date.now());if(!open)return false;apiBase=api;sessionLive=true;sessionUntil=Number.isFinite(until)?until:0;renderSession();return true;}
 async function loadServer(){for(const source of SERVER_SOURCES){try{const data=await readServer(source);if(data&&applyServer(data))return;}catch{/* prueba la siguiente fuente */}}if(!sessionLive)renderSession();}
@@ -619,7 +632,7 @@ function stopLaunchTimer(){if(launchTimer){clearInterval(launchTimer);launchTime
 function paintLaunching(){const time=formatRemain(Date.now()-launchStartedAt);launchStatus(autoLaunch?tr('start.waitSetup','Espera un momento mientras configuramos todo… {{time}}',{time}):tr('start.starting','Encendiendo el servidor del coach… {{time}}. Suele tardar 1 o 2 minutos.',{time}));}
 function launchFailed(message){if(autoLaunch)setAutoLaunch(false);stopLaunchTimer();launchPollId++;sessionStorage.removeItem(LAUNCH_KEY);$('launchBtn').disabled=false;$('launchBack').disabled=false;launchStatus(tr('start.failed','No se pudo iniciar la clase: {{message}}',{message}),true);if(!$('modal-launch').open)$('modal-launch').showModal();}
 async function pollLaunch(id){const poll=++launchPollId;$('launchBtn').disabled=true;$('launchBack').disabled=true;stopLaunchTimer();paintLaunching();launchTimer=setInterval(paintLaunching,1000);while(poll===launchPollId){let data=null;try{const response=await fetch(`${LAUNCHER}/sessions/${encodeURIComponent(id)}`,{cache:'no-store'});if(response.status===404){launchFailed(tr('start.expired','la sesión ya no existe.'));return;}data=await response.json();}catch{/* reintenta en el siguiente ciclo */}if(poll!==launchPollId)return;if(data&&data.status==='ready'&&applyServer(data)){stopLaunchTimer();$('launchBtn').disabled=false;$('launchBack').disabled=false;launchStatus('');if($('modal-launch').open)$('modal-launch').close();setAutoLaunch(false);restartInterview();return;}if(data&&(data.status==='failed'||data.status==='ended')){launchFailed(tr('start.serverDown','el servidor no arrancó.'));return;}await new Promise(resolve=>setTimeout(resolve,5000));}}
-async function launchClass(minutesOverride){const minutes=Math.min(180,Math.max(5,Number(minutesOverride)||Number.parseInt($('startMinutes').value,10)||60));$('startMinutes').value=String(minutes);$('launchBtn').disabled=true;$('launchBack').disabled=true;if(autoLaunch){launchStartedAt=Date.now();paintLaunching();}else launchStatus(tr('start.requesting','Pidiendo un servidor para tu clase…'));try{const response=await fetch(`${LAUNCHER}/sessions`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({minutes,type:$('interviewType').value,lang:$('targetLanguage').value})});const data=await response.json().catch(()=>({}));if(!response.ok){const known={429:'start.tooMany',503:'start.full'}[response.status];launchFailed(known?tr(known,data.error||''):(data.error||`HTTP ${response.status}`));return;}sessionStorage.setItem(LAUNCH_KEY,data.id);launchStartedAt=Date.now();pollLaunch(data.id);}catch(e){launchFailed(e.message);}}
+async function launchClass(minutesOverride){const minutes=Math.min(180,Math.max(5,Number(minutesOverride)||Number.parseInt($('startMinutes').value,10)||60));$('startMinutes').value=String(minutes);$('launchBtn').disabled=true;$('launchBack').disabled=true;if(autoLaunch){launchStartedAt=Date.now();paintLaunching();}else launchStatus(tr('start.requesting','Pidiendo un servidor para tu clase…'));try{const response=await fetch(`${LAUNCHER}/sessions`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({minutes,type:$('interviewType').value,lang:$('targetLanguage').value})});const data=await response.json().catch(()=>({}));applyQuota(data.quota);if(response.ok)endedSessionNo=0;if(!response.ok){const known={429:'start.tooMany',503:'start.full'}[response.status];launchFailed(known?tr(known,data.error||''):(data.error||`HTTP ${response.status}`));return;}sessionStorage.setItem(LAUNCH_KEY,data.id);launchStartedAt=Date.now();pollLaunch(data.id);}catch(e){launchFailed(e.message);}}
 const AUTO_KEY='coach-launcher-auto', DEMO_KEY='coach-demo-at', DEMO_MINUTES=5;
 let autoLaunch=false, demoWanted=false, demoStarted=false;
 function setAutoLaunch(on){if(!on&&ballHostId!=='studentSheet'){stopSpeech();ballHostId='studentSheet';}autoLaunch=on;$('modal-launch').classList.toggle('is-auto',on);if(on)sessionStorage.setItem(AUTO_KEY,'1');else sessionStorage.removeItem(AUTO_KEY);}
@@ -633,7 +646,12 @@ function demoNative(){const api=window.coachI18n;const locale=api&&api.ready&&ap
 function applyDemoChoice(){const native=demoNative();$('explanationLanguage').value=native;$('targetLanguage').value=native==='en'?'fr':'en';$('level').value='beginner';$('interviewType').value='verb_tenses';$('startMinutes').value=String(DEMO_MINUTES);document.body.classList.add('class-started');updateLanguageHints();renderCard();paintAutoConfig();return native;}
 function startDemo(){if(demoStarted||!demoWanted)return;demoStarted=true;try{localStorage.setItem(DEMO_KEY,String(Date.now()));}catch{/* sin storage */}applyDemoChoice();setAutoLaunch(true);if(!$('modal-launch').open)$('modal-launch').showModal();readStory();launchClass(DEMO_MINUTES);}
 $('modal-launch').addEventListener('cancel',event=>{if(autoLaunch)event.preventDefault();});
-function sessionEnded(){sessionStorage.removeItem(LAUNCH_KEY);setStatus('start.ended','La clase terminó. Inicia otra cuando quieras.');openStartModal();}
+let quota=null, endedSessionNo=0, quotaFetching=false;
+function applyQuota(data){if(!data||!Number.isFinite(Number(data.limit)))return;const limit=Number(data.limit)||3;const used=Math.max(0,Number(data.used)||0);quota={used,limit,remaining:Math.max(0,limit-used),resetAt:Date.parse(data.resetAt)||0};paintQuota();}
+async function loadQuota(){if(!useLauncher||quotaFetching)return;quotaFetching=true;try{const response=await fetch(`${LAUNCHER}/quota`,{cache:'no-store'});if(response.ok)applyQuota(await response.json());}catch{/* sin datos del servidor */}finally{quotaFetching=false;}}
+function paintQuota(){const line=$('quotaLine'), box=$('startQuota');if(!quota){line.hidden=true;box.hidden=true;return;}if(quota.resetAt&&quota.resetAt<=Date.now()){quota={used:0,limit:quota.limit,remaining:quota.limit,resetAt:quota.resetAt+3600000};endedSessionNo=0;loadQuota();}const vars={left:quota.remaining,limit:quota.limit,time:formatRemain(quota.resetAt-Date.now()),n:endedSessionNo};line.hidden=false;line.textContent=tr('ui.quotaLine','Te quedan {{left}} de {{limit}} sesiones en este servidor · Servidor {{time}}',vars);box.hidden=false;$('startQuotaLeft').textContent=quota.remaining?tr('start.quotaLeft','Te quedan {{left}} de {{limit}} sesiones en este servidor. El servidor se renueva en {{time}}.',vars):tr('start.quotaNone','No te quedan sesiones en este servidor. Espera {{time}} para tener un servidor nuevo con {{limit}} sesiones.',vars);const ended=$('startQuotaEnded');ended.hidden=!endedSessionNo;ended.textContent=endedSessionNo?tr('start.quotaEnded','Tu sesión {{n}} en este servidor ha finalizado. Crea otra o espera {{time}} para tener un servidor nuevo con {{limit}} sesiones.',vars):'';}
+setInterval(paintQuota,1000);
+function sessionEnded(){endedSessionNo=quota?quota.used:0;loadQuota();sessionStorage.removeItem(LAUNCH_KEY);setStatus('start.ended','La clase terminó. Inicia otra cuando quieras.');openStartModal();}
 $('modal-start').addEventListener('close',()=>{if(!choiceSnapshot)return;const snapshot=choiceSnapshot;choiceSnapshot=null;if(choiceConfirmed){if(useLauncher&&!sessionLive){launchStatus('');launchSummary();$('modal-launch').showModal();return;}if(snapshot.restart)restartInterview();return;}if(CHOICE_IDS.every(id=>snapshot.values[id]===$(id).value))return;for(const [id,value] of Object.entries(snapshot.values))$(id).value=value;updateLanguageHints();});
 $('startBegin').addEventListener('click',()=>{const before=(choiceSnapshot&&choiceSnapshot.values)||{};choiceSnapshot={values:before,restart:['interviewType','targetLanguage'].some(id=>before[id]!==$(id).value)||!$('interviewer').value.trim()};choiceConfirmed=true;document.body.classList.add('class-started');$('modal-start').close();updateLanguageHints();renderCard();});
 $('launchBack').addEventListener('click',()=>{$('modal-launch').close();openStartModal();});
@@ -749,10 +767,11 @@ renderCard();
 renderSession();
 setInterval(renderSession,1000);
 setStatus('start.pick','Elige el tipo de entrevista y el idioma para iniciar la clase.');
+if(useLauncher)loadQuota();
 if(useLauncher){const pending=sessionStorage.getItem(LAUNCH_KEY);if(pending){if(sessionStorage.getItem(AUTO_KEY)==='1'){setAutoLaunch(true);applyDemoChoice();readStory();}launchStartedAt=Date.now();launchSummary();$('modal-launch').showModal();pollLaunch(pending);}else if(demoEligible()){demoWanted=true;if(window.coachI18n&&window.coachI18n.ready)startDemo();else setTimeout(startDemo,2500);}else openStartModal();}
 else{setInterval(loadServer,30000);loadServer();openStartModal();}
 function refreshOpenHint(){const dialog=$('modal-hint');const btn=window.__coachOpenHint&&$(window.__coachOpenHint);if(!dialog||!dialog.open||!btn)return;$('hintTitle').textContent=btn.dataset.hintTitle||btn.getAttribute('aria-label')||'';$('hintBody').textContent=btn.dataset.hint||'';}
-function refreshChrome(){updateLanguageHints();fitQuestion();renderSession();paintStatus();refreshOpenHint();renderCard();paintAutoConfig();paintInputTools();paintVoiceSelects();if(useLauncher){launchSummary();if(launchTimer)paintLaunching();}}
+function refreshChrome(){updateLanguageHints();fitQuestion();paintQuota();renderSession();paintStatus();refreshOpenHint();renderCard();paintAutoConfig();paintInputTools();paintVoiceSelects();if(useLauncher){launchSummary();if(launchTimer)paintLaunching();}}
 window.onCoachLocaleChange=refreshChrome;
 window.addEventListener('resize',fitQuestion);
 function syncNativeLanguage(){const locale=window.coachI18n&&window.coachI18n.getLocale&&window.coachI18n.getLocale();if(locale&&!document.body.classList.contains('class-started'))$('explanationLanguage').value=locale;if(autoLaunch&&!sessionLive){applyDemoChoice();if(!activeUtter)readStory();}refreshChrome();startDemo();}

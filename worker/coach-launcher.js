@@ -115,6 +115,27 @@ async function dispatchWorkflow(env, id, minutes) {
   }
 }
 
+async function readQuota(request, env) {
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const now = new Date();
+  const hourKey = `ip:${ip}:${now.toISOString().slice(0, 13)}`;
+  const used = intVar(await env.SESSIONS.get(hourKey), 0);
+  const limit = intVar(env.MAX_PER_IP_HOUR, 3);
+  const reset = new Date(now);
+  reset.setUTCMinutes(60, 0, 0);
+  return { hourKey, used, limit, resetAt: reset.toISOString() };
+}
+
+function quotaView(quota, used) {
+  return { used, limit: quota.limit, remaining: Math.max(0, quota.limit - used), resetAt: quota.resetAt };
+}
+
+async function getQuota(request, env) {
+  if (!allowedOrigin(request, env)) return json(request, env, 403, { error: 'Origen no permitido.' });
+  const quota = await readQuota(request, env);
+  return json(request, env, 200, quotaView(quota, quota.used));
+}
+
 async function createSession(request, env) {
   if (!allowedOrigin(request, env)) return json(request, env, 403, { error: 'Origen no permitido.' });
   let body = {};
@@ -123,11 +144,10 @@ async function createSession(request, env) {
   const lang = LANGS.has(body.lang) ? body.lang : 'en';
   const type = typeof body.type === 'string' ? body.type.slice(0, 60) : '';
 
-  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
-  const hourKey = `ip:${ip}:${new Date().toISOString().slice(0, 13)}`;
-  const used = intVar(await env.SESSIONS.get(hourKey), 0);
-  if (used >= intVar(env.MAX_PER_IP_HOUR, 3)) {
-    return json(request, env, 429, { error: 'Ya iniciaste varias clases en la última hora. Intenta más tarde.' });
+  const quota = await readQuota(request, env);
+  const { hourKey, used } = quota;
+  if (used >= quota.limit) {
+    return json(request, env, 429, { error: 'Ya iniciaste varias clases en la última hora. Intenta más tarde.', quota: quotaView(quota, used) });
   }
   if (await countActive(env) >= intVar(env.MAX_ACTIVE, 3)) {
     return json(request, env, 503, { error: 'Todas las aulas están ocupadas. Intenta en unos minutos.' });
@@ -146,7 +166,7 @@ async function createSession(request, env) {
     return json(request, env, 502, { error: 'No se pudo encender el servidor del coach.', detail: error.message });
   }
   await env.SESSIONS.put(hourKey, String(used + 1), { expirationTtl: 3700 });
-  return json(request, env, 201, { id, status: 'starting', minutes });
+  return json(request, env, 201, { id, status: 'starting', minutes, quota: quotaView(quota, used + 1) });
 }
 
 async function getSession(request, env, id) {
@@ -339,6 +359,7 @@ async function route(request, env) {
       });
     }
     if (request.method === 'GET' && url.pathname === '/admin/board') return listBoard(request, env);
+    if (request.method === 'GET' && url.pathname === '/quota') return getQuota(request, env);
     if (request.method === 'POST' && url.pathname === '/sessions') return createSession(request, env);
     const match = url.pathname.match(/^\/sessions\/([^/]+)(?:\/(ready|end|usage))?$/);
     if (match && ID_PATTERN.test(match[1])) {
