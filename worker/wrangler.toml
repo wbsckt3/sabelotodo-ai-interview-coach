@@ -7,7 +7,7 @@ compatibility_date = "2026-10-01"
 binding = "SESSIONS"
 
 [vars]
-ALLOWED_ORIGINS = "https://wbsckt3.github.io,http://127.0.0.1:8787,http://localhost:8787"
+ALLOWED_ORIGINS = "https://wbsckt3.github.io,https://www.refactorii.com,https://refactorii.com,http://127.0.0.1:8787,http://localhost:8787"
 GITHUB_REPO = "wbsckt3/sabelotodo-ai-interview-coach"
 WORKFLOW_FILE = "coach-server.yml"
 GITHUB_REF = "main"
