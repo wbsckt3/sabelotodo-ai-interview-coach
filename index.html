@@ -751,11 +751,11 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 </dialog>
 
 <script src="https://unpkg.com/i18next@23.4.6/i18next.min.js"></script>
-<script src="scripts/locales-embed.js?v=20261016b"></script>
+<script src="scripts/locales-embed.js?v=20261017a"></script>
 <script src="scripts/i18n.js?v=20261016b"></script>
 <script type="module">
 /* import {analyzeGrammar} from './motorg.js'; Motores y lógica difusa en pausa. */
-import {buildPedagogicalContext,INTERVIEW_TYPES,DEFAULT_INTERVIEW_TYPE,interviewTypeOf} from './skill.js?v=20261016b';
+import {buildPedagogicalContext,INTERVIEW_TYPES,DEFAULT_INTERVIEW_TYPE,interviewTypeOf} from './skill.js?v=20261017a';
 const $=id=>document.getElementById(id);
 for(const [id,type] of Object.entries(INTERVIEW_TYPES)){const option=document.createElement('option');option.value=id;option.textContent=type.label;if(id===DEFAULT_INTERVIEW_TYPE)option.selected=true;$('interviewType').append(option);}
 function currentType(){return interviewTypeOf($('interviewType').value);}
