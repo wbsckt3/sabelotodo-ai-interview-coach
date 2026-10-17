@@ -402,21 +402,27 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 #modal-launch.is-auto .launch-story .launch-status.is-error{background:transparent;color:#f08a7a}
 #modal-launch.is-auto .launch-story p:last-child{color:#cfd9e6}
 /* Encabezado */
-.title-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px 12px}
-.title-row>.q-learn{width:30px;height:30px}
-.title-row>.header-session{grid-column:1/-1;max-width:none;margin:0;display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px 10px;padding:8px 8px 8px 10px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
-.header-session .session{justify-self:start;padding:6px 12px;font-size:.8rem;text-decoration:none}
+.title-row{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:0 12px}
+.title-text{display:grid;gap:5px;min-width:0}
+.title-text .subtitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.title-text>.header-session{display:flex;align-items:center;gap:8px;min-width:0;max-width:none;margin:0;flex-wrap:nowrap}
+.header-session .session{flex:0 0 auto;padding:3px 10px;font-size:.76rem;white-space:nowrap;text-decoration:none}
 .header-session .session.is-clickable{border:1px dashed var(--line-hi)}
-.header-session .change-row{gap:6px}
-.header-session .ghost{padding:6px 12px;border-radius:999px;font-size:.78rem;white-space:nowrap}
-.header-session .session{white-space:nowrap}
-@media(max-width:400px){.header-session .session{padding:6px 10px;font-size:.76rem}.header-session .ghost{padding:6px 10px;font-size:.74rem}}
-.header-session .quota-line{grid-column:1/-1;margin:0;padding-top:8px;border-top:1px solid var(--line);font-size:clamp(.68rem,2.9vw,.75rem);font-weight:600;line-height:1.5;text-align:left;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.header-session .quota-line{flex:0 1 auto;min-width:0;margin:0;font-size:.74rem;font-weight:600;line-height:1.5;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .header-session .quota-line[hidden]{display:none}
+.header-session .change-row{flex:0 0 auto;margin-left:auto;gap:4px}
+.header-session .ghost{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:.74rem;white-space:nowrap}
+.header-session .ghost svg{display:none}
+.quota-short{display:none}
+.app-foot{flex:0 0 auto;display:flex;justify-content:center;padding:6px 0 2px}
+.foot-learn{display:inline-flex;align-items:center;gap:8px;border:0;background:transparent;color:var(--muted);font:600 .78rem/1.2 var(--font,inherit);cursor:pointer;padding:4px 6px}
+.foot-learn:hover{color:var(--text)}
+.foot-learn .q-learn{width:22px;height:22px;display:inline-grid;place-items:center;border-radius:50%;font-size:.75rem}
+@media(max-width:600px){.brand-logo{height:40px}.header-session{gap:6px}.header-session .session{padding:3px 8px;font-size:.7rem}.header-session .quota-line{font-size:.7rem}.header-session .ghost{padding:5px 7px}.header-session .ghost svg{display:block}.header-session .ghost span,#hintChange{display:none}.quota-full{display:none}.quota-short{display:inline}}
 .time-server,.time-session{padding:1px 7px;border-radius:999px;font-weight:700}
 .time-server{background:rgba(245,185,74,.14);color:var(--amber);-webkit-text-fill-color:var(--amber)}
 .time-session{background:rgba(52,211,153,.14);color:#6ee7b7;-webkit-text-fill-color:#6ee7b7}
-@media(max-width:650px){.title-row{gap:8px 10px}.title-row>.header-session{margin:0}}
+@media(max-width:650px){.title-row{gap:0 10px}}
 </style>
 </head>
 <body>
@@ -426,15 +432,14 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 <img class="brand-logo" src="logo-p2l.png" alt="P2L">
 <div class="title-text">
 <p class="subtitle" id="subtitle"><span class="sub-full">Practica speaking de Tiempos verbales en inglés</span><span class="sub-short">Practica speaking en inglés</span></p>
-</div>
-<button type="button" class="q q-learn" id="learnBtn" data-open-modal="modal-aprende" aria-haspopup="dialog" data-i18n-aria="ui.learn" aria-label="Aprende más de este motor conversacional" title="Aprende más de este motor conversacional">?</button>
-<div class="class-card__side header-session">
+<div class="header-session">
 <p class="session" id="sessionClock" aria-live="polite">Sesión 00:00</p>
+<p class="quota-line" id="quotaLine" hidden></p>
 <div class="change-row">
-<button type="button" class="ghost" id="changeClass" data-i18n="ui.change">Cambia tu sesión</button>
+<button type="button" class="ghost" id="changeClass" data-i18n-aria="ui.change" aria-label="Cambia tu sesión"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg><span data-i18n="ui.change">Cambia tu sesión</span></button>
 <button type="button" class="q" id="hintChange" data-i18n-aria="hints.changeTitle" aria-label="Cambiar">?</button>
 </div>
-<p class="quota-line" id="quotaLine" hidden></p>
+</div>
 </div>
 </div>
 </header>
@@ -480,6 +485,9 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 </div>
 </div>
 </section>
+<footer class="app-foot">
+<button type="button" class="foot-learn" id="learnBtn" data-open-modal="modal-aprende" aria-haspopup="dialog"><span class="q q-learn" aria-hidden="true">?</span><span data-i18n="ui.learn">Aprende más de este motor conversacional</span></button>
+</footer>
 </main>
 
 <dialog class="theory-modal hint-modal" id="modal-hint" aria-labelledby="hintTitle">
@@ -752,7 +760,7 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 </dialog>
 
 <script src="https://unpkg.com/i18next@23.4.6/i18next.min.js"></script>
-<script src="scripts/locales-embed.js?v=20261017b"></script>
+<script src="scripts/locales-embed.js?v=20261017d"></script>
 <script src="scripts/i18n.js?v=20261016b"></script>
 <script type="module">
 /* import {analyzeGrammar} from './motorg.js'; Motores y lógica difusa en pausa. */
@@ -815,7 +823,7 @@ $('modal-launch').addEventListener('cancel',event=>{if(autoLaunch)event.preventD
 let quota=null, endedSessionNo=0, quotaFetching=false;
 function applyQuota(data){if(!data||!Number.isFinite(Number(data.limit)))return;const limit=Number(data.limit)||3;const used=Math.max(0,Number(data.used)||0);quota={used,limit,remaining:Math.max(0,limit-used),resetAt:Date.parse(data.resetAt)||0};paintQuota();}
 async function loadQuota(){if(!useLauncher||quotaFetching)return;quotaFetching=true;try{const response=await fetch(`${LAUNCHER}/quota`,{cache:'no-store'});if(response.ok)applyQuota(await response.json());}catch{/* sin datos del servidor */}finally{quotaFetching=false;}}
-function paintQuota(){const line=$('quotaLine'), box=$('startQuota');if(!quota){line.hidden=true;box.hidden=true;return;}if(quota.resetAt&&quota.resetAt<=Date.now()){quota={used:0,limit:quota.limit,remaining:quota.limit,resetAt:quota.resetAt+3600000};endedSessionNo=0;loadQuota();}const vars={left:quota.remaining,limit:quota.limit,time:'@@TIME@@',n:endedSessionNo};const timeChip={'@@TIME@@':{cls:'time-server',text:formatRemain(quota.resetAt-Date.now())}};line.hidden=false;paintMarked(line,tr('ui.quotaLine','Te quedan {{left}} de {{limit}} sesiones · Servidor {{time}}',vars),timeChip);box.hidden=false;paintMarked($('startQuotaLeft'),quota.remaining?tr('start.quotaLeft','Te quedan {{left}} de {{limit}} sesiones en este servidor. El servidor se renueva en {{time}}.',vars):tr('start.quotaNone','No te quedan sesiones en este servidor. Espera {{time}} para tener un servidor nuevo con {{limit}} sesiones.',vars),timeChip);const ended=$('startQuotaEnded');ended.hidden=!endedSessionNo;if(endedSessionNo)paintMarked(ended,tr('start.quotaEnded','Tu sesión {{n}} en este servidor ha finalizado. Crea otra o espera {{time}} para tener un servidor nuevo con {{limit}} sesiones.',vars),timeChip);else ended.textContent='';}
+function paintQuota(){const line=$('quotaLine'), box=$('startQuota');if(!quota){line.hidden=true;box.hidden=true;return;}if(quota.resetAt&&quota.resetAt<=Date.now()){quota={used:0,limit:quota.limit,remaining:quota.limit,resetAt:quota.resetAt+3600000};endedSessionNo=0;loadQuota();}const vars={left:quota.remaining,limit:quota.limit,time:'@@TIME@@',n:endedSessionNo};const timeChip={'@@TIME@@':{cls:'time-server',text:formatRemain(quota.resetAt-Date.now())}};line.hidden=false;const full=document.createElement('span'),short=document.createElement('span');full.className='quota-full';short.className='quota-short';paintMarked(full,tr('ui.quotaLine','Te quedan {{left}} de {{limit}} sesiones · Servidor {{time}}',vars),timeChip);paintMarked(short,tr('ui.quotaShort','{{left}}/{{limit}} · {{time}}',vars),timeChip);line.replaceChildren(full,short);box.hidden=false;paintMarked($('startQuotaLeft'),quota.remaining?tr('start.quotaLeft','Te quedan {{left}} de {{limit}} sesiones en este servidor. El servidor se renueva en {{time}}.',vars):tr('start.quotaNone','No te quedan sesiones en este servidor. Espera {{time}} para tener un servidor nuevo con {{limit}} sesiones.',vars),timeChip);const ended=$('startQuotaEnded');ended.hidden=!endedSessionNo;if(endedSessionNo)paintMarked(ended,tr('start.quotaEnded','Tu sesión {{n}} en este servidor ha finalizado. Crea otra o espera {{time}} para tener un servidor nuevo con {{limit}} sesiones.',vars),timeChip);else ended.textContent='';}
 setInterval(paintQuota,1000);
 function sessionEnded(){endedSessionNo=quota?quota.used:0;loadQuota();sessionStorage.removeItem(LAUNCH_KEY);setStatus('start.ended','La clase terminó. Inicia otra cuando quieras.');openStartModal();}
 $('modal-start').addEventListener('close',()=>{if(!choiceSnapshot)return;const snapshot=choiceSnapshot;choiceSnapshot=null;if(choiceConfirmed){if(useLauncher&&!sessionLive){launchStatus('');launchSummary();$('modal-launch').showModal();return;}if(snapshot.restart)restartInterview();return;}if(CHOICE_IDS.every(id=>snapshot.values[id]===$(id).value))return;for(const [id,value] of Object.entries(snapshot.values))$(id).value=value;updateLanguageHints();});
