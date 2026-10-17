@@ -396,6 +396,12 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 .coach-note .suggest-view{padding:4px 0}
 .coach-note .suggest-tools{padding:4px 0 2px}
 @media(min-width:700px){.coach-note{margin-left:12%}}
+/* Demo automático con el estilo del feedback */
+#modal-launch.is-auto .launch-story{margin:4px 0 14px;padding:4px 6px 6px 15px;box-shadow:inset 3px 0 0 var(--amber);font-size:.95rem;line-height:1.5;color:#cfd9e6}
+#modal-launch.is-auto .launch-story .launch-lead{margin:0 0 6px;padding:0;border:0;border-radius:0;background:transparent;color:var(--text);font-size:1rem;font-weight:800;line-height:1.4}
+#modal-launch.is-auto .launch-story .launch-status{margin:0 0 10px;padding:0;border:0;border-radius:0;background:transparent;color:var(--muted);font-size:.85rem;font-weight:500;line-height:1.4}
+#modal-launch.is-auto .launch-story .launch-status.is-error{background:transparent;color:#f08a7a}
+#modal-launch.is-auto .launch-story p:last-child{color:#cfd9e6}
 /* Encabezado */
 .title-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px 12px}
 .title-row>.q-learn{width:30px;height:30px}
