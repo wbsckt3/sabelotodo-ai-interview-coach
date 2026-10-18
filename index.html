@@ -442,7 +442,8 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 .session-now .class-card__data dt{padding:0;font-size:.7rem;font-weight:600;color:var(--muted)}
 .session-now .class-card__data div:first-child{grid-column:1/-1}
 .session-now .class-card__data div dd{margin:0;padding:0;border:0;border-radius:0;background:transparent;font-size:.88rem;font-weight:800;color:var(--amber);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.app-foot{flex:0 0 auto;display:flex;justify-content:center;padding:6px 0 2px}
+.app-foot{flex:0 0 auto;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;padding:6px 0 2px}
+.sponsor-btn{display:block;border:0;border-radius:6px}
 .foot-learn{display:inline-flex;align-items:center;gap:8px;border:0;background:transparent;color:var(--muted);font:600 .78rem/1.2 var(--font,inherit);cursor:pointer;padding:4px 6px}
 .foot-learn:hover{color:var(--text)}
 .foot-learn .q-learn{width:22px;height:22px;display:inline-grid;place-items:center;border-radius:50%;font-size:.75rem}
@@ -507,6 +508,7 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 </section>
 <footer class="app-foot">
 <button type="button" class="foot-learn" id="learnBtn" data-open-modal="modal-aprende" aria-haspopup="dialog"><span class="q q-learn" aria-hidden="true">?</span><span data-i18n="ui.learn">Aprende más de este motor conversacional</span></button>
+<iframe class="sponsor-btn" src="https://github.com/sponsors/wbsckt3/button" title="Sponsor wbsckt3" height="32" width="114" loading="lazy"></iframe>
 </footer>
 </main>
 
