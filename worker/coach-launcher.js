@@ -76,6 +76,7 @@ function classIndexRow(id, session) {
     minutes: session.minutes || 0,
     type: session.type || '',
     lang: session.lang || '',
+    visitor: session.visitor || '',
   };
 }
 
@@ -143,6 +144,7 @@ async function createSession(request, env) {
   const minutes = Math.min(180, Math.max(5, intVar(body.minutes, 60)));
   const lang = LANGS.has(body.lang) ? body.lang : 'en';
   const type = typeof body.type === 'string' ? body.type.slice(0, 60) : '';
+  const visitor = typeof body.visitor === 'string' ? body.visitor.replace(/[^a-zA-Z0-9]/g, '').slice(0, 16) : '';
 
   const quota = await readQuota(request, env);
   const { hourKey, used } = quota;
@@ -154,7 +156,7 @@ async function createSession(request, env) {
   }
 
   const id = crypto.randomUUID();
-  const session = { status: 'starting', minutes, lang, type, createdAt: new Date().toISOString(), api: '', until: '' };
+  const session = { status: 'starting', minutes, lang, type, visitor, createdAt: new Date().toISOString(), api: '', until: '' };
   await writeSession(env, id, session);
   await rememberClass(env, id, session);
   try {
@@ -183,6 +185,7 @@ async function getSession(request, env, id) {
     until: session.until || '',
     minutes: session.minutes,
     createdAt: session.createdAt,
+    visitor: session.visitor || '',
   });
 }
 
@@ -277,6 +280,7 @@ async function listBoard(request, env) {
     minutes: row.minutes || 0,
     type: row.type || '',
     lang: row.lang || '',
+    visitor: row.visitor || '',
   }));
   classes.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
   const day = new Date().toISOString().slice(0, 10);
