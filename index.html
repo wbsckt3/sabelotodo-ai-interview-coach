@@ -413,6 +413,10 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 .title-row #changeClass:hover{background:rgba(245,185,74,.2)}
 .title-row #changeClass svg{width:20px;height:20px;flex:0 0 auto}
 .quota-short{display:none}
+.lang-pair{flex:0 0 auto;align-self:flex-start;display:inline-flex;align-items:center;max-width:100%;margin:0 0 8px;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--bg);font-size:.82rem;font-weight:600;line-height:1.2}
+.lang-pair span{padding:5px 12px;border-radius:999px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lang-pair__learn{background:var(--text);color:var(--bg)}
+.lang-pair__fb{color:var(--muted)}
 .session-now{margin:0 0 12px;padding:10px 12px 10px 15px;border-radius:10px;background:var(--bg);box-shadow:inset 3px 0 0 var(--amber)}
 .session-now[hidden]{display:none}
 .session-now__title{margin:0 0 8px;font-size:.95rem;font-weight:800;color:var(--text)}
@@ -454,6 +458,7 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 </header>
 <section class="stage">
 <p id="status" class="status-pill" role="status" data-i18n="status.opening">Abriendo la entrevista…</p>
+<div class="lang-pair" id="langPair"><span class="lang-pair__learn" id="pairLearn"></span><span class="lang-pair__fb" id="pairFb"></span></div>
 <div class="field grow field-interviewer field-float">
 <div class="label-row"><label for="interviewer" data-i18n="ui.interviewer">Entrevistador</label><button type="button" class="q" id="hintInterviewer" data-i18n-aria="hints.interviewerTitle" aria-label="Entrevistador">?</button></div>
 <textarea id="interviewer" class="actor actor-interviewer" readonly placeholder="El entrevistador está preparando la primera pregunta…"></textarea>
@@ -769,7 +774,7 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 </dialog>
 
 <script src="https://unpkg.com/i18next@23.4.6/i18next.min.js"></script>
-<script src="scripts/locales-embed.js?v=20261017e"></script>
+<script src="scripts/locales-embed.js?v=20261017f"></script>
 <script src="scripts/i18n.js?v=20261016b"></script>
 <script type="module">
 /* import {analyzeGrammar} from './motorg.js'; Motores y lógica difusa en pausa. */
@@ -805,7 +810,8 @@ function readChoice(){return Object.fromEntries(CHOICE_IDS.map(id=>[id,$(id).val
 function selectedText(id){const option=$(id).selectedOptions[0];return option?option.textContent:'';}
 let sessionChoice=null, sessionMinutes=0;
 function optionText(id,value){const option=[...$(id).options].find(item=>item.value===value);return option?option.textContent:'';}
-function renderCard(){const box=$('sessionNow');const choice=sessionLive?(sessionChoice||readChoice()):null;box.hidden=!choice;if(!choice)return;$('cardType').textContent=optionText('interviewType',choice.interviewType);$('cardTarget').textContent=optionText('targetLanguage',choice.targetLanguage);$('cardLevel').textContent=optionText('level',choice.level);$('cardExplain').textContent=optionText('explanationLanguage',choice.explanationLanguage);$('cardMinutes').textContent=sessionMinutes?tr('ui.sessionMinutes','· {{n}} min',{n:sessionMinutes}):'';}
+function paintPair(){const choice=(sessionLive&&sessionChoice)||readChoice();$('pairLearn').textContent=(OWN_LANG_NAME[choice.targetLanguage]||choice.targetLanguage)+' →';$('pairFb').textContent=tr('ui.pairFeedback','Feedback en {{lang}}',{lang:uiLangName(choice.explanationLanguage)});}
+function renderCard(){paintPair();const box=$('sessionNow');const choice=sessionLive?(sessionChoice||readChoice()):null;box.hidden=!choice;if(!choice)return;$('cardType').textContent=optionText('interviewType',choice.interviewType);$('cardTarget').textContent=optionText('targetLanguage',choice.targetLanguage);$('cardLevel').textContent=optionText('level',choice.level);$('cardExplain').textContent=optionText('explanationLanguage',choice.explanationLanguage);$('cardMinutes').textContent=sessionMinutes?tr('ui.sessionMinutes','· {{n}} min',{n:sessionMinutes}):'';}
 function launchSummary(){$('launchSummary').textContent=tr('start.summary','Entrevista: {{type}} · Idioma: {{lang}}',{type:selectedText('interviewType'),lang:targetName()});}
 function openStartModal(){const pending=useLauncher&&!sessionLive&&sessionStorage.getItem(LAUNCH_KEY);if(pending){launchSummary();if(!$('modal-launch').open)$('modal-launch').showModal();return;}choiceSnapshot={values:readChoice(),restart:false};choiceConfirmed=false;renderCard();if(!$('modal-start').open)$('modal-start').showModal();}
 function stopLaunchTimer(){if(launchTimer){clearInterval(launchTimer);launchTimer=null;}}
