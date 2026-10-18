@@ -38,8 +38,6 @@ h1{margin:0;font-size:1.2rem;line-height:1.2;color:var(--ink)}
 .subtitle{margin:0;font-size:1.02rem;font-weight:750;line-height:1.35;color:#000;-webkit-text-fill-color:#000}
 .title-text{flex:1 1 auto;min-width:0}
 .header-session{margin-left:auto;flex:0 1 auto;max-width:58%}
-#classCard{flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:6px}
-#classCard .class-card__data{flex:0 0 auto}
 .class-card__rule{width:100%;height:0;margin:2px 0 4px;border:0;border-top:2px solid #f97316;border-radius:2px}
 h1 .chip-learn,h1 .chip-native,.subtitle .chip-learn,.subtitle .chip-native{border-radius:6px;padding:0 5px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 h1 .chip-learn,.subtitle .chip-learn{background:var(--interviewer-bg)}
@@ -402,7 +400,7 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 #modal-launch.is-auto .launch-story .launch-status.is-error{background:transparent;color:#f08a7a}
 #modal-launch.is-auto .launch-story p:last-child{color:#cfd9e6}
 /* Encabezado */
-.title-row{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:0 12px}
+.title-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:0 12px}
 .title-text{display:grid;gap:5px;min-width:0}
 .title-text .subtitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .title-text>.header-session{display:flex;align-items:center;gap:8px;min-width:0;max-width:none;margin:0;flex-wrap:nowrap}
@@ -410,15 +408,26 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 .header-session .session.is-clickable{border:1px dashed var(--line-hi)}
 .header-session .quota-line{flex:0 1 auto;min-width:0;margin:0;font-size:.74rem;font-weight:600;line-height:1.5;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .header-session .quota-line[hidden]{display:none}
-.header-session .change-row{flex:0 0 auto;margin-left:auto;gap:4px}
-.header-session .ghost{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:.74rem;white-space:nowrap}
-.header-session .ghost svg{display:none}
+.title-row>.change-row{align-self:stretch;gap:4px}
+.title-row #changeClass{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;height:100%;padding:0 16px;border-radius:14px;font-size:.84rem;font-weight:700;white-space:nowrap;background:rgba(245,185,74,.12);color:var(--amber);border:1px solid rgba(245,185,74,.45)}
+.title-row #changeClass:hover{background:rgba(245,185,74,.2)}
+.title-row #changeClass svg{width:20px;height:20px;flex:0 0 auto}
 .quota-short{display:none}
+.session-now{margin:0 0 12px;padding:10px 12px 10px 15px;border-radius:10px;background:var(--bg);box-shadow:inset 3px 0 0 var(--amber)}
+.session-now[hidden]{display:none}
+.session-now__title{margin:0 0 8px;font-size:.95rem;font-weight:800;color:var(--text)}
+.session-now__dur{color:var(--amber)}
+.session-now__dur:empty{display:none}
+.session-now .class-card__data{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin:0}
+.session-now .class-card__data div{min-width:0;display:flex;flex-direction:column;gap:2px}
+.session-now .class-card__data dt{padding:0;font-size:.7rem;font-weight:600;color:var(--muted)}
+.session-now .class-card__data div:first-child{grid-column:1/-1}
+.session-now .class-card__data div dd{margin:0;padding:0;border:0;border-radius:0;background:transparent;font-size:.88rem;font-weight:800;color:var(--amber);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .app-foot{flex:0 0 auto;display:flex;justify-content:center;padding:6px 0 2px}
 .foot-learn{display:inline-flex;align-items:center;gap:8px;border:0;background:transparent;color:var(--muted);font:600 .78rem/1.2 var(--font,inherit);cursor:pointer;padding:4px 6px}
 .foot-learn:hover{color:var(--text)}
 .foot-learn .q-learn{width:22px;height:22px;display:inline-grid;place-items:center;border-radius:50%;font-size:.75rem}
-@media(max-width:600px){.brand-logo{height:40px}.header-session{gap:6px}.header-session .session{padding:3px 8px;font-size:.7rem}.header-session .quota-line{font-size:.7rem}.header-session .ghost{padding:5px 7px}.header-session .ghost svg{display:block}.header-session .ghost span,#hintChange{display:none}.quota-full{display:none}.quota-short{display:inline}}
+@media(max-width:600px){.brand-logo{height:40px}.header-session{gap:6px}.header-session .session{padding:3px 8px;font-size:.7rem}.header-session .quota-line{font-size:.7rem}.title-row #changeClass{width:52px;min-height:52px;padding:0}.title-row #changeClass svg{width:28px;height:28px}.title-row #changeClass span,#hintChange{display:none}.quota-full{display:none}.quota-short{display:inline}}
 .time-server,.time-session{padding:1px 7px;border-radius:999px;font-weight:700}
 .time-server{background:rgba(245,185,74,.14);color:var(--amber);-webkit-text-fill-color:var(--amber)}
 .time-session{background:rgba(52,211,153,.14);color:#6ee7b7;-webkit-text-fill-color:#6ee7b7}
@@ -435,24 +444,15 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 <div class="header-session">
 <p class="session" id="sessionClock" aria-live="polite">Sesión 00:00</p>
 <p class="quota-line" id="quotaLine" hidden></p>
+</div>
+</div>
 <div class="change-row">
 <button type="button" class="ghost" id="changeClass" data-i18n-aria="ui.change" aria-label="Cambia tu sesión"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg><span data-i18n="ui.change">Cambia tu sesión</span></button>
 <button type="button" class="q" id="hintChange" data-i18n-aria="hints.changeTitle" aria-label="Cambiar">?</button>
 </div>
 </div>
-</div>
-</div>
 </header>
 <section class="stage">
-<div class="class-card" id="classCard">
-<hr class="class-card__rule">
-<dl class="class-card__data">
-<div><dt data-i18n="ui.type">Tópico a practicar</dt><dd id="cardType"></dd></div>
-<div><dt data-i18n="ui.target">Idioma a aprender</dt><dd id="cardTarget"></dd></div>
-<div><dt data-i18n="ui.level">Nivel aproximado</dt><dd id="cardLevel"></dd></div>
-<div><dt data-i18n="ui.explain">Idioma de explicación</dt><dd id="cardExplain"></dd></div>
-</dl>
-</div>
 <p id="status" class="status-pill" role="status" data-i18n="status.opening">Abriendo la entrevista…</p>
 <div class="field grow field-interviewer field-float">
 <div class="label-row"><label for="interviewer" data-i18n="ui.interviewer">Entrevistador</label><button type="button" class="q" id="hintInterviewer" data-i18n-aria="hints.interviewerTitle" aria-label="Entrevistador">?</button></div>
@@ -518,6 +518,15 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 <div class="modal-card">
 <div class="modal-top">
 <h2 id="titulo-start" data-i18n="start.title">Configura tu práctica</h2>
+</div>
+<div class="session-now" id="sessionNow" hidden>
+<p class="session-now__title"><span data-i18n="ui.sessionNow">Sesión actual</span> <span class="session-now__dur" id="cardMinutes"></span></p>
+<dl class="class-card__data">
+<div><dt data-i18n="ui.type">Tópico a practicar</dt><dd id="cardType"></dd></div>
+<div><dt data-i18n="ui.target">Idioma a aprender</dt><dd id="cardTarget"></dd></div>
+<div><dt data-i18n="ui.level">Nivel aproximado</dt><dd id="cardLevel"></dd></div>
+<div><dt data-i18n="ui.explain">Idioma de explicación</dt><dd id="cardExplain"></dd></div>
+</dl>
 </div>
 <div class="quota-box" id="startQuota" hidden><p class="quota-ended" id="startQuotaEnded" hidden></p><p class="quota-left" id="startQuotaLeft"></p></div>
 <p class="note" data-i18n="start.lead">Elige tu profesión, el idioma que quieres practicar y tu nivel. Tu entrevistador hablará en ese idioma y tu profesor te explicará en el tuyo.</p>
@@ -760,7 +769,7 @@ dialog.theory-modal::backdrop{background:rgba(3,8,16,.72)}
 </dialog>
 
 <script src="https://unpkg.com/i18next@23.4.6/i18next.min.js"></script>
-<script src="scripts/locales-embed.js?v=20261017d"></script>
+<script src="scripts/locales-embed.js?v=20261017e"></script>
 <script src="scripts/i18n.js?v=20261016b"></script>
 <script type="module">
 /* import {analyzeGrammar} from './motorg.js'; Motores y lógica difusa en pausa. */
@@ -780,7 +789,7 @@ function pad(n){return String(n).padStart(2,'0');}
 function formatRemain(ms){const total=Math.max(0,Math.ceil(ms/1000));const h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;return h?`${h}:${pad(m)}:${pad(s)}`:`${pad(m)}:${pad(s)}`;}
 function renderSession(){const el=$('sessionClock');if(!el)return;el.classList.toggle('is-clickable',useLauncher&&!sessionLive);if(sessionLive&&sessionUntil&&sessionUntil<=Date.now()){sessionLive=false;apiBase='';el.classList.toggle('is-clickable',useLauncher);if(useLauncher)sessionEnded();}el.classList.toggle('is-server',!sessionLive&&!location.hostname.endsWith('github.io'));el.classList.toggle('is-live',sessionLive);if(sessionLive&&sessionUntil>Date.now()){paintMarked(el,tr('ui.sessionCurrent','Sesión actual {{time}}',{time:'@@TIME@@'}),{'@@TIME@@':{cls:'time-session',text:formatRemain(sessionUntil-Date.now())}});return;}if(sessionLive){el.textContent=tr('ui.sessionActive','Sesión activa');return;}el.textContent=location.hostname.endsWith('github.io')?tr('ui.sessionZero','Sesión 00:00'):tr('ui.sessionLocal','Session server');}
 async function readServer(source){const response=await fetch(`${source}${source.includes('?')?'&':'?'}t=${Date.now()}`,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});if(!response.ok)return null;const data=await response.json();if(data&&typeof data.content==='string'){try{return JSON.parse(atob(data.content.replace(/\s/g,'')));}catch{return null;}}return data&&typeof data==='object'?data:null;}
-function applyServer(data){const api=data&&typeof data.api==='string'&&/^https:\/\//.test(data.api.trim())?data.api.trim().replace(/\/$/,''):'';const until=Date.parse(data&&data.until||'');const open=Boolean(api)&&( !Number.isFinite(until)||until>Date.now());if(!open)return false;apiBase=api;sessionLive=true;sessionUntil=Number.isFinite(until)?until:0;renderSession();return true;}
+function applyServer(data){const api=data&&typeof data.api==='string'&&/^https:\/\//.test(data.api.trim())?data.api.trim().replace(/\/$/,''):'';const until=Date.parse(data&&data.until||'');const open=Boolean(api)&&( !Number.isFinite(until)||until>Date.now());if(!open)return false;apiBase=api;sessionLive=true;sessionUntil=Number.isFinite(until)?until:0;sessionMinutes=Number(data.minutes)||0;sessionChoice=readChoice();renderSession();renderCard();return true;}
 async function loadServer(){for(const source of SERVER_SOURCES){try{const data=await readServer(source);if(data&&applyServer(data))return;}catch{/* prueba la siguiente fuente */}}if(!sessionLive)renderSession();}
 function remoteMissing(){return location.hostname.endsWith('github.io')&&!apiBase;}
 const LAUNCHER=((document.querySelector('meta[name="coach-launcher"]')||{}).content||'').trim().replace(/\/$/,'');
@@ -794,9 +803,11 @@ const CHOICE_IDS=['interviewType','targetLanguage','level','explanationLanguage'
 let choiceSnapshot=null, choiceConfirmed=false;
 function readChoice(){return Object.fromEntries(CHOICE_IDS.map(id=>[id,$(id).value]));}
 function selectedText(id){const option=$(id).selectedOptions[0];return option?option.textContent:'';}
-function renderCard(){$('cardType').textContent=selectedText('interviewType');$('cardTarget').textContent=selectedText('targetLanguage');$('cardLevel').textContent=selectedText('level');$('cardExplain').textContent=selectedText('explanationLanguage');}
+let sessionChoice=null, sessionMinutes=0;
+function optionText(id,value){const option=[...$(id).options].find(item=>item.value===value);return option?option.textContent:'';}
+function renderCard(){const box=$('sessionNow');const choice=sessionLive?(sessionChoice||readChoice()):null;box.hidden=!choice;if(!choice)return;$('cardType').textContent=optionText('interviewType',choice.interviewType);$('cardTarget').textContent=optionText('targetLanguage',choice.targetLanguage);$('cardLevel').textContent=optionText('level',choice.level);$('cardExplain').textContent=optionText('explanationLanguage',choice.explanationLanguage);$('cardMinutes').textContent=sessionMinutes?tr('ui.sessionMinutes','· {{n}} min',{n:sessionMinutes}):'';}
 function launchSummary(){$('launchSummary').textContent=tr('start.summary','Entrevista: {{type}} · Idioma: {{lang}}',{type:selectedText('interviewType'),lang:targetName()});}
-function openStartModal(){const pending=useLauncher&&!sessionLive&&sessionStorage.getItem(LAUNCH_KEY);if(pending){launchSummary();if(!$('modal-launch').open)$('modal-launch').showModal();return;}choiceSnapshot={values:readChoice(),restart:false};choiceConfirmed=false;if(!$('modal-start').open)$('modal-start').showModal();}
+function openStartModal(){const pending=useLauncher&&!sessionLive&&sessionStorage.getItem(LAUNCH_KEY);if(pending){launchSummary();if(!$('modal-launch').open)$('modal-launch').showModal();return;}choiceSnapshot={values:readChoice(),restart:false};choiceConfirmed=false;renderCard();if(!$('modal-start').open)$('modal-start').showModal();}
 function stopLaunchTimer(){if(launchTimer){clearInterval(launchTimer);launchTimer=null;}}
 function paintLaunching(){const time=formatRemain(Date.now()-launchStartedAt);launchStatus(autoLaunch?tr('start.waitSetup','Espera un momento mientras configuramos todo… {{time}}',{time}):tr('start.starting','Encendiendo el servidor del coach… {{time}}. Suele tardar 1 o 2 minutos.',{time}));}
 function launchFailed(message){if(autoLaunch)setAutoLaunch(false);stopLaunchTimer();launchPollId++;sessionStorage.removeItem(LAUNCH_KEY);$('launchBtn').disabled=false;$('launchBack').disabled=false;launchStatus(tr('start.failed','No se pudo iniciar la clase: {{message}}',{message}),true);if(!$('modal-launch').open)$('modal-launch').showModal();}
@@ -827,7 +838,7 @@ function paintQuota(){const line=$('quotaLine'), box=$('startQuota');if(!quota){
 setInterval(paintQuota,1000);
 function sessionEnded(){endedSessionNo=quota?quota.used:0;loadQuota();sessionStorage.removeItem(LAUNCH_KEY);setStatus('start.ended','La clase terminó. Inicia otra cuando quieras.');openStartModal();}
 $('modal-start').addEventListener('close',()=>{if(!choiceSnapshot)return;const snapshot=choiceSnapshot;choiceSnapshot=null;if(choiceConfirmed){if(useLauncher&&!sessionLive){launchStatus('');launchSummary();$('modal-launch').showModal();return;}if(snapshot.restart)restartInterview();return;}if(CHOICE_IDS.every(id=>snapshot.values[id]===$(id).value))return;for(const [id,value] of Object.entries(snapshot.values))$(id).value=value;updateLanguageHints();});
-$('startBegin').addEventListener('click',()=>{const before=(choiceSnapshot&&choiceSnapshot.values)||{};choiceSnapshot={values:before,restart:['interviewType','targetLanguage'].some(id=>before[id]!==$(id).value)||!$('interviewer').value.trim()};choiceConfirmed=true;document.body.classList.add('class-started');$('modal-start').close();updateLanguageHints();renderCard();});
+$('startBegin').addEventListener('click',()=>{const before=(choiceSnapshot&&choiceSnapshot.values)||{};choiceSnapshot={values:before,restart:['interviewType','targetLanguage'].some(id=>before[id]!==$(id).value)||!$('interviewer').value.trim()};choiceConfirmed=true;if(sessionLive)sessionChoice=readChoice();document.body.classList.add('class-started');$('modal-start').close();updateLanguageHints();renderCard();});
 $('launchBack').addEventListener('click',()=>{$('modal-launch').close();openStartModal();});
 $('launchBtn').addEventListener('click',()=>launchClass());
 $('changeClass').addEventListener('click',openStartModal);
