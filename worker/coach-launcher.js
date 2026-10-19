@@ -77,6 +77,7 @@ function classIndexRow(id, session) {
     type: session.type || '',
     lang: session.lang || '',
     visitor: session.visitor || '',
+    plan: session.plan || '',
   };
 }
 
@@ -169,6 +170,33 @@ async function createSession(request, env) {
   }
   await env.SESSIONS.put(hourKey, String(used + 1), { expirationTtl: 3700 });
   return json(request, env, 201, { id, status: 'starting', minutes, quota: quotaView(quota, used + 1) });
+}
+
+/** Servidor de un plan pagado: modelos_back ya descontó el cupo del Gmail, así que no se cuenta por IP. */
+async function createPaidSession(request, env) {
+  if (!callbackAuthorized(request, env)) return json(request, env, 401, { error: 'No autorizado.' });
+  let body = {};
+  try { body = await request.json(); } catch { /* cuerpo vacío */ }
+  const minutes = Math.min(180, Math.max(5, intVar(body.minutes, 60)));
+  const lang = LANGS.has(body.lang) ? body.lang : 'en';
+  const type = typeof body.type === 'string' ? body.type.slice(0, 60) : '';
+  const email = typeof body.email === 'string' ? body.email.toLowerCase().slice(0, 120) : '';
+  if (await countActive(env) >= intVar(env.MAX_ACTIVE, 3)) {
+    return json(request, env, 503, { error: 'Todas las aulas están ocupadas. Intenta en unos minutos.' });
+  }
+  const id = crypto.randomUUID();
+  const session = { status: 'starting', minutes, lang, type, visitor: '', plan: 'coach-5', email, createdAt: new Date().toISOString(), api: '', until: '' };
+  await writeSession(env, id, session);
+  await rememberClass(env, id, session);
+  try {
+    await dispatchWorkflow(env, id, minutes);
+  } catch (error) {
+    const failed = { ...session, status: 'failed', error: error.message };
+    await writeSession(env, id, failed);
+    await rememberClass(env, id, failed);
+    return json(request, env, 502, { error: 'No se pudo encender el servidor del coach.', detail: error.message });
+  }
+  return json(request, env, 201, { id, status: 'starting', minutes });
 }
 
 async function getSession(request, env, id) {
@@ -281,6 +309,7 @@ async function listBoard(request, env) {
     type: row.type || '',
     lang: row.lang || '',
     visitor: row.visitor || '',
+    plan: row.plan || '',
   }));
   classes.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
   const day = new Date().toISOString().slice(0, 10);
@@ -365,6 +394,7 @@ async function route(request, env) {
     if (request.method === 'GET' && url.pathname === '/admin/board') return listBoard(request, env);
     if (request.method === 'GET' && url.pathname === '/quota') return getQuota(request, env);
     if (request.method === 'POST' && url.pathname === '/sessions') return createSession(request, env);
+    if (request.method === 'POST' && url.pathname === '/paid/sessions') return createPaidSession(request, env);
     const match = url.pathname.match(/^\/sessions\/([^/]+)(?:\/(ready|end|usage))?$/);
     if (match && ID_PATTERN.test(match[1])) {
       if (request.method === 'GET' && !match[2]) return getSession(request, env, match[1]);
