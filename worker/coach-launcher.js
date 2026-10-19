@@ -129,14 +129,46 @@ async function readQuota(request, env) {
   return { hourKey, used, limit, resetAt: reset.toISOString() };
 }
 
-function quotaView(quota, used) {
-  return { used, limit: quota.limit, remaining: Math.max(0, quota.limit - used), resetAt: quota.resetAt };
+function quotaView(quota, used, freeUsed) {
+  const remaining = freeUsed ? 0 : Math.max(0, quota.limit - used);
+  return { used, limit: quota.limit, remaining, resetAt: quota.resetAt, freeUsed: Boolean(freeUsed) };
+}
+
+const FREE_TTL = 365 * 24 * 3600;
+
+function cleanVisitor(value) {
+  return typeof value === 'string' ? value.replace(/[^a-zA-Z0-9]/g, '').slice(0, 16) : '';
+}
+
+/** Plan Free: un solo servidor por red (IP) o por visitante; después solo queda el plan pagado. */
+function freeKeys(request, env, visitor) {
+  const ip = request.headers.get('CF-Connecting-IP') || '';
+  const exempt = String(env.FREE_EXEMPT_IPS || '').split(',').map((item) => item.trim()).filter(Boolean);
+  const keys = [];
+  if (ip && !exempt.includes(ip)) keys.push(`free:ip:${ip}`);
+  if (visitor && !(ip && exempt.includes(ip))) keys.push(`free:v:${visitor}`);
+  return keys;
+}
+
+async function freeUsedAt(request, env, visitor) {
+  for (const key of freeKeys(request, env, visitor)) {
+    const at = await env.SESSIONS.get(key);
+    if (at) return at;
+  }
+  return '';
+}
+
+async function markFreeUsed(request, env, visitor) {
+  const at = new Date().toISOString();
+  await Promise.all(freeKeys(request, env, visitor).map((key) => env.SESSIONS.put(key, at, { expirationTtl: FREE_TTL })));
 }
 
 async function getQuota(request, env) {
   if (!allowedOrigin(request, env)) return json(request, env, 403, { error: 'Origen no permitido.' });
+  const visitor = cleanVisitor(new URL(request.url).searchParams.get('visitor'));
   const quota = await readQuota(request, env);
-  return json(request, env, 200, quotaView(quota, quota.used));
+  const usedAt = await freeUsedAt(request, env, visitor);
+  return json(request, env, 200, { ...quotaView(quota, quota.used, usedAt), freeUsedAt: usedAt });
 }
 
 async function createSession(request, env) {
@@ -146,10 +178,19 @@ async function createSession(request, env) {
   const minutes = Math.min(180, Math.max(5, intVar(body.minutes, 60)));
   const lang = LANGS.has(body.lang) ? body.lang : 'en';
   const type = typeof body.type === 'string' ? body.type.slice(0, 60) : '';
-  const visitor = typeof body.visitor === 'string' ? body.visitor.replace(/[^a-zA-Z0-9]/g, '').slice(0, 16) : '';
+  const visitor = cleanVisitor(body.visitor);
 
   const quota = await readQuota(request, env);
   const { hourKey, used } = quota;
+  const usedAt = await freeUsedAt(request, env, visitor);
+  if (usedAt) {
+    return json(request, env, 402, {
+      error: 'FREE_USED',
+      message: 'Ya usaste el servidor gratuito desde esta red. Sigue con el plan Coach 5.',
+      freeUsedAt: usedAt,
+      quota: quotaView(quota, used, usedAt),
+    });
+  }
   if (used >= quota.limit) {
     return json(request, env, 429, { error: 'Ya iniciaste varias clases en la última hora. Intenta más tarde.', quota: quotaView(quota, used) });
   }
@@ -170,6 +211,7 @@ async function createSession(request, env) {
     return json(request, env, 502, { error: 'No se pudo encender el servidor del coach.', detail: error.message });
   }
   await env.SESSIONS.put(hourKey, String(used + 1), { expirationTtl: 3700 });
+  await markFreeUsed(request, env, visitor);
   return json(request, env, 201, { id, status: 'starting', minutes, quota: quotaView(quota, used + 1) });
 }
 
