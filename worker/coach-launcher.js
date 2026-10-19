@@ -150,25 +150,34 @@ function freeKeys(request, env, visitor) {
   return keys;
 }
 
-async function freeUsedAt(request, env, visitor) {
+async function freeUse(request, env, visitor) {
   for (const key of freeKeys(request, env, visitor)) {
-    const at = await env.SESSIONS.get(key);
-    if (at) return at;
+    const raw = await env.SESSIONS.get(key);
+    if (!raw) continue;
+    try {
+      const data = JSON.parse(raw);
+      if (data && data.at) return { at: data.at, visitor: data.visitor || '' };
+    } catch { /* claves viejas: solo la fecha */ }
+    return { at: raw, visitor: '' };
   }
-  return '';
+  return null;
 }
 
 async function markFreeUsed(request, env, visitor) {
-  const at = new Date().toISOString();
-  await Promise.all(freeKeys(request, env, visitor).map((key) => env.SESSIONS.put(key, at, { expirationTtl: FREE_TTL })));
+  const value = JSON.stringify({ at: new Date().toISOString(), visitor });
+  await Promise.all(freeKeys(request, env, visitor).map((key) => env.SESSIONS.put(key, value, { expirationTtl: FREE_TTL })));
+}
+
+function freeView(use) {
+  return { freeUsedAt: (use && use.at) || '', freeVisitor: (use && use.visitor) || '' };
 }
 
 async function getQuota(request, env) {
   if (!allowedOrigin(request, env)) return json(request, env, 403, { error: 'Origen no permitido.' });
   const visitor = cleanVisitor(new URL(request.url).searchParams.get('visitor'));
   const quota = await readQuota(request, env);
-  const usedAt = await freeUsedAt(request, env, visitor);
-  return json(request, env, 200, { ...quotaView(quota, quota.used, usedAt), freeUsedAt: usedAt });
+  const use = await freeUse(request, env, visitor);
+  return json(request, env, 200, { ...quotaView(quota, quota.used, use), ...freeView(use) });
 }
 
 async function createSession(request, env) {
@@ -182,13 +191,13 @@ async function createSession(request, env) {
 
   const quota = await readQuota(request, env);
   const { hourKey, used } = quota;
-  const usedAt = await freeUsedAt(request, env, visitor);
-  if (usedAt) {
+  const use = await freeUse(request, env, visitor);
+  if (use) {
     return json(request, env, 402, {
       error: 'FREE_USED',
       message: 'Ya usaste el servidor gratuito desde esta red. Sigue con el plan Coach 5.',
-      freeUsedAt: usedAt,
-      quota: quotaView(quota, used, usedAt),
+      ...freeView(use),
+      quota: quotaView(quota, used, use),
     });
   }
   if (used >= quota.limit) {
