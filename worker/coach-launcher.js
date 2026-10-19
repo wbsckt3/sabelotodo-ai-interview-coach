@@ -78,6 +78,7 @@ function classIndexRow(id, session) {
     lang: session.lang || '',
     visitor: session.visitor || '',
     plan: session.plan || '',
+    email: session.email || '',
   };
 }
 
@@ -310,6 +311,7 @@ async function listBoard(request, env) {
     lang: row.lang || '',
     visitor: row.visitor || '',
     plan: row.plan || '',
+    email: row.email || '',
   }));
   classes.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
   const day = new Date().toISOString().slice(0, 10);
