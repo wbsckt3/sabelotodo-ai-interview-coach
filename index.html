@@ -909,6 +909,17 @@ function presenceTick(force){
   presenceState=state;presenceLast=Date.now();
   sendPresence('beat',state);
 }
+/* Quien llega desde la landing trae ?visitor=…&session=…: se avisa una vez que entró a la app, aunque no haya iniciado sesión. */
+function reportAppOpen(){
+  if(!PLAN_API)return;
+  try{
+    const params=new URLSearchParams(location.search), visitor=(params.get('visitor')||'').replace(/[^a-z0-9]/gi,'').slice(0,16), session=params.get('session')||'';
+    if(!visitor||!session||sessionStorage.getItem('coach-app-open')===session)return;
+    sessionStorage.setItem('coach-app-open',session);
+    fetch(`${PLAN_API}/events`,{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'app',lang:presenceLang(),path:location.pathname,visitor})}).catch(()=>{});
+  }catch{/* sin storage */}
+}
+reportAppOpen();
 function startPresence(){
   if(presenceOn||!PLAN_API||!planToken)return;
   presenceOn=true;
