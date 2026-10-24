@@ -892,7 +892,34 @@ function planChips(q){return {'@@LEFT@@':{cls:'time-session',text:String(q.remai
 function paintPlan(){const line=$('planLine'), slot=$('gsiSlot');if(!line)return;if(!planToken){line.hidden=true;slot.hidden=!GOOGLE_CLIENT||!useLauncher;return;}slot.hidden=true;line.hidden=false;const copy=planCopy(), q=planQuota();const text=(q?copy.line:copy.none).replace('{{email}}',planEmail);if(q)paintMarked(line,text,planChips(q));else line.textContent=text;}
 function paintPaidQuota(){const q=planQuota(), copy=planCopy();$('quotaLine').hidden=true;$('startQuota').hidden=false;$('startQuotaEnded').hidden=true;const span=document.createElement('span');paintMarked(span,q.remaining?copy.box:copy.empty,planChips(q));$('startQuotaLeft').replaceChildren(span);}
 function forgetPlan(){planToken='';planInfo=null;try{localStorage.removeItem(PLAN_TOKEN_KEY);}catch{/* sin storage */}paintPlan();paintQuota();}
-async function loadPlan(){if(!PLAN_API||!planToken){paintPlan();return;}try{const response=await fetch(`${PLAN_API}/paid-plan/me`,{cache:'no-store',headers:{Accept:'application/json',Authorization:`Bearer ${planToken}`}});if(response.status===401||response.status===403){forgetPlan();return;}if(response.ok){const data=await response.json();planInfo=data.plan||null;planEmail=data.email||planEmail;}}catch{/* sin red: se conserva lo último */}paintPlan();paintQuota();}
+/* Presencia: avisa al monitor dónde está el usuario con sesión (instancia, idioma, activo o inactivo).
+   Latido cada 60 s solo con la pestaña visible; si hay 30 s sin actividad pasa a "idle" de inmediato; al salir envía "leave". */
+const BEAT_MS=60000, IDLE_MS=30000;
+let presenceOn=false, presenceLast=0, presenceState='', lastActive=Date.now();
+function presenceLang(){const match=location.pathname.match(/\/(en|es|fr)(\/|$)/);return match?match[1]:'en';}
+function sendPresence(type,state,pathExtra){
+  if(!PLAN_API||!planToken)return;
+  try{fetch(`${PLAN_API}/events`,{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},body:JSON.stringify({type,lang:presenceLang(),path:location.pathname+(pathExtra||''),state,token:planToken})}).catch(()=>{});}catch{/* sin red */}
+}
+function presenceTick(force){
+  if(document.hidden)return;
+  const state=Date.now()-lastActive>IDLE_MS?'idle':'online';
+  if(!force&&state===presenceState&&Date.now()-presenceLast<BEAT_MS)return;
+  if(!force&&state==='idle'&&presenceState==='idle')return;
+  presenceState=state;presenceLast=Date.now();
+  sendPresence('beat',state);
+}
+function startPresence(){
+  if(presenceOn||!PLAN_API||!planToken)return;
+  presenceOn=true;
+  sendPresence('app','online');presenceState='online';presenceLast=Date.now();
+  const touch=()=>{const wasIdle=presenceState==='idle';lastActive=Date.now();if(wasIdle)presenceTick(true);};
+  ['pointerdown','keydown','scroll','touchstart'].forEach((name)=>addEventListener(name,touch,{passive:true}));
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)sendPresence('leave','online','?status=leave');else{lastActive=Date.now();presenceTick(true);}});
+  addEventListener('pagehide',()=>sendPresence('leave','online','?status=leave'));
+  setInterval(()=>presenceTick(false),15000);
+}
+async function loadPlan(){if(!PLAN_API||!planToken){paintPlan();return;}try{const response=await fetch(`${PLAN_API}/paid-plan/me`,{cache:'no-store',headers:{Accept:'application/json',Authorization:`Bearer ${planToken}`}});if(response.status===401||response.status===403){forgetPlan();return;}if(response.ok){const data=await response.json();planInfo=data.plan||null;planEmail=data.email||planEmail;startPresence();}}catch{/* sin red: se conserva lo último */}paintPlan();paintQuota();}
 function takeCredential(resp){const token=(resp&&resp.credential)||'';const body=jwtBody(token);if(!body||!body.email)return;planToken=token;planEmail=String(body.email).toLowerCase();try{localStorage.setItem(PLAN_TOKEN_KEY,token);}catch{/* sin storage */}loadPlan();}
 function initPlan(){if(!useLauncher||!PLAN_API)return;try{const token=localStorage.getItem(PLAN_TOKEN_KEY)||'';planToken=token;if(!planTokenFresh()){planToken='';localStorage.removeItem(PLAN_TOKEN_KEY);}else planEmail=String(jwtBody(token).email||'').toLowerCase();}catch{planToken='';}paintPlan();if(planToken)loadPlan();if(!GOOGLE_CLIENT)return;const script=document.createElement('script');script.src='https://accounts.google.com/gsi/client';script.async=true;script.onload=()=>{google.accounts.id.initialize({client_id:GOOGLE_CLIENT,callback:takeCredential,auto_select:true});google.accounts.id.renderButton($('gsiSlot'),{theme:'filled_black',size:'small',shape:'pill',text:'signin_with',locale:pathLocale()||demoNative()});if(!planToken)google.accounts.id.prompt();};document.head.appendChild(script);}
 async function requestServer(minutes){const body={minutes,type:$('interviewType').value,lang:$('targetLanguage').value};const usePaid=!autoLaunch&&paidReady();if(usePaid&&!planTokenFresh()){forgetPlan();if(window.google&&google.accounts&&google.accounts.id)google.accounts.id.prompt();return {response:{ok:false,status:401},data:{error:planCopy().signin},paid:true};}const response=usePaid?await fetch(`${PLAN_API}/paid-plan/sessions`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${planToken}`},body:JSON.stringify(body)}):await fetch(`${LAUNCHER}/sessions`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await response.json().catch(()=>({}));if(usePaid){if(data.quota&&planInfo){planInfo.quota=data.quota;paintPlan();paintQuota();}if(response.status===401){forgetPlan();data.error=planCopy().signin;}if(response.status===402)data.error=planCopy().noQuota;}return {response,data,paid:usePaid};}
