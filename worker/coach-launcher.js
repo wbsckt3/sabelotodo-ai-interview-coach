@@ -152,22 +152,42 @@ function quotaView(quota, used, freeUsed) {
 
 const FREE_TTL = 365 * 24 * 3600;
 
+const GOOGLE_CLIENT_ID = '980822676255-vntch0t28qbesul2bp5oc1galtoi8a97.apps.googleusercontent.com';
+
+/** Valida con Google el token con que la persona entró a la landing y devuelve su Gmail ('' si no es válido). */
+async function verifyGoogle(env, idToken) {
+  if (typeof idToken !== 'string' || !idToken || idToken.length > 4096) return '';
+  try {
+    const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`);
+    if (!response.ok) return '';
+    const info = await response.json();
+    if (info.aud !== (env.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID)) return '';
+    if (String(info.email_verified) !== 'true' || Number(info.exp) * 1000 <= Date.now()) return '';
+    const email = String(info.email || '').trim().toLowerCase();
+    return /^[^\s@]+@gmail\.com$/.test(email) ? email : '';
+  } catch {
+    return '';
+  }
+}
+
 function cleanVisitor(value) {
   return typeof value === 'string' ? value.replace(/[^a-zA-Z0-9]/g, '').slice(0, 16) : '';
 }
 
 /** Plan Free: un solo servidor por red (IP) o por visitante; después solo queda el plan pagado. */
-function freeKeys(request, env, visitor) {
+function freeKeys(request, env, visitor, email = '') {
   const ip = request.headers.get('CF-Connecting-IP') || '';
   const exempt = String(env.FREE_EXEMPT_IPS || '').split(',').map((item) => item.trim()).filter(Boolean);
   const keys = [];
   if (ip && !exempt.includes(ip)) keys.push(`free:ip:${ip}`);
   if (visitor && !(ip && exempt.includes(ip))) keys.push(`free:v:${visitor}`);
+  // Un solo demo por Gmail, aunque cambie de red o de navegador.
+  if (email && !(ip && exempt.includes(ip))) keys.push(`free:e:${email}`);
   return keys;
 }
 
-async function freeUse(request, env, visitor) {
-  for (const key of freeKeys(request, env, visitor)) {
+async function freeUse(request, env, visitor, email = '') {
+  for (const key of freeKeys(request, env, visitor, email)) {
     const raw = await env.SESSIONS.get(key);
     if (!raw) continue;
     try {
@@ -179,9 +199,9 @@ async function freeUse(request, env, visitor) {
   return null;
 }
 
-async function markFreeUsed(request, env, visitor) {
+async function markFreeUsed(request, env, visitor, email = '') {
   const value = JSON.stringify({ at: new Date().toISOString(), visitor });
-  await Promise.all(freeKeys(request, env, visitor).map((key) => env.SESSIONS.put(key, value, { expirationTtl: FREE_TTL })));
+  await Promise.all(freeKeys(request, env, visitor, email).map((key) => env.SESSIONS.put(key, value, { expirationTtl: FREE_TTL })));
 }
 
 function freeView(use) {
@@ -206,10 +226,16 @@ async function createSession(request, env) {
   const lang = LANGS.has(body.lang) ? body.lang : 'en';
   const type = typeof body.type === 'string' ? body.type.slice(0, 60) : '';
   const visitor = cleanVisitor(body.visitor);
+  // Con Gmail: el servidor queda a nombre de esa cuenta (trazabilidad y un solo demo por Gmail).
+  let email = '';
+  if (body.idToken) {
+    email = await verifyGoogle(env, body.idToken);
+    if (!email) return json(request, env, 401, { error: 'GOOGLE_INVALID' });
+  }
 
   const quota = await readQuota(request, env);
   const { hourKey, used } = quota;
-  const use = await freeUse(request, env, visitor);
+  const use = await freeUse(request, env, visitor, email);
   if (use) {
     return json(request, env, 402, {
       error: 'FREE_USED',
@@ -219,9 +245,9 @@ async function createSession(request, env) {
     });
   }
   // Si ya tiene un demo esperando (creado y sin reclamar), se le devuelve ese en vez de crear otro.
-  if (visitor) {
+  if (visitor || email) {
     const now = Date.now();
-    const waiting = (await readClassIndex(env)).find((row) => row.visitor === visitor && row.claim && !row.claimedAt && isActive(row, now));
+    const waiting = (await readClassIndex(env)).find((row) => (row.visitor === visitor || (email && row.email === email)) && row.claim && !row.claimedAt && isActive(row, now));
     if (waiting) {
       return json(request, env, 200, { id: waiting.id, status: liveStatus(waiting, now), minutes: waiting.minutes, reused: true, quota: quotaView(quota, used) });
     }
@@ -234,7 +260,7 @@ async function createSession(request, env) {
   }
 
   const id = crypto.randomUUID();
-  const session = { status: 'starting', minutes, lang, type, visitor, claim: true, holdMinutes, claimedAt: '', holdUntil: '', createdAt: new Date().toISOString(), api: '', until: '' };
+  const session = { status: 'starting', minutes, lang, type, visitor, email, claim: true, holdMinutes, claimedAt: '', holdUntil: '', createdAt: new Date().toISOString(), api: '', until: '' };
   await writeSession(env, id, session);
   await rememberClass(env, id, session);
   try {
@@ -310,7 +336,7 @@ async function claimSession(request, env, id) {
     current = { ...session, claimedAt, until };
     await writeSession(env, id, current);
     await rememberClass(env, id, current);
-    if (!session.plan) await markFreeUsed(request, env, session.visitor || '');
+    if (!session.plan) await markFreeUsed(request, env, session.visitor || '', session.email || '');
     status = 'ready';
   }
   return json(request, env, 200, {
@@ -396,6 +422,28 @@ async function reportUsage(request, env, id) {
     },
   });
   return json(request, env, 200, { ok: true });
+}
+
+/**
+ * Borra el rastro de las pruebas (sesiones, cupos del demo gratis y tablero) para volver a empezar.
+ * Borra de a poco (KV limita las operaciones por llamada): se repite mientras responda more: true.
+ * No toca el consumo de IA (usage:*).
+ */
+async function resetAll(request, env) {
+  if (!callbackAuthorized(request, env)) return json(request, env, 401, { error: 'No autorizado.' });
+  const budget = 40;
+  let deleted = 0;
+  for (const prefix of ['s:', 'idx:', 'free:', 'ip:']) {
+    while (deleted < budget) {
+      const page = await env.SESSIONS.list({ prefix, limit: budget - deleted });
+      if (!page.keys.length) break;
+      await Promise.all(page.keys.map((key) => env.SESSIONS.delete(key.name)));
+      deleted += page.keys.length;
+      if (page.list_complete) break;
+    }
+    if (deleted >= budget) return json(request, env, 200, { ok: true, deleted, more: true });
+  }
+  return json(request, env, 200, { ok: true, deleted, more: false });
 }
 
 async function listBoard(request, env) {
@@ -499,6 +547,7 @@ async function route(request, env) {
       });
     }
     if (request.method === 'GET' && url.pathname === '/admin/board') return listBoard(request, env);
+    if (request.method === 'POST' && url.pathname === '/admin/reset') return resetAll(request, env);
     if (request.method === 'GET' && url.pathname === '/quota') return getQuota(request, env);
     if (request.method === 'POST' && url.pathname === '/sessions') return createSession(request, env);
     if (request.method === 'POST' && url.pathname === '/paid/sessions') return createPaidSession(request, env);

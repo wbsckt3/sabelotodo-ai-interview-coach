@@ -156,7 +156,10 @@ jobs:
           while [ "$SECONDS" -lt "$end" ]; do
             if [ "${HOLD}" -gt 0 ]; then
               # El Worker manda: se apaga al vencer la espera sin reclamar o al terminar la sesión reclamada.
-              state=$(curl -fsS --max-time 10 "${LAUNCHER_URL}/sessions/${SESSION}" | jq -r '.status' 2>/dev/null || true)
+              reply=$(curl -s --max-time 10 -w '\n%{http_code}' "${LAUNCHER_URL}/sessions/${SESSION}" || true)
+              code=$(printf '%s' "${reply}" | tail -n1)
+              state=$(printf '%s' "${reply}" | head -n1 | jq -r '.status' 2>/dev/null || true)
+              if [ "${code}" = "404" ]; then echo "El lanzador ya no conoce esta sesión (reinicio de pruebas)."; break; fi
               case "${state}" in
                 ended|expired|failed) echo "Sesión cerrada por el lanzador: ${state}"; break ;;
               esac
