@@ -12,6 +12,10 @@ on:
         description: Sesión de navegador creada por el lanzador (vacío = servidor compartido en server.json)
         default: ""
         required: false
+      hold:
+        description: Minutos que el servidor espera a que la persona entre antes de apagarse (0 = el reloj corre desde que está listo)
+        default: "0"
+        required: false
 
 permissions:
   contents: write
@@ -35,6 +39,7 @@ jobs:
           COACH_CORS_ORIGIN: https://wbsckt3.github.io
           PORT: "8787"
           MINUTES: ${{ inputs.minutes }}
+          HOLD: ${{ inputs.hold }}
           SESSION: ${{ inputs.session }}
           LAUNCHER_URL: ${{ vars.COACH_LAUNCHER_URL }}
           CALLBACK_SECRET: ${{ secrets.COACH_CALLBACK_SECRET || secrets.CALLBACK_SECRET }}
@@ -49,6 +54,11 @@ jobs:
           esac
           if [ "${MINUTES}" -gt 180 ]; then MINUTES=180; fi
           if [ "${MINUTES}" -lt 5 ]; then MINUTES=5; fi
+          case "${HOLD}" in
+            ''|*[!0-9]*) HOLD=0 ;;
+          esac
+          if [ "${HOLD}" -gt 120 ]; then HOLD=120; fi
+          if [ -z "${SESSION}" ]; then HOLD=0; fi
 
           if [ -n "${SESSION}" ]; then
             if ! printf '%s' "${SESSION}" | grep -Eq '^[a-z0-9-]{8,40}$'; then
@@ -61,7 +71,11 @@ jobs:
             fi
             LAUNCHER_URL="${LAUNCHER_URL%/}"
           fi
-          echo "El servidor quedará activo ${MINUTES} minutos."
+          if [ "${HOLD}" -gt 0 ]; then
+            echo "El servidor espera hasta ${HOLD} minutos a que la persona entre; al entrar, la sesión dura ${MINUTES} minutos."
+          else
+            echo "El servidor quedará activo ${MINUTES} minutos."
+          fi
 
           notify() {
             curl -fsS -X POST "${LAUNCHER_URL}/sessions/${SESSION}/$1" \
@@ -119,7 +133,11 @@ jobs:
           echo "::notice title=Servidor del coach::${URL}"
           echo "Servidor listo: ${URL}" >>"$GITHUB_STEP_SUMMARY"
           UNTIL=$(date -u -d "+${MINUTES} minutes" +%Y-%m-%dT%H:%M:%SZ)
-          echo "SESION_HASTA ${UNTIL}"
+          if [ "${HOLD}" -gt 0 ]; then
+            echo "ESPERANDO_A_LA_PERSONA ${HOLD} min"
+          else
+            echo "SESION_HASTA ${UNTIL}"
+          fi
 
           if [ -n "${SESSION}" ]; then
             notify ready "{\"api\":\"${URL}\",\"until\":\"${UNTIL}\"}"
@@ -130,8 +148,19 @@ jobs:
             git push origin HEAD:main
           fi
 
-          end=$((SECONDS + MINUTES * 60))
+          if [ "${HOLD}" -gt 0 ]; then
+            end=$((SECONDS + (HOLD + MINUTES) * 60 + 120))
+          else
+            end=$((SECONDS + MINUTES * 60))
+          fi
           while [ "$SECONDS" -lt "$end" ]; do
+            if [ "${HOLD}" -gt 0 ]; then
+              # El Worker manda: se apaga al vencer la espera sin reclamar o al terminar la sesión reclamada.
+              state=$(curl -fsS --max-time 10 "${LAUNCHER_URL}/sessions/${SESSION}" | jq -r '.status' 2>/dev/null || true)
+              case "${state}" in
+                ended|expired|failed) echo "Sesión cerrada por el lanzador: ${state}"; break ;;
+              esac
+            fi
             if ! kill -0 "$(cat node.pid)" 2>/dev/null; then
               echo "Node se detuvo."
               cat node.log

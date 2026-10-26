@@ -13,6 +13,9 @@ WORKFLOW_FILE = "coach-server.yml"
 GITHUB_REF = "main"
 MAX_ACTIVE = "3"
 MAX_PER_IP_HOUR = "3"
+# Demo gratis: 5 minutos de sesión, que empiezan cuando la persona entra; el servidor la espera HOLD_MINUTES.
+FREE_MINUTES = "5"
+HOLD_MINUTES = "30"
 
 # Secretos (no van en este archivo; se crean en Settings → Variables and Secrets del Worker):
 #   GITHUB_TOKEN     -> token fine-grained, solo este repo, permiso Actions: Read and write

@@ -30,7 +30,7 @@ async function readSession(env, id) {
 }
 
 async function writeSession(env, id, session) {
-  const classTtl = Math.max(600, (session.minutes || 60) * 60 + 1800);
+  const classTtl = Math.max(600, ((session.minutes || 60) + (session.holdMinutes || 0)) * 60 + 1800);
   await env.SESSIONS.put(`s:${id}`, JSON.stringify(session), {
     expirationTtl: Math.max(classTtl, HISTORY_TTL_SECONDS),
     metadata: {
@@ -44,11 +44,24 @@ async function writeSession(env, id, session) {
   });
 }
 
+/**
+ * Estado visible de una sesión. Las del plan Free (claim) tienen dos relojes: la ventana de espera
+ * (holdUntil, desde que el servidor está listo hasta que la persona entra) y la sesión (until, que
+ * solo empieza a correr cuando la persona la reclama). Las pagadas conservan el reloj de siempre.
+ */
+function liveStatus(meta, now) {
+  const status = meta?.status || '';
+  if (status === 'starting') return now - Date.parse(meta.createdAt) >= STARTING_TIMEOUT_MS ? 'failed' : 'starting';
+  if (status !== 'ready') return status;
+  if (meta.claim && !meta.claimedAt) return Date.parse(meta.holdUntil) > now ? 'ready' : 'expired';
+  if (meta.until && Date.parse(meta.until) <= now) return 'ended';
+  return 'ready';
+}
+
 function isActive(meta, now) {
   if (!meta) return false;
-  if (meta.status === 'starting') return now - Date.parse(meta.createdAt) < STARTING_TIMEOUT_MS;
-  if (meta.status === 'ready') return !meta.until || Date.parse(meta.until) > now;
-  return false;
+  const status = liveStatus(meta, now);
+  return status === 'starting' || status === 'ready';
 }
 
 const CLASS_INDEX_KEY = 'idx:classes';
@@ -79,6 +92,9 @@ function classIndexRow(id, session) {
     visitor: session.visitor || '',
     plan: session.plan || '',
     email: session.email || '',
+    claim: Boolean(session.claim),
+    claimedAt: session.claimedAt || '',
+    holdUntil: session.holdUntil || '',
   };
 }
 
@@ -97,7 +113,7 @@ async function countActive(env) {
   return rows.reduce((active, row) => active + (isActive(row, now) ? 1 : 0), 0);
 }
 
-async function dispatchWorkflow(env, id, minutes) {
+async function dispatchWorkflow(env, id, minutes, hold = 0) {
   if (!env.GITHUB_TOKEN) throw new Error('Falta el secreto GITHUB_TOKEN en el Worker.');
   const repo = env.GITHUB_REPO || 'wbsckt3/sabelotodo-ai-interview-coach';
   const workflow = env.WORKFLOW_FILE || 'coach-server.yml';
@@ -110,7 +126,7 @@ async function dispatchWorkflow(env, id, minutes) {
       'User-Agent': 'sabelotodo-coach-launcher',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ ref: env.GITHUB_REF || 'main', inputs: { minutes: String(minutes), session: id } }),
+    body: JSON.stringify({ ref: env.GITHUB_REF || 'main', inputs: { minutes: String(minutes), session: id, hold: String(hold) } }),
   });
   if (response.status !== 204) {
     const detail = await response.text().catch(() => '');
@@ -184,7 +200,9 @@ async function createSession(request, env) {
   if (!allowedOrigin(request, env)) return json(request, env, 403, { error: 'Origen no permitido.' });
   let body = {};
   try { body = await request.json(); } catch { /* cuerpo vacío */ }
-  const minutes = Math.min(180, Math.max(5, intVar(body.minutes, 60)));
+  // El demo gratis es siempre de FREE_MINUTES (5): el cliente no decide la duración.
+  const minutes = Math.min(180, Math.max(5, intVar(env.FREE_MINUTES, 5)));
+  const holdMinutes = Math.min(120, Math.max(5, intVar(env.HOLD_MINUTES, 30)));
   const lang = LANGS.has(body.lang) ? body.lang : 'en';
   const type = typeof body.type === 'string' ? body.type.slice(0, 60) : '';
   const visitor = cleanVisitor(body.visitor);
@@ -200,6 +218,14 @@ async function createSession(request, env) {
       quota: quotaView(quota, used, use),
     });
   }
+  // Si ya tiene un demo esperando (creado y sin reclamar), se le devuelve ese en vez de crear otro.
+  if (visitor) {
+    const now = Date.now();
+    const waiting = (await readClassIndex(env)).find((row) => row.visitor === visitor && row.claim && !row.claimedAt && isActive(row, now));
+    if (waiting) {
+      return json(request, env, 200, { id: waiting.id, status: liveStatus(waiting, now), minutes: waiting.minutes, reused: true, quota: quotaView(quota, used) });
+    }
+  }
   if (used >= quota.limit) {
     return json(request, env, 429, { error: 'Ya iniciaste varias clases en la última hora. Intenta más tarde.', quota: quotaView(quota, used) });
   }
@@ -208,20 +234,20 @@ async function createSession(request, env) {
   }
 
   const id = crypto.randomUUID();
-  const session = { status: 'starting', minutes, lang, type, visitor, createdAt: new Date().toISOString(), api: '', until: '' };
+  const session = { status: 'starting', minutes, lang, type, visitor, claim: true, holdMinutes, claimedAt: '', holdUntil: '', createdAt: new Date().toISOString(), api: '', until: '' };
   await writeSession(env, id, session);
   await rememberClass(env, id, session);
   try {
-    await dispatchWorkflow(env, id, minutes);
+    await dispatchWorkflow(env, id, minutes, holdMinutes);
   } catch (error) {
     const failed = { ...session, status: 'failed', error: error.message };
     await writeSession(env, id, failed);
     await rememberClass(env, id, failed);
     return json(request, env, 502, { error: 'No se pudo encender el servidor del coach.', detail: error.message });
   }
+  // El demo gratis se marca como usado cuando la persona lo reclama (claimSession), no al crear el servidor.
   await env.SESSIONS.put(hourKey, String(used + 1), { expirationTtl: 3700 });
-  await markFreeUsed(request, env, visitor);
-  return json(request, env, 201, { id, status: 'starting', minutes, quota: quotaView(quota, used + 1) });
+  return json(request, env, 201, { id, status: 'starting', minutes, holdMinutes, quota: quotaView(quota, used + 1) });
 }
 
 /** Servidor de un plan pagado: modelos_back ya descontó el cupo del Gmail, así que no se cuenta por IP. */
@@ -255,9 +281,7 @@ async function getSession(request, env, id) {
   const session = await readSession(env, id);
   if (!session) return json(request, env, 404, { error: 'La sesión no existe o ya expiró.' });
   const now = Date.now();
-  let status = session.status;
-  if (status === 'starting' && now - Date.parse(session.createdAt) >= STARTING_TIMEOUT_MS) status = 'failed';
-  if (status === 'ready' && session.until && Date.parse(session.until) <= now) status = 'ended';
+  const status = liveStatus(session, now);
   return json(request, env, 200, {
     id,
     status,
@@ -266,6 +290,38 @@ async function getSession(request, env, id) {
     minutes: session.minutes,
     createdAt: session.createdAt,
     visitor: session.visitor || '',
+    claim: Boolean(session.claim),
+    claimedAt: session.claimedAt || '',
+    holdUntil: session.holdUntil || '',
+  });
+}
+
+/** La persona entra a su demo: el reloj de 5 minutos arranca aquí y el demo gratis queda usado. Es idempotente. */
+async function claimSession(request, env, id) {
+  if (!allowedOrigin(request, env)) return json(request, env, 403, { error: 'Origen no permitido.' });
+  const session = await readSession(env, id);
+  if (!session) return json(request, env, 404, { error: 'La sesión no existe o ya expiró.' });
+  const now = Date.now();
+  let status = liveStatus(session, now);
+  let current = session;
+  if (status === 'ready' && session.claim && !session.claimedAt) {
+    const claimedAt = new Date(now).toISOString();
+    const until = new Date(now + (session.minutes || 5) * 60000).toISOString();
+    current = { ...session, claimedAt, until };
+    await writeSession(env, id, current);
+    await rememberClass(env, id, current);
+    if (!session.plan) await markFreeUsed(request, env, session.visitor || '');
+    status = 'ready';
+  }
+  return json(request, env, 200, {
+    id,
+    status,
+    api: status === 'ready' ? current.api : '',
+    until: current.until || '',
+    minutes: current.minutes,
+    createdAt: current.createdAt,
+    claimedAt: current.claimedAt || '',
+    claim: Boolean(current.claim),
   });
 }
 
@@ -278,13 +334,6 @@ function callbackAuthorized(request, env) {
 function positiveNumber(value) {
   const n = Number(value);
   return Number.isFinite(n) && n > 0 ? n : 0;
-}
-
-function visibleStatus(meta, now) {
-  let status = meta?.status || '';
-  if (status === 'starting' && now - Date.parse(meta.createdAt) >= STARTING_TIMEOUT_MS) status = 'failed';
-  if (status === 'ready' && meta.until && Date.parse(meta.until) <= now) status = 'ended';
-  return status;
 }
 
 async function reportUsage(request, env, id) {
@@ -354,7 +403,7 @@ async function listBoard(request, env) {
   const now = Date.now();
   const classes = (await readClassIndex(env)).map((row) => ({
     id: row.id,
-    status: visibleStatus(row, now),
+    status: liveStatus(row, now),
     until: row.until || '',
     createdAt: row.createdAt || '',
     minutes: row.minutes || 0,
@@ -363,6 +412,9 @@ async function listBoard(request, env) {
     visitor: row.visitor || '',
     plan: row.plan || '',
     email: row.email || '',
+    claim: Boolean(row.claim),
+    claimedAt: row.claimedAt || '',
+    holdUntil: row.holdUntil || '',
   }));
   classes.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
   const day = new Date().toISOString().slice(0, 10);
@@ -397,8 +449,10 @@ async function updateFromWorkflow(request, env, id, action) {
   if (action === 'ready') {
     const api = typeof body.api === 'string' && /^https:\/\/[-a-z0-9]+\.trycloudflare\.com$/.test(body.api) ? body.api : '';
     if (!api) return json(request, env, 400, { error: 'Dirección de túnel inválida.' });
-    const until = Number.isFinite(Date.parse(body.until)) ? body.until : '';
-    const ready = { ...session, status: 'ready', api, until };
+    // Plan Free (claim): el servidor queda esperando a la persona; el reloj de la sesión arranca al reclamarla.
+    const holdUntil = session.claim ? new Date(Date.now() + (session.holdMinutes || 30) * 60000).toISOString() : '';
+    const until = session.claim ? '' : (Number.isFinite(Date.parse(body.until)) ? body.until : '');
+    const ready = { ...session, status: 'ready', api, until, holdUntil };
     await writeSession(env, id, ready);
     await rememberClass(env, id, ready);
   } else {
@@ -448,10 +502,11 @@ async function route(request, env) {
     if (request.method === 'GET' && url.pathname === '/quota') return getQuota(request, env);
     if (request.method === 'POST' && url.pathname === '/sessions') return createSession(request, env);
     if (request.method === 'POST' && url.pathname === '/paid/sessions') return createPaidSession(request, env);
-    const match = url.pathname.match(/^\/sessions\/([^/]+)(?:\/(ready|end|usage))?$/);
+    const match = url.pathname.match(/^\/sessions\/([^/]+)(?:\/(ready|end|usage|claim))?$/);
     if (match && ID_PATTERN.test(match[1])) {
       if (request.method === 'GET' && !match[2]) return getSession(request, env, match[1]);
       if (request.method === 'POST' && match[2] === 'usage') return reportUsage(request, env, match[1]);
+      if (request.method === 'POST' && match[2] === 'claim') return claimSession(request, env, match[1]);
       if (request.method === 'POST' && match[2]) return updateFromWorkflow(request, env, match[1], match[2]);
     }
     return json(request, env, 404, { error: 'Ruta no encontrada.' });
